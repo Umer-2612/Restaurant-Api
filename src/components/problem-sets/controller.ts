@@ -22,7 +22,7 @@ class ProblemSetController {
   public getAll = async (req: RequestWithUser, res: Response): Promise<any> => {
     try {
       const body = {
-        userId: req.user?._id,
+        userId: req.user?._id as string,
       };
 
       const data: IProblemSetSchema[] = await ProblemSetService.getAll(body);

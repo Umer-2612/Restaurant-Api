@@ -28,43 +28,55 @@ class ProblemSetService {
   }
 
   public async create(data: IProblemSetSchema): Promise<IProblemSetSchema> {
-    const { error } = ProblemSetValidation.validateCreateBody(data);
+    try {
+      const { error } = ProblemSetValidation.validateCreateBody(data);
 
-    if (error) {
+      if (error) {
+        throw new ErrorHandler({ statusCode: 400, message: error.message });
+      }
+
+      return await ProblemSetDAO.createProblemSet(data);
+    } catch (error: any) {
       throw new ErrorHandler({ statusCode: 400, message: error.message });
     }
-
-    return await ProblemSetDAO.createProblemSet(data);
   }
 
   public async update(
     id: string,
     data: Partial<IProblemSetSchema>
   ): Promise<IProblemSetSchema | null> {
-    const { error } = ProblemSetValidation.validateId(id);
-    if (error) {
+    try {
+      const { error } = ProblemSetValidation.validateId(id);
+      if (error) {
+        throw new ErrorHandler({ statusCode: 400, message: error.message });
+      }
+
+      const updatedData = await ProblemSetDAO.updateProblemSet(id, data);
+
+      if (!updatedData) {
+        throw new ErrorHandler({
+          statusCode: 404,
+          message: "Problem set not found.",
+        });
+      }
+
+      return updatedData;
+    } catch (error: any) {
       throw new ErrorHandler({ statusCode: 400, message: error.message });
     }
-
-    const updatedData = await ProblemSetDAO.updateProblemSet(id, data);
-
-    if (!updatedData) {
-      throw new ErrorHandler({
-        statusCode: 404,
-        message: "Problem set not found.",
-      });
-    }
-
-    return updatedData;
   }
 
   public async delete(id: string): Promise<void> {
-    const { error } = ProblemSetValidation.validateId(id);
-    if (error) {
+    try {
+      const { error } = ProblemSetValidation.validateId(id);
+      if (error) {
+        throw new ErrorHandler({ statusCode: 400, message: error.message });
+      }
+
+      await ProblemSetDAO.deleteProblemSet(id);
+    } catch (error: any) {
       throw new ErrorHandler({ statusCode: 400, message: error.message });
     }
-
-    await ProblemSetDAO.deleteProblemSet(id);
   }
 }
 

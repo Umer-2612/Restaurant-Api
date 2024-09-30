@@ -39,7 +39,7 @@ class MenuItemSchema implements IMenuItemService {
     } catch (error: any) {
       throw new ErrorHandler({
         statusCode: 500,
-        message: error.message || "Failed to create category",
+        message: error.message || "Failed to create menu item",
       });
     }
   }

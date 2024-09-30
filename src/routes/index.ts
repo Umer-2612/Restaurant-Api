@@ -2,6 +2,7 @@ import { Router } from "express";
 import userRouter from "../components/user/router";
 import authRouter from "../components/auth/router";
 import menuRouter from "../components/menu/router";
+import categoryRouter from "../components/category/router";
 import contactRequestRouter from "../components/contact_us/router";
 import ReservationRequestFormRouter from "../components/reservation/router";
 
@@ -10,6 +11,8 @@ const router = Router();
 router.use("/auth", authRouter);
 
 router.use("/user", userRouter);
+
+router.use("/category", categoryRouter);
 
 router.use("/menu", menuRouter);
 

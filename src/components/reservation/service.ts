@@ -42,14 +42,15 @@ class ReservationRequestFormService {
 
   public async getReservationRequestForm(): Promise<IReservationRequestSchema[] | null> {
     try {
-      const reservationForms = await ReservationRequestsDAO.getReservationRequestForm();
-      if(reservationForms && reservationForms.length) {
-        reservationForms.forEach((e: any) => {
+      let reservationForms = await ReservationRequestsDAO.getReservationRequestForm();
+      if (reservationForms && reservationForms.length) {
+        reservationForms = reservationForms.map(e => {
+          let dateObj = e.toObject();
           if (e.date_of_reservation) {
-            // console.log(e.date_of_reservation);
-            e.date = e.date_of_reservation.toLocaleDateString();
-            e.time = e.date_of_reservation.toLocaleTimeString();
+            dateObj.actual_date = e.date_of_reservation.toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+            dateObj.actual_time = e.date_of_reservation.toLocaleTimeString();
           }
+          return dateObj;
         });
       }
       return reservationForms;

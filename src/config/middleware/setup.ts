@@ -4,7 +4,6 @@ import bodyParser from "body-parser";
 import routes from "../../routes/index";
 import session from "express-session";
 import Config from "../env/index";
-import { setupSwaggerDocs } from "../swagger/swagger";
 var passport = require("passport");
 
 export function setupMiddleware(app: Application): void {
@@ -42,9 +41,6 @@ export function setupMiddleware(app: Application): void {
   // Initialize Passport and restore authentication state
   app.use(passport.initialize());
   app.use(passport.session());
-
-  // Setup Swagger
-  setupSwaggerDocs(app);
 
   // Mount the routes to the Express app
   app.use(routes);

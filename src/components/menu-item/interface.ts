@@ -67,9 +67,9 @@ export interface IMenuItemSchema extends Document {
  */
 export interface IMenuItemService {
   /**
-   * @method createCategory
-   * @param {ICategorySchema} data - The menu item data to create.
-   * @returns {Promise<ICategorySchema>} The created menu item.
+   * @method createMenuItem
+   * @param {IMenuItemSchema} data - The menu item data to create.
+   * @returns {Promise<IMenuItemSchema>} The created menu item.
    */
   createMenuItem(data: IMenuItemSchema): Promise<IMenuItemSchema>;
 }

@@ -62,15 +62,7 @@ class AuthController {
       this.handleError(res, error);
     }
   };
-
-  public googleCallback = async (req: any, res: Response): Promise<void> => {
-    try {
-      const token = req.user?.token; // Attach token to user object
-      res.redirect(`http://localhost:5173/dashboard?token=${token}`);
-    } catch (error: any) {
-      this.handleError(res, error);
-    }
-  };
+  
 }
 
 export default new AuthController();

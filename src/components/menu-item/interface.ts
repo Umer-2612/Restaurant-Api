@@ -72,4 +72,8 @@ export interface IMenuItemService {
    * @returns {Promise<IMenuItemSchema>} The created menu item.
    */
   createMenuItem(data: IMenuItemSchema): Promise<IMenuItemSchema>;
+  getMenuItems(): Promise<IMenuItemSchema[]>;
+  getMenuItemById(id: string): Promise<IMenuItemSchema>;
+  updateMenuItem(id: string, data: Partial<IMenuItemSchema>): Promise<IMenuItemSchema>;
+  deleteMenuItem(id: string): Promise<void>;
 }

@@ -34,6 +34,9 @@ class ContactRequestFormService {
 
     try {
       const contactForm = await ContactRequestsDAO.updateContactRequestForm(id, data);
+      if(!contactForm) {
+        throw new ErrorHandler({ statusCode: 404, message: "Contact form not found for update" });
+      }
       return contactForm;
     } catch (error) {
       throw error;

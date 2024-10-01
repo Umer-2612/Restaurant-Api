@@ -2,14 +2,15 @@ import Joi from "joi";
 import { objectIdValidator } from "../../utils/common-function";
 
 export default class ReservationRequestsValidation {
+  static reservationRequestsValidation: any;
 
-  public static validateId(id: string): Joi.ValidationResult {
+  public validateId(id: string): Joi.ValidationResult {
     return Joi.string()
       .custom(objectIdValidator, "MongoDB ObjectID")
       .validate(id, { messages: { "string.custom": "Invalid ID format" } });
   }
 
-  public static validateCreateReservationRequestForm = Joi.object({
+  public validateCreateReservationRequestForm: Joi.ObjectSchema = Joi.object({
     firstName: Joi.string().required().messages({
       "any.required": "First name is required",
       "string.empty": "First name cannot be empty",
@@ -41,7 +42,7 @@ export default class ReservationRequestsValidation {
     recordDeleted: Joi.boolean().optional().default(false),
   });
 
-  public static validateUpdateReservationRequestForm = Joi.object({
+  public validateUpdateReservationRequestForm: Joi.ObjectSchema = Joi.object({
     firstName: Joi.string().optional().default(null),
     lastName: Joi.string().optional().default(null),
     phoneNo: Joi.number().optional().default(null),

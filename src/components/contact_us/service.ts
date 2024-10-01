@@ -1,17 +1,10 @@
 import ContactRequestsDAO from "./dao";
-import ContactRequestsValidation from "./validation";
 import { ErrorHandler } from "../../utils/common-function";
 import { IContactRequestSchema } from "./interface";
 
-class ContactRequestFormService {
+export default class ContactRequestFormService {
 
   public async createContactRequestForm(data: IContactRequestSchema): Promise<IContactRequestSchema> {
-    const { error } = ContactRequestsValidation.validateCreateContactRequestForm.validate(data);
-
-    if (error) {
-      throw new ErrorHandler({ statusCode: 400, message: error.message });
-    }
-
     try {
       const contactForm = await ContactRequestsDAO.createContactRequestForm(data);
       return contactForm;
@@ -21,17 +14,6 @@ class ContactRequestFormService {
   }
 
   public async updateContactRequestForm(id: string, data: IContactRequestSchema): Promise<IContactRequestSchema | null> {
-    const { error } = ContactRequestsValidation.validateUpdateContactRequestForm.validate(data);
-    const { error: idError } = ContactRequestsValidation.validateId(id);
-
-    if (error) {
-      throw new ErrorHandler({ statusCode: 400, message: error.message });
-    }
-
-    if (idError) {
-      throw new ErrorHandler({ statusCode: 400, message: idError.message });
-    }
-
     try {
       const contactForm = await ContactRequestsDAO.updateContactRequestForm(id, data);
       if(!contactForm) {
@@ -53,11 +35,6 @@ class ContactRequestFormService {
   }
 
   public async deleteContactRequestForm(id: string): Promise<IContactRequestSchema | null> {
-    const { error } = ContactRequestsValidation.validateId(id);
-    if (error) {
-      throw new ErrorHandler({ statusCode: 400, message: error.message });
-    }
-
     try {
       const contactForm = await ContactRequestsDAO.deleteContactRequestForm(id);
       return contactForm;
@@ -66,5 +43,3 @@ class ContactRequestFormService {
     }
   }
 }
-
-export default new ContactRequestFormService();

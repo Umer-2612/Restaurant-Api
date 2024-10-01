@@ -3,13 +3,13 @@ import { objectIdValidator } from "../../utils/common-function";
 
 export default class ContactRequestsValidation {
 
-  public static validateId(id: string): Joi.ValidationResult {
+  public validateId(id: string): Joi.ValidationResult {
     return Joi.string()
       .custom(objectIdValidator, "MongoDB ObjectID")
       .validate(id, { messages: { "string.custom": "Invalid ID format" } });
   }
 
-  public static validateCreateContactRequestForm = Joi.object({
+  public validateCreateContactRequestForm = Joi.object({
     firstName: Joi.string().required().messages({
       "any.required": "First name is required",
       "string.empty": "First name cannot be empty",
@@ -33,7 +33,7 @@ export default class ContactRequestsValidation {
     recordDeleted: Joi.boolean().optional().default(false),
   });
 
-  public static validateUpdateContactRequestForm = Joi.object({
+  public validateUpdateContactRequestForm = Joi.object({
     firstName: Joi.string().optional().default(null),
     lastName: Joi.string().optional().default(null),
     phoneNo: Joi.number().optional().default(null),

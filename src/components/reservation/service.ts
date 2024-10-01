@@ -1,17 +1,10 @@
 import ReservationRequestsDAO from "./dao";
-import ReservationRequestsValidation from "./validation";
 import { ErrorHandler } from "../../utils/common-function";
 import { IReservationRequestSchema } from "./interface";
 
-class ReservationRequestFormService {
+export default class ReservationRequestFormService {
 
   public async createReservationRequestForm(data: IReservationRequestSchema): Promise<IReservationRequestSchema> {
-    const { error } = ReservationRequestsValidation.validateCreateReservationRequestForm.validate(data);
-
-    if (error) {
-      throw new ErrorHandler({ statusCode: 400, message: error.message });
-    }
-
     try {
       const reservationForm = await ReservationRequestsDAO.createReservationRequestForm(data);
       return reservationForm;
@@ -21,17 +14,6 @@ class ReservationRequestFormService {
   }
 
   public async updateReservationRequestForm(id: string, data: IReservationRequestSchema): Promise<IReservationRequestSchema | null> {
-    const { error } = ReservationRequestsValidation.validateUpdateReservationRequestForm.validate(data);
-    const { error: idError } = ReservationRequestsValidation.validateId(id);
-
-    if (error) {
-      throw new ErrorHandler({ statusCode: 400, message: error.message });
-    }
-
-    if (idError) {
-      throw new ErrorHandler({ statusCode: 400, message: idError.message });
-    }
-
     try {
       const reservationForm = await ReservationRequestsDAO.updateReservationRequestForm(id, data);
       if(!reservationForm) {
@@ -63,11 +45,6 @@ class ReservationRequestFormService {
   }
 
   public async deleteReservationRequestForm(id: string): Promise<IReservationRequestSchema | null> {
-    const { error } = ReservationRequestsValidation.validateId(id);
-    if (error) {
-      throw new ErrorHandler({ statusCode: 400, message: error.message });
-    }
-
     try {
       const reservationForm = await ReservationRequestsDAO.deleteReservationRequestForm(id);
       return reservationForm;
@@ -76,5 +53,3 @@ class ReservationRequestFormService {
     }
   }
 }
-
-export default new ReservationRequestFormService();

@@ -29,7 +29,7 @@ export default class ReservationRequestsDAO {
 
   public static async getReservationRequestForm(): Promise<IReservationRequestSchema[] | null> {
     try {
-      const query: any = { is_deleted: false };
+      const query: any = { recordDeleted: false };
       let getreservationForms = await ReservationRequestsSchema.find(query);
       return getreservationForms;
     } catch (error: any) {
@@ -39,7 +39,7 @@ export default class ReservationRequestsDAO {
 
   public static async deleteReservationRequestForm(id: string): Promise<IReservationRequestSchema | null> {
     try {
-      const query = { is_deleted: true };
+      const query = { recordDeleted: true };
       const deleteReservationRequestForm = await ReservationRequestsSchema.findByIdAndUpdate(id, query, { new: true });
       return deleteReservationRequestForm;
     } catch (error: any) {

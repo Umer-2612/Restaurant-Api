@@ -29,7 +29,7 @@ export default class ContactRequestsDAO {
 
   public static async getContactRequestForm(): Promise<IContactRequestSchema[] | null> {
     try {
-      const query: any = { is_deleted: false };
+      const query: any = { recordDeleted: false };
       let getContactForms = await ContactRequestSchema.find(query);
       return getContactForms;
     } catch (error: any) {
@@ -39,7 +39,7 @@ export default class ContactRequestsDAO {
 
   public static async deleteContactRequestForm(id: string): Promise<IContactRequestSchema | null> {
     try {
-      const query = { is_deleted: true };
+      const query = { recordDeleted: true };
       const deleteContactRequestForm = await ContactRequestSchema.findByIdAndUpdate(id, query, { new: true });
       return deleteContactRequestForm;
     } catch (error: any) {

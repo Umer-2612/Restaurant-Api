@@ -1,12 +1,12 @@
 import { Document } from "mongoose";
 
 export interface IContactRequestSchema extends Document {
-  first_name: string;
-  last_name: string;
-  phone_no: number;
+  firstName: string;
+  lastName: string;
+  phoneNo: number;
   email: string;
   message: string;
-  is_deleted: boolean;
+  recordDeleted: boolean;
   createdAt: Date;
   updatedAt: Date;
 }

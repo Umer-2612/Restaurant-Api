@@ -10,15 +10,15 @@ export default class ContactRequestsValidation {
   }
 
   public static validateCreateContactRequestForm = Joi.object({
-    first_name: Joi.string().required().messages({
+    firstName: Joi.string().required().messages({
       "any.required": "First name is required",
       "string.empty": "First name cannot be empty",
     }),
-    last_name: Joi.string().required().messages({
+    lastName: Joi.string().required().messages({
       "any.required": "Last name is required",
       "string.empty": "Last name cannot be empty",
     }),
-    phone_no: Joi.number().required().messages({
+    phoneNo: Joi.number().required().messages({
       "any.required": "Phone number is required",
       "string.empty": "Phone number cannot be empty",
     }),
@@ -30,15 +30,15 @@ export default class ContactRequestsValidation {
       "any.required": "Message is required",
       "string.empty": "Message cannot be empty",
     }),
-    is_deleted: Joi.boolean().optional().default(false),
+    recordDeleted: Joi.boolean().optional().default(false),
   });
 
   public static validateUpdateContactRequestForm = Joi.object({
-    first_name: Joi.string().optional().default(null),
-    last_name: Joi.string().optional().default(null),
-    phone_no: Joi.number().optional().default(null),
+    firstName: Joi.string().optional().default(null),
+    lastName: Joi.string().optional().default(null),
+    phoneNo: Joi.number().optional().default(null),
     email: Joi.string().optional().default(null),
     message: Joi.string().optional().default(null),
-    is_deleted: Joi.boolean().optional().default(false),
+    recordDeleted: Joi.boolean().optional().default(false),
   });
 }

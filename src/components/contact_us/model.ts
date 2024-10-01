@@ -3,17 +3,17 @@ import { IContactRequestSchema } from "./interface";
 
 const ContactRequestSchema: Schema = new Schema(
   {
-    first_name: { type: String },
-    last_name: { type: String },
-    phone_no: { type: Number },
+    firstName: { type: String },
+    lastName: { type: String },
+    phoneNo: { type: Number },
     email: { type: String },
     message: { type: String },
-    is_deleted: { type: Boolean, default: false },
+    recordDeleted: { type: Boolean, default: false },
   },
   {
     timestamps: true,
-    collection: "contact_requests",
+    collection: "contact_request",
   }
 );
 
-export default mongoose.model<IContactRequestSchema>("ContactRequests", ContactRequestSchema);
+export default mongoose.model<IContactRequestSchema>("ContactRequest", ContactRequestSchema);

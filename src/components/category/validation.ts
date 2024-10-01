@@ -40,6 +40,19 @@ class CategoryValidation {
       .custom(objectIdValidator, "MongoDB ObjectID")
       .validate(id, { messages: { "string.custom": "Invalid ID format" } });
   }
+
+  /**
+   * Validates a pagination query object.
+   *
+   * @param {Object} body - The pagination query object to validate.
+   * @returns {Joi.ValidationResult} - The result of the validation.
+   */
+  public validatePaginationBody(body: any): Joi.ValidationResult {
+    return Joi.object({
+      page: Joi.number().optional(),
+      limit: Joi.number().optional(),
+    }).validate(body);
+  }
 }
 
 export default CategoryValidation;

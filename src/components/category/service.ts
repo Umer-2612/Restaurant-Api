@@ -1,4 +1,4 @@
-import { ICategoryService, ICategorySchema } from "./interface";
+import { ICategoryService, ICategorySchema, IPaginationBody } from "./interface";
 import CategoryDAO from "./dao";
 import { ErrorHandler } from "../../utils/common-function";
 
@@ -35,9 +35,9 @@ class CategoryService implements ICategoryService {
    * @returns {Promise<ICategorySchema[]>} - An array of categories.
    * @throws {ErrorHandler} - Throws an error if the categories cannot be retrieved.
    */
-  async getCategories(): Promise<ICategorySchema[]> {
+  async getCategories(data: IPaginationBody): Promise<ICategorySchema[]> {
     try {
-      return await this.categoryDao.getCategories();
+      return await this.categoryDao.getCategories(data);
     } catch (error: any) {
       throw new ErrorHandler({
         statusCode: 500,

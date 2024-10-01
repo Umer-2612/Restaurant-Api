@@ -62,6 +62,17 @@ export interface IMenuItemSchema extends Document {
 }
 
 /**
+ * @interface IPaginationBody
+ * @description Interface for pagination query parameters.
+ * @property {number} page - The page number to retrieve.
+ * @property {number} limit - The number of records to retrieve per page.
+ */
+export interface IPaginationBody {
+  page: number;
+  limit: number;
+}
+
+/**
  * @interface IMenuItemService
  * @description Interface defining the menu item service methods for managing menu.
  */
@@ -72,8 +83,9 @@ export interface IMenuItemService {
    * @returns {Promise<IMenuItemSchema>} The created menu item.
    */
   createMenuItem(data: IMenuItemSchema): Promise<IMenuItemSchema>;
-  getMenuItems(): Promise<IMenuItemSchema[]>;
+  getMenuItems(data: IPaginationBody): Promise<IMenuItemSchema[]>;
   getMenuItemById(id: string): Promise<IMenuItemSchema>;
+  getMenuItemsByCategoryId(categoryId: string, data: IPaginationBody): Promise<IMenuItemSchema[]>;
   updateMenuItem(id: string, data: Partial<IMenuItemSchema>): Promise<IMenuItemSchema>;
   deleteMenuItem(id: string): Promise<void>;
 }

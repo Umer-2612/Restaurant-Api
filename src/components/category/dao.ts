@@ -1,6 +1,6 @@
 import CategorySchema from "./model";
 import { ErrorHandler } from "../../utils/common-function";
-import { ICategorySchema } from "./interface";
+import { ICategorySchema, IPaginationBody } from "./interface";
 
 /**
  * @class CategoryDAO
@@ -41,9 +41,11 @@ export default class CategoryDAO {
    * @throws {ErrorHandler} Throws an ErrorHandler if the database operation fails.
    * @description Retrieves all categories from the database, excluding deleted records.
    */
-  async getCategories(): Promise<ICategorySchema[]> {
+  async getCategories(data: IPaginationBody): Promise<ICategorySchema[]> {
     try {
-      return await CategorySchema.find({ recordDeleted: false }); // Fetch only non-deleted records
+      let rowLimit = data.limit ? data.limit : 10;
+      let rowSkip = data.page ? (data.page * rowLimit) - rowLimit : 0;
+      return await CategorySchema.find({ recordDeleted: false }).skip(rowSkip).limit(rowLimit); // Fetch only non-deleted records
     } catch (error: any) {
       throw new ErrorHandler({
         statusCode: 500,

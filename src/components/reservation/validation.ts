@@ -1,15 +1,33 @@
+/**
+ * Validation class for reservation-related data using Joi.
+ *
+ * @class ReservationRequestsValidation
+ * @constructor
+ */
 import Joi from "joi";
 import { objectIdValidator } from "../../utils/common-function";
 
 export default class ReservationRequestsValidation {
   static reservationRequestsValidation: any;
 
+  /**
+   * Validates a MongoDB ObjectID.
+   *
+   * @param {string} id - The ID to validate.
+   * @returns {Joi.ValidationResult} - The result of the validation.
+   * @throws {Joi.ValidationError} - Throws an error if the ID format is invalid.
+   */
   public validateId(id: string): Joi.ValidationResult {
     return Joi.string()
       .custom(objectIdValidator, "MongoDB ObjectID")
       .validate(id, { messages: { "string.custom": "Invalid ID format" } });
   }
 
+  /**
+   * Validates a reservation request object when creating a new reservation request.
+   *
+   * @type {Joi.ObjectSchema}
+   */
   public validateCreateReservationRequestForm: Joi.ObjectSchema = Joi.object({
     firstName: Joi.string().required().messages({
       "any.required": "First name is required",
@@ -42,6 +60,11 @@ export default class ReservationRequestsValidation {
     recordDeleted: Joi.boolean().optional().default(false),
   });
 
+  /**
+   * Validates a reservation request object when updating an existing reservation request.
+   *
+   * @type {Joi.ObjectSchema}
+   */
   public validateUpdateReservationRequestForm: Joi.ObjectSchema = Joi.object({
     firstName: Joi.string().optional().default(null),
     lastName: Joi.string().optional().default(null),
@@ -52,4 +75,17 @@ export default class ReservationRequestsValidation {
     message: Joi.string().optional().default(null),
     recordDeleted: Joi.boolean().optional().default(false),
   });
+
+  /**
+   * Validates a pagination query object.
+   *
+   * @param {Object} body - The pagination query object to validate.
+   * @returns {Joi.ValidationResult} - The result of the validation.
+   */
+  public validatePaginationBody(body: any): Joi.ValidationResult {
+    return Joi.object({
+      page: Joi.number().optional(),
+      limit: Joi.number().optional(),
+    }).validate(body);
+  }
 }

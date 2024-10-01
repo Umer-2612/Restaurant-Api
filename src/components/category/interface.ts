@@ -44,6 +44,18 @@ export interface ICategorySchema extends Document {
 }
 
 /**
+ * Interface representing the pagination query object.
+ *
+ * @interface IPaginationBody
+ * @property {number} page - The page number to retrieve.
+ * @property {number} limit - The number of records to retrieve per page.
+ */
+export interface IPaginationBody {
+  page: number;
+  limit: number;
+}
+
+/**
  * @interface ICategoryService
  * @description Interface defining the category service methods for managing categories.
  */
@@ -59,7 +71,7 @@ export interface ICategoryService {
    * @method getCategories
    * @returns {Promise<ICategorySchema[]>} A list of all categories.
    */
-  getCategories(): Promise<ICategorySchema[]>;
+  getCategories(data: IPaginationBody): Promise<ICategorySchema[]>;
 
   /**
    * @method getCategoryById

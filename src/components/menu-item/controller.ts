@@ -5,6 +5,7 @@ import MenuItemService from "./service";
 import Generator from "../../utils/generator";
 import { ErrorHandler } from "../../utils/common-function";
 import MenuItemValidation from "./validation";
+import { IPaginationBody } from "./interface";
 
 /**
  * @class MenuController
@@ -74,17 +75,33 @@ class MenuItemController {
     }
   };
 
- /**
- * @public
- * @method getMenuItems
- * @param {Request} req - The request object from Express.
- * @param {Response} res - The response object from Express.
- * @returns {Promise<any>}
- * @description Retrieves all menu items.
- */
+  /**
+   * @public
+   * @method getMenuItems
+   * @param {Request} req - The request object from Express.
+   * @param {Response} res - The response object from Express.
+   * @returns {Promise<any>}
+   * @description Retrieves all menu items from the database, excluding deleted records.
+   * The request query parameters must include the page and limit of the pagination.
+   * The response will contain the retrieved menu items, along with the pagination data.
+   */
   public getMenuItems = async (req: Request, res: Response): Promise<any> => {
+    const validateBody = this.menuItemValidation.validatePaginationBody(req.query);
+
+    if (validateBody.error) {
+      return Generator.sendResponse({
+        res,
+        statusCode: 400,
+        success: false,
+        message: validateBody.error.details[0].message,
+      });
+    }
+
     try {
-      const menuItems = await this.menuItemService.getMenuItems();
+      const page = Number(req.query.page);
+      const limit = Number(req.query.limit);
+      const paginationData: IPaginationBody = { page, limit };
+      const menuItems = await this.menuItemService.getMenuItems(paginationData);
       return Generator.sendResponse({
         res,
         statusCode: 200,
@@ -104,22 +121,20 @@ class MenuItemController {
  * @returns {Promise<any>}
  * @description Retrieves a menu item by its ID.
  */
-  public getMenuItemById = async (
-    req: Request,
-    res: Response
-  ): Promise<any> => {
-    try {
-      const { id } = req.params;
-      const idValidation = this.menuItemValidation.validateId(id); // Validate ID
+  public getMenuItemById = async (req: Request, res: Response): Promise<any> => {
+    const { id } = req.params;
+    const idValidation = this.menuItemValidation.validateId(id); // Validate ID
 
-      if (idValidation.error) {
-        return Generator.sendResponse({
-          res,
-          statusCode: 400,
-          success: false,
-          message: idValidation.error.details[0].message,
-        });
-      }
+    if (idValidation.error) {
+      return Generator.sendResponse({
+        res,
+        statusCode: 400,
+        success: false,
+        message: idValidation.error.details[0].message,
+      });
+    }
+
+    try {
       const menuItem = await this.menuItemService.getMenuItemById(id);
       return Generator.sendResponse({
         res,
@@ -175,6 +190,55 @@ class MenuItemController {
         statusCode: 200,
         message: "Menu item updated successfully",
         data: updatedMenuItem,
+      });
+    } catch (error: any) {
+      await this.handleError(res, error);
+    }
+  };
+
+  /**
+   * @public
+   * @method getMenuItemByCategory
+   * @param {Request} req - The request object from Express.
+   * @param {Response} res - The response object from Express.
+   * @returns {Promise<any>}
+   * @description Retrieves menu items by their category ID.
+   */
+  public getMenuItemByCategory = async (req: Request, res: Response): Promise<any> => {
+    const { categoryId } = req.params;
+    const validateBody = this.menuItemValidation.validatePaginationBody(req.query);
+    const categoryValidation = this.menuItemValidation.validateId(categoryId); // Validate Category
+
+    if (validateBody.error) {
+      return Generator.sendResponse({
+        res,
+        statusCode: 400,
+        success: false,
+        message: validateBody.error.details[0].message,
+      });
+    }
+
+    if (categoryValidation.error) {
+      return Generator.sendResponse({
+        res,
+        statusCode: 400,
+        success: false,
+        message: categoryValidation.error.details[0].message,
+      });
+    }
+
+    try {
+      const page = Number(req.query.page);
+      const limit = Number(req.query.limit);
+      const paginationData: IPaginationBody = { page, limit };
+      const menuItems = await this.menuItemService.getMenuItemsByCategoryId(
+        categoryId, paginationData
+      );
+      return Generator.sendResponse({
+        res,
+        statusCode: 200,
+        message: "Menu items retrieved successfully",
+        data: menuItems,
       });
     } catch (error: any) {
       await this.handleError(res, error);

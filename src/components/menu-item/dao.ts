@@ -1,6 +1,6 @@
 import MenuItemSchema from "./model";
 import { ErrorHandler } from "../../utils/common-function";
-import { IMenuItemSchema } from "./interface";
+import { IMenuItemSchema, IPaginationBody } from "./interface";
 
 /**
  * @class MenuItemDAO
@@ -34,10 +34,19 @@ export default class MenuItemDAO {
     }
   }
 
-  async getMenuItems(): Promise<IMenuItemSchema[]> {
+  /**
+   * @async
+   * @method getMenuItems
+   * @returns {Promise<IMenuItemSchema[]>}
+   * @throws {ErrorHandler} Throws an ErrorHandler if the database operation fails.
+   * @description Retrieves all menu items from the database, excluding deleted records.
+   */
+  async getMenuItems(data: IPaginationBody): Promise<IMenuItemSchema[]> {
     try {
+      let rowLimit = data.limit ? data.limit : 10;
+      let rowSkip = data.page ? (data.page * rowLimit) - rowLimit : 0;
       let join = { path: "category", select: "name", match: { recordDeleted: false } };
-      const res = await MenuItemSchema.find({ recordDeleted: false }).populate(join);
+      const res = await MenuItemSchema.find({ recordDeleted: false }).populate(join).skip(rowSkip).limit(rowLimit);
       return res;
     } catch (error: any) {
       throw new ErrorHandler({
@@ -47,6 +56,14 @@ export default class MenuItemDAO {
     }
   }
 
+  /**
+   * @async
+   * @method getMenuItemById
+   * @param {string} id - The ID of the menu item to retrieve.
+   * @returns {Promise<IMenuItemSchema | null>}
+   * @throws {ErrorHandler} Throws an ErrorHandler if the database operation fails.
+   * @description Retrieves a specific menu item by its ID from the database.
+   */
   async getMenuItemById(id: string): Promise<IMenuItemSchema | null> {
     try {
       let join = { path: "category", select: "name", match: { recordDeleted: false } };
@@ -60,6 +77,35 @@ export default class MenuItemDAO {
     }
   }
 
+  /**
+ * Retrieves all menu items associated with a specific category ID from the database.
+ * @param {string} categoryId - The ID of the category to retrieve menu items for.
+ * @returns {Promise<IMenuItemSchema[]>} - An array of IMenuItemSchema objects representing the menu items associated with the category.
+ * @throws {ErrorHandler} - Throws an ErrorHandler if the database operation fails.
+ */
+  async getMenuItemsByCategoryId(categoryId: string, data: IPaginationBody): Promise<IMenuItemSchema[]> {
+    try {
+      let rowLimit = data.limit ? data.limit : 10;
+      let rowSkip = data.page ? (data.page * rowLimit) - rowLimit : 0;
+      const res = await MenuItemSchema.find({ category: categoryId, recordDeleted: false }).skip(rowSkip).limit(rowLimit);
+      return res;
+    } catch (error: any) {
+      throw new ErrorHandler({
+        statusCode: 500,
+        message: "Database Error: Unable to retrieve menu items",
+      });
+    }
+  }
+
+  /**
+   * @async
+   * @method updateMenuItem
+   * @param {string} id - The ID of the menu item to update.
+   * @param {Partial<IMenuItemSchema>} data - The updated menu item data.
+   * @returns {Promise<IMenuItemSchema | null>}
+   * @throws {ErrorHandler} Throws an ErrorHandler if the database operation fails.
+   * @description Updates an existing menu item in the database by its ID.
+   */
   async updateMenuItem(id: string, data: Partial<IMenuItemSchema>): Promise<IMenuItemSchema | null> {
     try {
       const res = await MenuItemSchema.findOneAndUpdate(
@@ -76,6 +122,14 @@ export default class MenuItemDAO {
     }
   }
 
+  /**
+   * @async
+   * @method deleteMenuItem
+   * @param {string} id - The ID of the menu item to delete.
+   * @returns {Promise<any>}
+   * @throws {ErrorHandler} Throws an ErrorHandler if the database operation fails.
+   * @description Soft deletes a menu item by marking it as deleted in the database.
+   */
   async deleteMenuItem(id: string): Promise<any> {
     try {
       await MenuItemSchema.findByIdAndUpdate(id, {

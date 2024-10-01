@@ -1,9 +1,22 @@
+/**
+ * Service class for Reservation Request Form
+ * @class ReservationRequestFormService
+ * @author Neel Rana
+ * @since 2024-10-01
+ */
 import ReservationRequestsDAO from "./dao";
 import { ErrorHandler } from "../../utils/common-function";
-import { IReservationRequestSchema } from "./interface";
+import { IReservationRequestSchema, IPaginationBody } from "./interface";
 
 export default class ReservationRequestFormService {
 
+  /**
+   * Creates a new Reservation Request Form
+   * @method createReservationRequestForm
+   * @param {IReservationRequestSchema} data Reservation Request Form data
+   * @returns {Promise<IReservationRequestSchema>} newly created Reservation Request Form
+   * @throws {ErrorHandler} if error occurs while creating Reservation Request Form
+   */
   public async createReservationRequestForm(data: IReservationRequestSchema): Promise<IReservationRequestSchema> {
     try {
       const reservationForm = await ReservationRequestsDAO.createReservationRequestForm(data);
@@ -13,6 +26,14 @@ export default class ReservationRequestFormService {
     }
   }
 
+  /**
+   * Updates an existing Reservation Request Form
+   * @method updateReservationRequestForm
+   * @param {string} id id of the Reservation Request Form to be updated
+   * @param {IReservationRequestSchema} data Reservation Request Form data
+   * @returns {Promise<IReservationRequestSchema | null>} updated Reservation Request Form
+   * @throws {ErrorHandler} if error occurs while updating Reservation Request Form
+   */
   public async updateReservationRequestForm(id: string, data: IReservationRequestSchema): Promise<IReservationRequestSchema | null> {
     try {
       const reservationForm = await ReservationRequestsDAO.updateReservationRequestForm(id, data);
@@ -25,9 +46,15 @@ export default class ReservationRequestFormService {
     }
   }
 
-  public async getReservationRequestForm(): Promise<IReservationRequestSchema[] | null> {
+  /**
+   * Gets all Reservation Request Forms
+   * @method getReservationRequestForm
+   * @returns {Promise<IReservationRequestSchema[] | null>} list of all Reservation Request Forms
+   * @throws {ErrorHandler} if error occurs while getting Reservation Request Forms
+   */
+  public async getReservationRequestForm(data: IPaginationBody ): Promise<IReservationRequestSchema[] | null> {
     try {
-      let reservationForms = await ReservationRequestsDAO.getReservationRequestForm();
+      let reservationForms = await ReservationRequestsDAO.getReservationRequestForm(data);
       if (reservationForms && reservationForms.length) {
         reservationForms = reservationForms.map(e => {
           let dateObj = e.toObject();
@@ -44,6 +71,13 @@ export default class ReservationRequestFormService {
     }
   }
 
+  /**
+   * Deletes a Reservation Request Form
+   * @method deleteReservationRequestForm
+   * @param {string} id id of the Reservation Request Form to be deleted
+   * @returns {Promise<IReservationRequestSchema | null>} deleted Reservation Request Form
+   * @throws {ErrorHandler} if error occurs while deleting Reservation Request Form
+   */
   public async deleteReservationRequestForm(id: string): Promise<IReservationRequestSchema | null> {
     try {
       const reservationForm = await ReservationRequestsDAO.deleteReservationRequestForm(id);

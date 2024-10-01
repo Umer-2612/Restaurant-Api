@@ -5,6 +5,7 @@ import CategoryService from "./service";
 import Generator from "../../utils/generator";
 import { ErrorHandler } from "../../utils/common-function";
 import CategoryValidation from "./validation";
+import { IPaginationBody } from "./interface";
 
 /**
  * @class CategoryController
@@ -86,8 +87,22 @@ class CategoryController {
    * @description Retrieves all categories.
    */
   public getCategories = async (req: Request, res: Response): Promise<any> => {
+    const validateBody = this.categoryValidation.validatePaginationBody(req.query);
+
+    if (validateBody.error) {
+      return Generator.sendResponse({
+        res,
+        statusCode: 400,
+        success: false,
+        message: validateBody.error.details[0].message,
+      });
+    }
+
     try {
-      const categories = await this.categoryService.getCategories();
+      const page = Number(req.query.page);
+      const limit = Number(req.query.limit);
+      const paginationData: IPaginationBody = { page, limit };
+      const categories = await this.categoryService.getCategories(paginationData);
       return Generator.sendResponse({
         res,
         statusCode: 200,

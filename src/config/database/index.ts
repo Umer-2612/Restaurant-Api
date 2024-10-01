@@ -11,15 +11,15 @@ class Database {
   async connect(): Promise<void> {
     try {
       const connectOptions: mongoose.ConnectOptions = {
-        dbName: config.mongoDBConfig.MONGODB_DB_MAIN,
+        dbName: config.mongoDBConfig.dbName,
       };
 
       if (config.mongoDBConfig.authenticate) {
-        connectOptions.user = config.mongoDBConfig.authenticate.username;
-        connectOptions.pass = config.mongoDBConfig.authenticate.password;
+        connectOptions.user = config.mongoDBConfig.authenticate.dbUsername;
+        connectOptions.pass = config.mongoDBConfig.authenticate.dbPassword;
       }
 
-      const MONGO_URI: string = `${config.mongoDBConfig.MONGODB_URI}`;
+      const MONGO_URI: string = `${config.mongoDBConfig.dbUrl}`;
 
       this.connection = mongoose.connection;
 
@@ -54,6 +54,7 @@ class Database {
 
       await mongoose.connect(MONGO_URI, connectOptions);
     } catch (error) {
+      console.log({ aeeea: error });
       console.error("Error connecting to MongoDB:", error);
       throw error;
     }

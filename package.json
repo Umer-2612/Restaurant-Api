@@ -7,7 +7,8 @@
     "start": "node build/config/server/index.js",
     "dev": "nodemon",
     "build": "tsc -p tsconfig.json",
-    "watch": "tsc -w -p tsconfig.json"
+    "watch": "tsc -w -p tsconfig.json",
+    "pm2": "npm run build && pm2 start ecosystem.config.js --env DEV"
   },
   "nodemonConfig": {
     "watch": [

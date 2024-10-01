@@ -11,11 +11,11 @@ interface Config {
     expiryTime: string;
   };
   mongoDBConfig: {
-    MONGODB_URI: string;
-    MONGODB_DB_MAIN: string;
+    dbUrl: string;
+    dbName: string;
     authenticate?: {
-      username: string;
-      password: string;
+      dbUsername: string;
+      dbPassword: string;
     };
   };
   googleConfig: {
@@ -51,11 +51,11 @@ const dev: Config = {
     expiryTime: "24h",
   },
   mongoDBConfig: {
-    MONGODB_URI: process.env.MONGO_URI || "",
-    MONGODB_DB_MAIN: process.env.MONGO_DB_NAME || "",
+    dbUrl: process.env.MONGO_DB_URI || "",
+    dbName: process.env.MONGO_DB_NAME || "",
     authenticate: {
-      username: process.env.MONGO_DB_USER || "",
-      password: process.env.MONGO_DB_PASSWORD || "",
+      dbUsername: process.env.MONGO_DB_USERNAME || "",
+      dbPassword: process.env.MONGO_DB_PASSWORD || "",
     },
   },
   googleConfig: {
@@ -71,8 +71,8 @@ const dev: Config = {
   },
 };
 
-const qa: Config = {
-  nodeEnv: "QA",
+const staging: Config = {
+  nodeEnv: "STAGING",
   port: Number(process.env.PORT) || 3000,
   whiteList: [
     `http://localhost:${process.env.PORT || 3000}`,
@@ -92,11 +92,11 @@ const qa: Config = {
     expiryTime: "24h",
   },
   mongoDBConfig: {
-    MONGODB_URI: process.env.MONGO_URI || "",
-    MONGODB_DB_MAIN: process.env.MONGO_DB_NAME || "",
+    dbUrl: process.env.MONGO_URI || "",
+    dbName: process.env.MONGO_DB_NAME || "",
     authenticate: {
-      username: process.env.MONGO_DB_USER || "",
-      password: process.env.MONGO_DB_PASSWORD || "",
+      dbUsername: process.env.MONGO_DB_USERNAME || "",
+      dbPassword: process.env.MONGO_DB_PASSWORD || "",
     },
   },
   googleConfig: {
@@ -133,11 +133,11 @@ const prod: Config = {
     expiryTime: "24h",
   },
   mongoDBConfig: {
-    MONGODB_URI: process.env.MONGO_URI || "",
-    MONGODB_DB_MAIN: process.env.MONGO_DB_NAME || "",
+    dbUrl: process.env.MONGO_URI || "",
+    dbName: process.env.MONGO_DB_NAME || "",
     authenticate: {
-      username: process.env.MONGO_DB_USER || "",
-      password: process.env.MONGO_DB_PASSWORD || "",
+      dbUsername: process.env.MONGO_DB_USERNAME || "",
+      dbPassword: process.env.MONGO_DB_PASSWORD || "",
     },
   },
   googleConfig: {
@@ -160,7 +160,7 @@ switch (process.env.NODE_ENV) {
     env = prod;
     break;
   case "QA":
-    env = qa;
+    env = staging;
     break;
   case "DEV":
   default:

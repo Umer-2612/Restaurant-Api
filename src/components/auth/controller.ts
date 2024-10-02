@@ -78,11 +78,14 @@ class AuthController {
 
   public test = async (req: Request, res: Response): Promise<void> => {
     try {
+      const user = (req as any).user;
+      
       Generator.sendResponse({
         res,
         statusCode: 200,
         success: true,
         message: "success",
+        data: user,
       });
     } catch (error: any) {
       this.handleError(res, error);

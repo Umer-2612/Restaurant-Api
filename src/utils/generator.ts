@@ -7,18 +7,29 @@ class Generator {
     success = true,
     message,
     data,
+    paginationData,
   }: {
     res: Response;
     statusCode?: number;
     success?: boolean;
     message: string;
     data?: any;
+    paginationData?: any;
   }) {
-    return res.status(statusCode).json({
-      success: success,
-      message: message,
-      data: data,
-    });
+    if (paginationData) {
+      return res.status(statusCode).json({
+        success: success,
+        message: message,
+        data,
+        paginationData,
+      });
+    } else {
+      return res.status(statusCode).json({
+        success: success,
+        message: message,
+        data,
+      });
+    }
   }
 }
 

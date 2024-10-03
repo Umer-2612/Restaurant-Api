@@ -40,6 +40,47 @@ class MenuItemController {
 
   /**
    * @public
+   * @method getMenuItems
+   * @param {Request} req - The request object from Express.
+   * @param {Response} res - The response object from Express.
+   * @returns {Promise<any>}
+   * @description Retrieves all menu items from the database, excluding deleted records.
+   * The request query parameters must include the page and limit of the pagination.
+   * The response will contain the retrieved menu items, along with the pagination data.
+   */
+  public getMenuItems = async (req: Request, res: Response): Promise<any> => {
+    const validateBody = this.menuItemValidation.validatePaginationBody(
+      req.query
+    );
+
+    if (validateBody.error) {
+      return Generator.sendResponse({
+        res,
+        statusCode: 400,
+        success: false,
+        message: validateBody.error.details[0].message,
+      });
+    }
+
+    try {
+      const page = Number(req.query.page);
+      const limit = Number(req.query.limit);
+      const paginationData: IPaginationBody = { page, limit };
+      const menuItems = await this.menuItemService.getMenuItems(paginationData);
+      return Generator.sendResponse({
+        res,
+        statusCode: 200,
+        message: "Menu items retrieved successfully",
+        data: menuItems[0].data,
+        paginationData: menuItems[0].paginationData,
+      });
+    } catch (error: any) {
+      await this.handleError(res, error);
+    }
+  };
+
+  /**
+   * @public
    * @method createMenuItem
    * @param {Request} req - The request object from Express.
    * @param {Response} res - The response object from Express.
@@ -77,51 +118,16 @@ class MenuItemController {
 
   /**
    * @public
-   * @method getMenuItems
+   * @method getMenuItemById
    * @param {Request} req - The request object from Express.
    * @param {Response} res - The response object from Express.
    * @returns {Promise<any>}
-   * @description Retrieves all menu items from the database, excluding deleted records.
-   * The request query parameters must include the page and limit of the pagination.
-   * The response will contain the retrieved menu items, along with the pagination data.
+   * @description Retrieves a menu item by its ID.
    */
-  public getMenuItems = async (req: Request, res: Response): Promise<any> => {
-    const validateBody = this.menuItemValidation.validatePaginationBody(req.query);
-
-    if (validateBody.error) {
-      return Generator.sendResponse({
-        res,
-        statusCode: 400,
-        success: false,
-        message: validateBody.error.details[0].message,
-      });
-    }
-
-    try {
-      const page = Number(req.query.page);
-      const limit = Number(req.query.limit);
-      const paginationData: IPaginationBody = { page, limit };
-      const menuItems = await this.menuItemService.getMenuItems(paginationData);
-      return Generator.sendResponse({
-        res,
-        statusCode: 200,
-        message: "Menu items retrieved successfully",
-        data: menuItems,
-      });
-    } catch (error: any) {
-      await this.handleError(res, error);
-    }
-  };
-
-  /**
- * @public
- * @method getMenuItemById
- * @param {Request} req - The request object from Express.
- * @param {Response} res - The response object from Express.
- * @returns {Promise<any>}
- * @description Retrieves a menu item by its ID.
- */
-  public getMenuItemById = async (req: Request, res: Response): Promise<any> => {
+  public getMenuItemById = async (
+    req: Request,
+    res: Response
+  ): Promise<any> => {
     const { id } = req.params;
     const idValidation = this.menuItemValidation.validateId(id); // Validate ID
 
@@ -148,13 +154,13 @@ class MenuItemController {
   };
 
   /**
- * @public
- * @method updateMenuItem
- * @param {Request} req - The request object from Express.
- * @param {Response} res - The response object from Express.
- * @returns {Promise<any>}
- * @description Updates an existing menu item by its ID.
- */
+   * @public
+   * @method updateMenuItem
+   * @param {Request} req - The request object from Express.
+   * @param {Response} res - The response object from Express.
+   * @returns {Promise<any>}
+   * @description Updates an existing menu item by its ID.
+   */
   public updateMenuItem = async (req: Request, res: Response): Promise<any> => {
     try {
       const { id } = req.params;
@@ -204,9 +210,14 @@ class MenuItemController {
    * @returns {Promise<any>}
    * @description Retrieves menu items by their category ID.
    */
-  public getMenuItemByCategory = async (req: Request, res: Response): Promise<any> => {
+  public getMenuItemByCategory = async (
+    req: Request,
+    res: Response
+  ): Promise<any> => {
     const { categoryId } = req.params;
-    const validateBody = this.menuItemValidation.validatePaginationBody(req.query);
+    const validateBody = this.menuItemValidation.validatePaginationBody(
+      req.query
+    );
     const categoryValidation = this.menuItemValidation.validateId(categoryId); // Validate Category
 
     if (validateBody.error) {
@@ -232,7 +243,8 @@ class MenuItemController {
       const limit = Number(req.query.limit);
       const paginationData: IPaginationBody = { page, limit };
       const menuItems = await this.menuItemService.getMenuItemsByCategoryId(
-        categoryId, paginationData
+        categoryId,
+        paginationData
       );
       return Generator.sendResponse({
         res,
@@ -246,13 +258,13 @@ class MenuItemController {
   };
 
   /**
- * @public
- * @method  deleteMenuItem
- * @param {Request} req - The request object from Express.
- * @param {Response} res - The response object from Express.
- * @returns {Promise<any>}
- * @description Deletes a menu item by its ID.
- */
+   * @public
+   * @method  deleteMenuItem
+   * @param {Request} req - The request object from Express.
+   * @param {Response} res - The response object from Express.
+   * @returns {Promise<any>}
+   * @description Deletes a menu item by its ID.
+   */
   public deleteMenuItem = async (req: Request, res: Response): Promise<any> => {
     try {
       const { id } = req.params;

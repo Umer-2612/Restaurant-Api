@@ -1,4 +1,8 @@
-import { IMenuItemSchema, IMenuItemService, IPaginationBody } from "./interface";
+import {
+  IMenuItemSchema,
+  IMenuItemService,
+  IPaginationBody,
+} from "./interface";
 import MenuItemDAO from "./dao";
 import { ErrorHandler } from "../../utils/common-function";
 import CategoryService from "../category/service";
@@ -62,9 +66,61 @@ class MenuItemSchema implements IMenuItemService {
    * @returns {Promise<{ data: IMenuItemSchema[], totalCount: number }>} - An array of menu items.
    * @throws {ErrorHandler} - Throws an error if the menu items cannot be retrieved.
    */
-  async getMenuItems(data: IPaginationBody): Promise<{ data: IMenuItemSchema[], totalCount: number }> {
+  async getMenuItems(data: IPaginationBody): Promise<any> {
     try {
-      return await this.menuItemDao.getMenuItems(data);
+      const rowLimit = data.limit ? data.limit : 10;
+      const rowSkip = data.page ? (data.page - 1) * rowLimit : 0;
+
+      const pipeline = [
+        {
+          $match: { recordDeleted: false },
+        },
+        {
+          $lookup: {
+            from: "category",
+            localField: "category",
+            foreignField: "_id",
+            as: "categoryDetails",
+          },
+        },
+        {
+          $unwind: {
+            path: "$categoryDetails",
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+        {
+          $facet: {
+            paginationData: [
+              { $count: "total" }, // Count the total number of records
+              {
+                $addFields: {
+                  currentPage: data.page > 0 ? Number(data.page) : 1, // Return the current page
+                },
+              },
+            ],
+            data: [
+              { $sort: { createdAt: -1 } }, // Sort by creation date
+              { $skip: rowSkip }, // Skip the documents for pagination
+              { $limit: rowLimit }, // Limit the number of documents returned
+              {
+                $project: {
+                  itemName: 1,
+                  itemDescription: 1,
+                  itemPrice: 1,
+                  category: {
+                    _id: "$categoryDetails._id",
+                    name: "$categoryDetails.name",
+                  },
+                },
+              },
+            ],
+          },
+        },
+      ];
+
+      const res = await this.menuItemDao.getMenuItems(pipeline);
+      return res;
     } catch (error: any) {
       throw new ErrorHandler({
         statusCode: 500,
@@ -98,14 +154,20 @@ class MenuItemSchema implements IMenuItemService {
   }
 
   /**
- * Retrieve all menu items by category ID.
- * @param {string} categoryId - The ID of the category to retrieve menu items from.
- * @returns {Promise<IMenuItemSchema[]>} - An array of menu items.
- * @throws {ErrorHandler} - Throws an error if the menu items cannot be retrieved.
- */
-  async getMenuItemsByCategoryId(categoryId: string, paginationData: IPaginationBody): Promise<{ data: IMenuItemSchema[], totalCount: number }> {
+   * Retrieve all menu items by category ID.
+   * @param {string} categoryId - The ID of the category to retrieve menu items from.
+   * @returns {Promise<IMenuItemSchema[]>} - An array of menu items.
+   * @throws {ErrorHandler} - Throws an error if the menu items cannot be retrieved.
+   */
+  async getMenuItemsByCategoryId(
+    categoryId: string,
+    paginationData: IPaginationBody
+  ): Promise<{ data: IMenuItemSchema[]; totalCount: number }> {
     try {
-      const menuItems = await this.menuItemDao.getMenuItemsByCategoryId(categoryId, paginationData);
+      const menuItems = await this.menuItemDao.getMenuItemsByCategoryId(
+        categoryId,
+        paginationData
+      );
       return menuItems;
     } catch (error: any) {
       throw new ErrorHandler({
@@ -122,7 +184,10 @@ class MenuItemSchema implements IMenuItemService {
    * @returns {Promise<IMenuItemSchema>} - The updated menu item.
    * @throws {ErrorHandler} - Throws an error if the menu item is not found or cannot be updated.
    */
-  async updateMenuItem(id: string, data: Partial<IMenuItemSchema>): Promise<IMenuItemSchema> {
+  async updateMenuItem(
+    id: string,
+    data: Partial<IMenuItemSchema>
+  ): Promise<IMenuItemSchema> {
     try {
       const updatedMenuItem = await this.menuItemDao.updateMenuItem(id, data);
       if (!updatedMenuItem) {

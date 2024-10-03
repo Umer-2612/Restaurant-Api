@@ -49,16 +49,21 @@ export default class ReservationRequestsDAO {
 
   /**
    * @description Get all Reservation Requests
-   * @returns {Promise<IReservationRequestSchema[] | null>} list of all reservation requests
+   * @returns {Promise<{data: IReservationRequestSchema[] | null, totalCount: number}>} list of all reservation requests
    * @throws {ErrorHandler} if error occurs while getting reservation requests
    */
-  public static async getReservationRequestForm(data: IPaginationBody): Promise<IReservationRequestSchema[] | null> {
+  public static async getReservationRequestForm(data: IPaginationBody): Promise<{ data: IReservationRequestSchema[] | null, totalCount: number }> {
     try {
       let rowLimit = data.limit ? data.limit : 10;
       let rowSkip = data.page ? (data.page * rowLimit) - rowLimit : 0;
       const query: any = { recordDeleted: false };
       let getreservationForms = await ReservationRequestsSchema.find(query).skip(rowSkip).limit(rowLimit);
-      return getreservationForms;
+      const total = await ReservationRequestsSchema.countDocuments({ recordDeleted: false });
+      const result = {
+        data: getreservationForms,
+        totalCount: total
+      }
+      return result;
     } catch (error: any) {
       throw new ErrorHandler({ statusCode: 500, message: "Database Error" });
     }

@@ -51,16 +51,21 @@ export default class ContactRequestsDAO {
   /**
    * Gets all Contact Request Forms
    * @method getContactRequestForm
-   * @returns {Promise<IContactRequestSchema[] | null>} list of all contact request forms
+   * @returns {Promise<{data: IContactRequestSchema[] | null, totalCount: number}>} list of all contact request forms
    * @throws {ErrorHandler} if error occurs while getting contact request forms
    */
-  public static async getContactRequestForm(data: IPaginationBody): Promise<IContactRequestSchema[] | null> {
+  public static async getContactRequestForm(data: IPaginationBody): Promise<{ data: IContactRequestSchema[] | null, totalCount: number }> {
     try {
       let rowLimit = data.limit ? data.limit : 10;
       let rowSkip = data.page ? (data.page * rowLimit) - rowLimit : 0;
       const query: any = { recordDeleted: false };
       let getContactForms = await ContactRequestSchema.find(query).skip(rowSkip).limit(rowLimit);
-      return getContactForms;
+      const total = await ContactRequestSchema.countDocuments({ recordDeleted: false });
+      const result = {
+        data: getContactForms,
+        totalCount: total
+      }
+      return result;
     } catch (error: any) {
       throw new ErrorHandler({ statusCode: 500, message: "Database Error" });
     }

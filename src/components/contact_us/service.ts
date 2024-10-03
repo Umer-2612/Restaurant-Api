@@ -40,7 +40,7 @@ export default class ContactRequestFormService {
   public async updateContactRequestForm(id: string, data: IContactRequestSchema): Promise<IContactRequestSchema | null> {
     try {
       const contactForm = await ContactRequestsDAO.updateContactRequestForm(id, data);
-      if(!contactForm) {
+      if (!contactForm) {
         throw new ErrorHandler({ statusCode: 404, message: "Contact form not found for update" });
       }
       return contactForm;
@@ -53,10 +53,10 @@ export default class ContactRequestFormService {
    * Gets all contact request forms.
    *
    * @method getContactRequestForm
-   * @returns {Promise<IContactRequestSchema[] | null>} list of all contact request forms.
+   * @returns {Promise<{data: IContactRequestSchema[] | null, totalCount: number}>} list of all contact request forms.
    * @throws {ErrorHandler} if error occurs while getting contact request forms.
    */
-  public async getContactRequestForm(data: IPaginationBody): Promise<IContactRequestSchema[] | null> {
+  public async getContactRequestForm(data: IPaginationBody): Promise<{ data: IContactRequestSchema[] | null, totalCount: number }> {
     try {
       const contactForms = await ContactRequestsDAO.getContactRequestForm(data);
       return contactForms;

@@ -83,9 +83,9 @@ export interface IMenuItemService {
    * @returns {Promise<IMenuItemSchema>} The created menu item.
    */
   createMenuItem(data: IMenuItemSchema): Promise<IMenuItemSchema>;
-  getMenuItems(data: IPaginationBody): Promise<IMenuItemSchema[]>;
+  getMenuItems(data: IPaginationBody): Promise<{ data: IMenuItemSchema[], totalCount: number }>;
   getMenuItemById(id: string): Promise<IMenuItemSchema>;
-  getMenuItemsByCategoryId(categoryId: string, data: IPaginationBody): Promise<IMenuItemSchema[]>;
+  getMenuItemsByCategoryId(categoryId: string, data: IPaginationBody): Promise<{ data: IMenuItemSchema[], totalCount: number }>;
   updateMenuItem(id: string, data: Partial<IMenuItemSchema>): Promise<IMenuItemSchema>;
   deleteMenuItem(id: string): Promise<void>;
 }

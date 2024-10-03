@@ -99,6 +99,7 @@ export class MenuItemValidation {
     return Joi.object({
       page: Joi.number().optional(),
       limit: Joi.number().optional(),
+      category: Joi.string().optional(),
     }).validate(body);
   }
 }

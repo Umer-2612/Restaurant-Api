@@ -1,6 +1,6 @@
 import MenuItemSchema from "./model";
 import { ErrorHandler } from "../../utils/common-function";
-import { IMenuItemSchema, IPaginationBody } from "./interface";
+import { IMenuItemSchema } from "./interface";
 
 /**
  * @class MenuItemDAO
@@ -93,41 +93,41 @@ export default class MenuItemDAO {
     }
   }
 
-  /**
-   * Retrieves all menu items associated with a specific category ID from the database.
-   * @param {string} categoryId - The ID of the category to retrieve menu items for.
-   * @returns {Promise<{ data: IMenuItemSchema[], totalCount: number }>} - An array of IMenuItemSchema objects representing the menu items associated with the category.
-   * @throws {ErrorHandler} - Throws an ErrorHandler if the database operation fails.
-   */
-  async getMenuItemsByCategoryId(
-    categoryId: string,
-    data: IPaginationBody
-  ): Promise<{ data: IMenuItemSchema[]; totalCount: number }> {
-    try {
-      let rowLimit = data.limit ? data.limit : 10;
-      let rowSkip = data.page ? data.page * rowLimit - rowLimit : 0;
-      const res = await MenuItemSchema.find({
-        category: categoryId,
-        recordDeleted: false,
-      })
-        .skip(rowSkip)
-        .limit(rowLimit);
-      const total = await MenuItemSchema.countDocuments({
-        category: categoryId,
-        recordDeleted: false,
-      });
-      const result = {
-        data: res,
-        totalCount: total,
-      };
-      return result;
-    } catch (error: any) {
-      throw new ErrorHandler({
-        statusCode: 500,
-        message: "Database Error: Unable to retrieve menu items",
-      });
-    }
-  }
+  // /**
+  //  * Retrieves all menu items associated with a specific category ID from the database.
+  //  * @param {string} categoryId - The ID of the category to retrieve menu items for.
+  //  * @returns {Promise<{ data: IMenuItemSchema[], totalCount: number }>} - An array of IMenuItemSchema objects representing the menu items associated with the category.
+  //  * @throws {ErrorHandler} - Throws an ErrorHandler if the database operation fails.
+  //  */
+  // async getMenuItemsByCategoryId(
+  //   categoryId: string,
+  //   data: IPaginationBody
+  // ): Promise<{ data: IMenuItemSchema[]; totalCount: number }> {
+  //   try {
+  //     let rowLimit = data.limit ? data.limit : 10;
+  //     let rowSkip = data.page ? data.page * rowLimit - rowLimit : 0;
+  //     const res = await MenuItemSchema.find({
+  //       category: categoryId,
+  //       recordDeleted: false,
+  //     })
+  //       .skip(rowSkip)
+  //       .limit(rowLimit);
+  //     const total = await MenuItemSchema.countDocuments({
+  //       category: categoryId,
+  //       recordDeleted: false,
+  //     });
+  //     const result = {
+  //       data: res,
+  //       totalCount: total,
+  //     };
+  //     return result;
+  //   } catch (error: any) {
+  //     throw new ErrorHandler({
+  //       statusCode: 500,
+  //       message: "Database Error: Unable to retrieve menu items",
+  //     });
+  //   }
+  // }
 
   /**
    * @async

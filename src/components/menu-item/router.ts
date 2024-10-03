@@ -28,7 +28,7 @@ router.post("/", MenuItemController.createMenuItem);
  * @returns {Promise<IMenuItemSchema[] | null>} list of all menu items
  * @throws {ErrorHandler} if error occurs while getting menu items
  */
-router.get("/", MenuItemController.getMenuItems);
+router.get("/", MenuItemController.getAllMenuItems);
 
 /**
  * Gets a menu item by id
@@ -39,14 +39,14 @@ router.get("/", MenuItemController.getMenuItems);
  */
 router.get("/:id", MenuItemController.getMenuItemById);
 
-/**
- * Gets all menu items for a specific category
- * @method GET /category/:categoryId
- * @param {string} request.params.categoryId - id of the category
- * @returns {Promise<IMenuItemSchema[] | null>} list of menu items
- * @throws {ErrorHandler} if error occurs while getting menu items
- */
-router.get("/category/:categoryId", MenuItemController.getMenuItemByCategory);
+// /**
+//  * Gets all menu items for a specific category
+//  * @method GET /category/:categoryId
+//  * @param {string} request.params.categoryId - id of the category
+//  * @returns {Promise<IMenuItemSchema[] | null>} list of menu items
+//  * @throws {ErrorHandler} if error occurs while getting menu items
+//  */
+// router.get("/category/:categoryId", MenuItemController.getMenuItemByCategory);
 
 /**
  * Updates an existing menu item

@@ -72,6 +72,12 @@ export interface IPaginationBody {
   limit: number;
 }
 
+export interface IQueryBody {
+  page: number;
+  limit: number;
+  category: string;
+}
+
 /**
  * @interface IMenuItemService
  * @description Interface defining the menu item service methods for managing menu.
@@ -83,9 +89,17 @@ export interface IMenuItemService {
    * @returns {Promise<IMenuItemSchema>} The created menu item.
    */
   createMenuItem(data: IMenuItemSchema): Promise<IMenuItemSchema>;
-  getMenuItems(data: IPaginationBody): Promise<{ data: IMenuItemSchema[], totalCount: number }>;
+  getAllMenuItems(
+    data: IPaginationBody
+  ): Promise<{ data: IMenuItemSchema[]; totalCount: number }>;
   getMenuItemById(id: string): Promise<IMenuItemSchema>;
-  getMenuItemsByCategoryId(categoryId: string, data: IPaginationBody): Promise<{ data: IMenuItemSchema[], totalCount: number }>;
-  updateMenuItem(id: string, data: Partial<IMenuItemSchema>): Promise<IMenuItemSchema>;
+  // getMenuItemsByCategoryId(
+  //   categoryId: string,
+  //   data: IPaginationBody
+  // ): Promise<{ data: IMenuItemSchema[]; totalCount: number }>;
+  updateMenuItem(
+    id: string,
+    data: Partial<IMenuItemSchema>
+  ): Promise<IMenuItemSchema>;
   deleteMenuItem(id: string): Promise<void>;
 }

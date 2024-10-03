@@ -1,11 +1,13 @@
 import {
   IMenuItemSchema,
   IMenuItemService,
-  IPaginationBody,
+  // IPaginationBody,
+  IQueryBody,
 } from "./interface";
 import MenuItemDAO from "./dao";
 import { ErrorHandler } from "../../utils/common-function";
 import CategoryService from "../category/service";
+import mongoose from "mongoose";
 
 /**
  * Service class for handling menu-related operations.
@@ -66,14 +68,21 @@ class MenuItemSchema implements IMenuItemService {
    * @returns {Promise<{ data: IMenuItemSchema[], totalCount: number }>} - An array of menu items.
    * @throws {ErrorHandler} - Throws an error if the menu items cannot be retrieved.
    */
-  async getMenuItems(data: IPaginationBody): Promise<any> {
+  async getAllMenuItems(body: IQueryBody): Promise<any> {
     try {
-      const rowLimit = data.limit ? data.limit : 10;
-      const rowSkip = data.page ? (data.page - 1) * rowLimit : 0;
+      const rowLimit = body.limit ? body.limit : 10;
+      const rowSkip = body.page ? (body.page - 1) * rowLimit : 0;
+      const matchCondition: any = {
+        recordDeleted: false,
+      };
+
+      if (body.category) {
+        matchCondition.category = new mongoose.Types.ObjectId(body.category);
+      }
 
       const pipeline = [
         {
-          $match: { recordDeleted: false },
+          $match: matchCondition,
         },
         {
           $lookup: {
@@ -95,7 +104,7 @@ class MenuItemSchema implements IMenuItemService {
               { $count: "total" }, // Count the total number of records
               {
                 $addFields: {
-                  currentPage: data.page > 0 ? Number(data.page) : 1, // Return the current page
+                  currentPage: body.page > 0 ? Number(body.page) : 1, // Return the current page
                 },
               },
             ],
@@ -153,29 +162,29 @@ class MenuItemSchema implements IMenuItemService {
     }
   }
 
-  /**
-   * Retrieve all menu items by category ID.
-   * @param {string} categoryId - The ID of the category to retrieve menu items from.
-   * @returns {Promise<IMenuItemSchema[]>} - An array of menu items.
-   * @throws {ErrorHandler} - Throws an error if the menu items cannot be retrieved.
-   */
-  async getMenuItemsByCategoryId(
-    categoryId: string,
-    paginationData: IPaginationBody
-  ): Promise<{ data: IMenuItemSchema[]; totalCount: number }> {
-    try {
-      const menuItems = await this.menuItemDao.getMenuItemsByCategoryId(
-        categoryId,
-        paginationData
-      );
-      return menuItems;
-    } catch (error: any) {
-      throw new ErrorHandler({
-        statusCode: 500,
-        message: error.message || "Failed to retrieve menu items",
-      });
-    }
-  }
+  // /**
+  //  * Retrieve all menu items by category ID.
+  //  * @param {string} categoryId - The ID of the category to retrieve menu items from.
+  //  * @returns {Promise<IMenuItemSchema[]>} - An array of menu items.
+  //  * @throws {ErrorHandler} - Throws an error if the menu items cannot be retrieved.
+  //  */
+  // async getMenuItemsByCategoryId(
+  //   categoryId: string,
+  //   paginationData: IPaginationBody
+  // ): Promise<{ data: IMenuItemSchema[]; totalCount: number }> {
+  //   try {
+  //     const menuItems = await this.menuItemDao.getMenuItemsByCategoryId(
+  //       categoryId,
+  //       paginationData
+  //     );
+  //     return menuItems;
+  //   } catch (error: any) {
+  //     throw new ErrorHandler({
+  //       statusCode: 500,
+  //       message: error.message || "Failed to retrieve menu items",
+  //     });
+  //   }
+  // }
 
   /**
    * Update a menu item by its ID.

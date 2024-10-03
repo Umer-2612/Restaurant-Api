@@ -41,13 +41,18 @@ export default class MenuItemDAO {
    * @throws {ErrorHandler} Throws an ErrorHandler if the database operation fails.
    * @description Retrieves all menu items from the database, excluding deleted records.
    */
-  async getMenuItems(data: IPaginationBody): Promise<IMenuItemSchema[]> {
+  async getMenuItems(data: IPaginationBody): Promise<{ data: IMenuItemSchema[], totalCount: number }> {
     try {
       let rowLimit = data.limit ? data.limit : 10;
       let rowSkip = data.page ? (data.page * rowLimit) - rowLimit : 0;
       let join = { path: "category", select: "name", match: { recordDeleted: false } };
       const res = await MenuItemSchema.find({ recordDeleted: false }).populate(join).skip(rowSkip).limit(rowLimit);
-      return res;
+      const total = await MenuItemSchema.countDocuments({ recordDeleted: false });
+      const result = {
+        data: res,
+        totalCount: total
+      }
+      return result;
     } catch (error: any) {
       throw new ErrorHandler({
         statusCode: 500,
@@ -80,15 +85,20 @@ export default class MenuItemDAO {
   /**
  * Retrieves all menu items associated with a specific category ID from the database.
  * @param {string} categoryId - The ID of the category to retrieve menu items for.
- * @returns {Promise<IMenuItemSchema[]>} - An array of IMenuItemSchema objects representing the menu items associated with the category.
+ * @returns {Promise<{ data: IMenuItemSchema[], totalCount: number }>} - An array of IMenuItemSchema objects representing the menu items associated with the category.
  * @throws {ErrorHandler} - Throws an ErrorHandler if the database operation fails.
  */
-  async getMenuItemsByCategoryId(categoryId: string, data: IPaginationBody): Promise<IMenuItemSchema[]> {
+  async getMenuItemsByCategoryId(categoryId: string, data: IPaginationBody): Promise<{ data: IMenuItemSchema[], totalCount: number }> {
     try {
       let rowLimit = data.limit ? data.limit : 10;
       let rowSkip = data.page ? (data.page * rowLimit) - rowLimit : 0;
       const res = await MenuItemSchema.find({ category: categoryId, recordDeleted: false }).skip(rowSkip).limit(rowLimit);
-      return res;
+      const total = await MenuItemSchema.countDocuments({ category: categoryId, recordDeleted: false });
+      const result = {
+        data: res,
+        totalCount: total
+      }
+      return result;
     } catch (error: any) {
       throw new ErrorHandler({
         statusCode: 500,

@@ -37,15 +37,21 @@ export default class CategoryDAO {
   /**
    * @async
    * @method getCategories
-   * @returns {Promise<ICategorySchema[]>}
+   * @returns {Promise<{data : ICategorySchema[], totalCount: number}>}
    * @throws {ErrorHandler} Throws an ErrorHandler if the database operation fails.
    * @description Retrieves all categories from the database, excluding deleted records.
    */
-  async getCategories(data: IPaginationBody): Promise<ICategorySchema[]> {
+  async getCategories(data: IPaginationBody): Promise<{ data: ICategorySchema[], totalCount: number }> {
     try {
       let rowLimit = data.limit ? data.limit : 10;
       let rowSkip = data.page ? (data.page * rowLimit) - rowLimit : 0;
-      return await CategorySchema.find({ recordDeleted: false }).skip(rowSkip).limit(rowLimit); // Fetch only non-deleted records
+      const res = await CategorySchema.find({ recordDeleted: false }).skip(rowSkip).limit(rowLimit); // Fetch only non-deleted records
+      const total = await CategorySchema.countDocuments({ recordDeleted: false });
+      const result = {
+        data: res,
+        totalCount: total
+      }
+      return result;
     } catch (error: any) {
       throw new ErrorHandler({
         statusCode: 500,

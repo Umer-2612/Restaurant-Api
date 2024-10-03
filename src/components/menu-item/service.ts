@@ -59,10 +59,10 @@ class MenuItemSchema implements IMenuItemService {
 
   /**
    * Retrieve all menu items.
-   * @returns {Promise<IMenuItemSchema[]>} - An array of menu items.
+   * @returns {Promise<{ data: IMenuItemSchema[], totalCount: number }>} - An array of menu items.
    * @throws {ErrorHandler} - Throws an error if the menu items cannot be retrieved.
    */
-  async getMenuItems(data: IPaginationBody): Promise<IMenuItemSchema[]> {
+  async getMenuItems(data: IPaginationBody): Promise<{ data: IMenuItemSchema[], totalCount: number }> {
     try {
       return await this.menuItemDao.getMenuItems(data);
     } catch (error: any) {
@@ -103,7 +103,7 @@ class MenuItemSchema implements IMenuItemService {
  * @returns {Promise<IMenuItemSchema[]>} - An array of menu items.
  * @throws {ErrorHandler} - Throws an error if the menu items cannot be retrieved.
  */
-  async getMenuItemsByCategoryId(categoryId: string, paginationData: IPaginationBody): Promise<IMenuItemSchema[]> {
+  async getMenuItemsByCategoryId(categoryId: string, paginationData: IPaginationBody): Promise<{ data: IMenuItemSchema[], totalCount: number }> {
     try {
       const menuItems = await this.menuItemDao.getMenuItemsByCategoryId(categoryId, paginationData);
       return menuItems;

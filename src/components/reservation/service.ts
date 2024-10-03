@@ -37,7 +37,7 @@ export default class ReservationRequestFormService {
   public async updateReservationRequestForm(id: string, data: IReservationRequestSchema): Promise<IReservationRequestSchema | null> {
     try {
       const reservationForm = await ReservationRequestsDAO.updateReservationRequestForm(id, data);
-      if(!reservationForm) {
+      if (!reservationForm) {
         throw new ErrorHandler({ statusCode: 404, message: "Reservation form not found for update" });
       }
       return reservationForm;
@@ -49,14 +49,14 @@ export default class ReservationRequestFormService {
   /**
    * Gets all Reservation Request Forms
    * @method getReservationRequestForm
-   * @returns {Promise<IReservationRequestSchema[] | null>} list of all Reservation Request Forms
+   * @returns {Promise<{data: IReservationRequestSchema[] | null, totalCount: number}>} list of all Reservation Request Forms
    * @throws {ErrorHandler} if error occurs while getting Reservation Request Forms
    */
-  public async getReservationRequestForm(data: IPaginationBody ): Promise<IReservationRequestSchema[] | null> {
+  public async getReservationRequestForm(data: IPaginationBody): Promise<{ data: IReservationRequestSchema[] | null, totalCount: number }> {
     try {
       let reservationForms = await ReservationRequestsDAO.getReservationRequestForm(data);
-      if (reservationForms && reservationForms.length) {
-        reservationForms = reservationForms.map(e => {
+      if (reservationForms && reservationForms.data && reservationForms.data.length) {
+        reservationForms.data = reservationForms.data.map(e => {
           let dateObj = e.toObject();
           if (e.date_of_reservation) {
             dateObj.actual_date = e.date_of_reservation.toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });

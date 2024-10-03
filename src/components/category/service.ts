@@ -32,10 +32,10 @@ class CategoryService implements ICategoryService {
 
   /**
    * Retrieve all categories.
-   * @returns {Promise<ICategorySchema[]>} - An array of categories.
+   * @returns {Promise<{data : ICategorySchema[], totalCount: number}>} - An array of categories.
    * @throws {ErrorHandler} - Throws an error if the categories cannot be retrieved.
    */
-  async getCategories(data: IPaginationBody): Promise<ICategorySchema[]> {
+  async getCategories(data: IPaginationBody): Promise<{ data: ICategorySchema[], totalCount: number }> {
     try {
       return await this.categoryDao.getCategories(data);
     } catch (error: any) {
@@ -66,9 +66,9 @@ class CategoryService implements ICategoryService {
       throw error instanceof ErrorHandler
         ? error
         : new ErrorHandler({
-            statusCode: 500,
-            message: error.message || "Failed to retrieve category",
-          });
+          statusCode: 500,
+          message: error.message || "Failed to retrieve category",
+        });
     }
   }
 
@@ -96,9 +96,9 @@ class CategoryService implements ICategoryService {
       throw error instanceof ErrorHandler
         ? error
         : new ErrorHandler({
-            statusCode: 500,
-            message: error.message || "Failed to update category",
-          });
+          statusCode: 500,
+          message: error.message || "Failed to update category",
+        });
     }
   }
 
@@ -115,9 +115,9 @@ class CategoryService implements ICategoryService {
       throw error instanceof ErrorHandler
         ? error
         : new ErrorHandler({
-            statusCode: 500,
-            message: error.message || "Failed to delete category",
-          });
+          statusCode: 500,
+          message: error.message || "Failed to delete category",
+        });
     }
   }
 }

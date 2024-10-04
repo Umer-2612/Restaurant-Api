@@ -56,14 +56,67 @@ export default class ContactRequestFormService {
    * @returns {Promise<{data: IContactRequestSchema[] | null, totalCount: number}>} list of all contact request forms.
    * @throws {ErrorHandler} if error occurs while getting contact request forms.
    */
+  // public async getContactRequestForm(data: IPaginationBody): Promise<{ data: IContactRequestSchema[] | null, totalCount: number }> {
+  //   try {
+  //     const contactForms = await ContactRequestsDAO.getContactRequestForm(data);
+  //     return contactForms;
+  //   } catch (error) {
+  //     throw error;
+  //   }
+  // }
   public async getContactRequestForm(data: IPaginationBody): Promise<{ data: IContactRequestSchema[] | null, totalCount: number }> {
     try {
-      const contactForms = await ContactRequestsDAO.getContactRequestForm(data);
+      const rowLimit = data.limit ? data.limit : 10;
+      const rowSkip = data.page ? (data.page - 1) * rowLimit : 0;
+
+      const matchCondition: any = { recordDeleted: false };
+
+      // Constructing the pipeline in the service layer
+      const pipeline = [
+        {
+          $match: matchCondition,
+        },
+        {
+          $facet: {
+            paginationData: [
+              { $count: "total" },
+              {
+                $addFields: {
+                  currentPage: data.page > 0 ? Number(data.page) : 1,
+                },
+              },
+            ],
+            data: [
+              { $sort: { createdAt: -1 } },
+              { $skip: rowSkip },
+              { $limit: rowLimit },
+              {
+                $project: {
+                  _id: 1,
+                  name: 1,
+                  email: 1,
+                  message: 1,
+                  createdAt: 1,
+                },
+              },
+            ],
+          },
+        },
+      ];
+
+      // Pass the pipeline to the DAO layer
+      const contactForms = await ContactRequestsDAO.getContactRequestForm(pipeline);
+
       return contactForms;
-    } catch (error) {
-      throw error;
+    } catch (error: any) {
+      throw new ErrorHandler({
+        statusCode: 500,
+        message: error.message || "Failed to retrieve contact request forms",
+      });
     }
   }
+
+
 
   /**
    * Deletes a contact request form.

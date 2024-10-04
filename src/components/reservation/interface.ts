@@ -56,6 +56,8 @@ export interface IReservationRequestSchema extends Document {
    * Timestamp when the reservation was last updated.
    */
   readonly updatedAt: Date;
+  actual_date?: string;
+  actual_time?: string;
 }
 
 /**

@@ -35,9 +35,48 @@ class CategoryService implements ICategoryService {
    * @returns {Promise<{data : ICategorySchema[], totalCount: number}>} - An array of categories.
    * @throws {ErrorHandler} - Throws an error if the categories cannot be retrieved.
    */
-  async getCategories(data: IPaginationBody): Promise<{ data: ICategorySchema[], totalCount: number }> {
+  async getCategories(data: IPaginationBody): Promise<any> {
     try {
-      return await this.categoryDao.getCategories(data);
+      const rowLimit = data.limit ? data.limit : 10;
+      const rowSkip = data.page ? (data.page - 1) * rowLimit : 0;
+      const matchCondition: any = {
+        recordDeleted: false,
+      };
+
+      const pipeline = [
+        {
+          $match: matchCondition,
+        },
+        {
+          $facet: {
+            paginationData: [
+              { $count: "total" }, // Count the total number of records
+              {
+                $addFields: {
+                  currentPage: data.page > 0 ? Number(data.page) : 1, // Return the current page
+                },
+              },
+            ],
+            data: [
+              { $sort: { createdAt: -1 } }, // Sort by creation date or any other field
+              { $skip: rowSkip }, // Skip the documents for pagination
+              { $limit: rowLimit }, // Limit the number of documents returned
+              {
+                $project: {
+                  _id: 1,
+                  name: 1,
+                  description: 1,
+                  createdAt: 1,
+                },
+              },
+            ],
+          },
+        },
+      ];
+
+      const result = await this.categoryDao.getCategories(pipeline);
+      return result;
+
     } catch (error: any) {
       throw new ErrorHandler({
         statusCode: 500,
@@ -45,6 +84,7 @@ class CategoryService implements ICategoryService {
       });
     }
   }
+
 
   /**
    * Retrieve a category by its ID.

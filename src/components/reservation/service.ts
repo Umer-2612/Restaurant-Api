@@ -54,22 +54,71 @@ export default class ReservationRequestFormService {
    */
   public async getReservationRequestForm(data: IPaginationBody): Promise<{ data: IReservationRequestSchema[] | null, totalCount: number }> {
     try {
-      let reservationForms = await ReservationRequestsDAO.getReservationRequestForm(data);
+      const rowLimit = data.limit ? data.limit : 10;
+      const rowSkip = data.page ? (data.page - 1) * rowLimit : 0;
+
+      const matchCondition: any = { recordDeleted: false };
+
+      // Construct the aggregation pipeline
+      const pipeline = [
+        {
+          $match: matchCondition,
+        },
+        {
+          $facet: {
+            paginationData: [
+              { $count: "total" },
+              {
+                $addFields: {
+                  currentPage: data.page > 0 ? Number(data.page) : 1,
+                },
+              },
+            ],
+            data: [
+              { $sort: { createdAt: -1 } },
+              { $skip: rowSkip },
+              { $limit: rowLimit },
+              {
+                $project: {
+                  _id: 1,
+                  name: 1,
+                  email: 1,
+                  date_of_reservation: 1,
+                  createdAt: 1,
+                },
+              },
+            ],
+          },
+        },
+      ];
+
+      // Fetch reservation forms from DAO
+      let reservationForms = await ReservationRequestsDAO.getReservationRequestForm(pipeline);
+
+      // Post-processing the data if necessary
       if (reservationForms && reservationForms.data && reservationForms.data.length) {
         reservationForms.data = reservationForms.data.map(e => {
-          let dateObj = e.toObject();
+          // e is now a plain JS object, so no need for .toObject()
           if (e.date_of_reservation) {
-            dateObj.actual_date = e.date_of_reservation.toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-            dateObj.actual_time = e.date_of_reservation.toLocaleTimeString();
+            e.actual_date = new Date(e.date_of_reservation).toLocaleDateString(undefined, {
+              weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+            });
+            e.actual_time = new Date(e.date_of_reservation).toLocaleTimeString();
           }
-          return dateObj;
+          return e;
         });
       }
+
       return reservationForms;
-    } catch (error) {
-      throw error;
+    } catch (error: any) {
+      throw new ErrorHandler({
+        statusCode: 500,
+        message: error.message || "Failed to retrieve reservation request forms",
+      });
     }
   }
+
+
 
   /**
    * Deletes a Reservation Request Form

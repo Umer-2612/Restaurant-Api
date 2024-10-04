@@ -41,16 +41,9 @@ export default class CategoryDAO {
    * @throws {ErrorHandler} Throws an ErrorHandler if the database operation fails.
    * @description Retrieves all categories from the database, excluding deleted records.
    */
-  async getCategories(data: IPaginationBody): Promise<{ data: ICategorySchema[], totalCount: number }> {
+  async getCategories(pipeline: any): Promise<any> {
     try {
-      let rowLimit = data.limit ? data.limit : 10;
-      let rowSkip = data.page ? (data.page * rowLimit) - rowLimit : 0;
-      const res = await CategorySchema.find({ recordDeleted: false }).skip(rowSkip).limit(rowLimit); // Fetch only non-deleted records
-      const total = await CategorySchema.countDocuments({ recordDeleted: false });
-      const result = {
-        data: res,
-        totalCount: total
-      }
+      const result = await CategorySchema.aggregate(pipeline);
       return result;
     } catch (error: any) {
       throw new ErrorHandler({
@@ -59,6 +52,7 @@ export default class CategoryDAO {
       });
     }
   }
+
 
   /**
    * @async

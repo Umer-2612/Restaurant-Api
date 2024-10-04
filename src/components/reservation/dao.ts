@@ -52,22 +52,26 @@ export default class ReservationRequestsDAO {
    * @returns {Promise<{data: IReservationRequestSchema[] | null, totalCount: number}>} list of all reservation requests
    * @throws {ErrorHandler} if error occurs while getting reservation requests
    */
-  public static async getReservationRequestForm(data: IPaginationBody): Promise<{ data: IReservationRequestSchema[] | null, totalCount: number }> {
+  public static async getReservationRequestForm(pipeline: any): Promise<{ data: IReservationRequestSchema[], totalCount: number }> {
     try {
-      let rowLimit = data.limit ? data.limit : 10;
-      let rowSkip = data.page ? (data.page * rowLimit) - rowLimit : 0;
-      const query: any = { recordDeleted: false };
-      let getreservationForms = await ReservationRequestsSchema.find(query).skip(rowSkip).limit(rowLimit);
-      const total = await ReservationRequestsSchema.countDocuments({ recordDeleted: false });
-      const result = {
-        data: getreservationForms,
-        totalCount: total
+      const result = await ReservationRequestsSchema.aggregate(pipeline);
+
+      if (result.length === 0) {
+        return { data: [], totalCount: 0 };
       }
-      return result;
+
+      const reservationForms = result[0].data || [];
+      const totalCount = result[0].paginationData.length ? result[0].paginationData[0].total : 0;
+
+      return { data: reservationForms, totalCount: totalCount };
     } catch (error: any) {
-      throw new ErrorHandler({ statusCode: 500, message: "Database Error" });
+      throw new ErrorHandler({
+        statusCode: 500,
+        message: "Database Error: Unable to retrieve reservation request forms",
+      });
     }
   }
+
 
   /**
    * @description Delete a Reservation Request

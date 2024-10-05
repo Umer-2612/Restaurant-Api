@@ -18,35 +18,19 @@ export class MenuItemValidation {
    * @type {Joi.ObjectSchema}
    */
   public createMenuItemBody: Joi.ObjectSchema = Joi.object({
-    /**
-     * Item name
-     * @type {Joi.StringSchema}
-     */
     itemName: Joi.string().required().messages({
       "any.required": "Item name is required",
       "string.empty": "Item name cannot be empty",
     }),
-    /**
-     * Category ID
-     * @type {Joi.StringSchema}
-     */
-    // will get back to this validation of ID
     category: Joi.string().required().messages({
       "any.required": "Category is required",
     }),
-    /**
-     * Item description
-     * @type {Joi.StringSchema}
-     */
     itemDescription: Joi.string().optional(),
-    /**
-     * Item price
-     * @type {Joi.NumberSchema}
-     */
     itemPrice: Joi.number().required().messages({
       "any.required": "Item price is required",
       "number.base": "Item price must be a number",
     }),
+    filePath: Joi.string().optional(),
   });
 
   /**

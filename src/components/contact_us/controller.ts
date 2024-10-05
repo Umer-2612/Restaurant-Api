@@ -8,9 +8,9 @@ import { ErrorHandler } from "../../utils/common-function";
 import Generator from "../../utils/generator";
 import ContactRequestsValidation from "./validation";
 import { IPaginationBody } from "./interface";
+import { RequestWithUser } from "../auth/interface";
 
 class ContactRequestFormController {
-
   /**
    * @private
    * @type {ContactRequestFormService}
@@ -60,8 +60,14 @@ class ContactRequestFormController {
    * @returns {Promise<any>}
    * @description Creates a new contact request form.
    */
-  public createContactRequestForm = async (req: Request, res: Response): Promise<any> => {
-    const { error } = this.contactRequestsValidation.validateCreateContactRequestForm.validate(req.body);
+  public createContactRequestForm = async (
+    req: Request,
+    res: Response
+  ): Promise<any> => {
+    const { error } =
+      this.contactRequestsValidation.validateCreateContactRequestForm.validate(
+        req.body
+      );
 
     if (error) {
       return Generator.sendResponse({
@@ -73,7 +79,8 @@ class ContactRequestFormController {
     }
 
     try {
-      const contactForm = await this.contactRequestFormService.createContactRequestForm(req.body);
+      const contactForm =
+        await this.contactRequestFormService.createContactRequestForm(req.body);
       Generator.sendResponse({
         res,
         message: "Contact form created successfully",
@@ -83,7 +90,7 @@ class ContactRequestFormController {
       console.log({ error });
       await this.handleError(res, error);
     }
-  }
+  };
 
   /**
    * @public
@@ -93,7 +100,10 @@ class ContactRequestFormController {
    * @returns {Promise<any>}
    * @description Updates an existing contact request form.
    */
-  public updateContactRequestForm = async (req: Request, res: Response): Promise<any> => {
+  public updateContactRequestForm = async (
+    req: Request,
+    res: Response
+  ): Promise<any> => {
     const user = (req as any).user;
     if (!user) {
       return Generator.sendResponse({
@@ -105,7 +115,10 @@ class ContactRequestFormController {
     }
 
     const { id } = req.params;
-    const bodyValidation = this.contactRequestsValidation.validateUpdateContactRequestForm.validate(req.body);
+    const bodyValidation =
+      this.contactRequestsValidation.validateUpdateContactRequestForm.validate(
+        req.body
+      );
     const idValidation = this.contactRequestsValidation.validateId(id);
 
     if (bodyValidation.error) {
@@ -127,7 +140,11 @@ class ContactRequestFormController {
     }
 
     try {
-      const contactForm = await this.contactRequestFormService.updateContactRequestForm(req.params.id, req.body);
+      const contactForm =
+        await this.contactRequestFormService.updateContactRequestForm(
+          req.params.id,
+          req.body
+        );
       Generator.sendResponse({
         res,
         message: "Contact form updated successfully",
@@ -137,7 +154,7 @@ class ContactRequestFormController {
       console.log({ error });
       await this.handleError(res, error);
     }
-  }
+  };
 
   /**
    * @public
@@ -147,7 +164,10 @@ class ContactRequestFormController {
    * @returns {Promise<any>}
    * @description Retrieves all contact request forms.
    */
-  public getContactRequestForm = async (req: Request, res: Response): Promise<any> => {
+  public getContactRequestForm = async (
+    req: Request,
+    res: Response
+  ): Promise<any> => {
     const user = (req as any).user;
     if (!user) {
       return Generator.sendResponse({
@@ -158,7 +178,9 @@ class ContactRequestFormController {
       });
     }
 
-    const validateBody = this.contactRequestsValidation.validatePaginationBody(req.query);
+    const validateBody = this.contactRequestsValidation.validatePaginationBody(
+      req.query
+    );
 
     if (validateBody.error) {
       return Generator.sendResponse({
@@ -173,7 +195,10 @@ class ContactRequestFormController {
       const page = Number(req.query.page);
       const limit = Number(req.query.limit);
       const paginationData: IPaginationBody = { page, limit };
-      const contactForms = await this.contactRequestFormService.getContactRequestForm(paginationData);
+      const contactForms =
+        await this.contactRequestFormService.getContactRequestForm(
+          paginationData
+        );
       Generator.sendResponse({
         res,
         message: "Contact form found",
@@ -183,7 +208,7 @@ class ContactRequestFormController {
       console.log({ error });
       await this.handleError(res, error);
     }
-  }
+  };
 
   /**
    * @public
@@ -193,17 +218,10 @@ class ContactRequestFormController {
    * @returns {Promise<any>}
    * @description Deletes a contact request form.
    */
-  public deleteContactRequestForm = async (req: Request, res: Response): Promise<any> => {
-    const user = (req as any).user;
-    if (!user) {
-      return Generator.sendResponse({
-        res,
-        statusCode: 401,
-        success: false,
-        message: "Unauthorized",
-      });
-    }
-    
+  public deleteContactRequestForm = async (
+    req: RequestWithUser,
+    res: Response
+  ): Promise<any> => {
     const { id } = req.params;
     const idValidation = this.contactRequestsValidation.validateId(id);
 
@@ -217,7 +235,10 @@ class ContactRequestFormController {
     }
 
     try {
-      const contactForms = await this.contactRequestFormService.deleteContactRequestForm(req.params.id);
+      const contactForms =
+        await this.contactRequestFormService.deleteContactRequestForm(
+          req.params.id
+        );
       Generator.sendResponse({
         res,
         message: "Contact form deleted successfully",
@@ -227,7 +248,7 @@ class ContactRequestFormController {
       console.log({ error });
       await this.handleError(res, error);
     }
-  }
+  };
 }
 
 export default new ContactRequestFormController();

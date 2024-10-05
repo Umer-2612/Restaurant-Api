@@ -31,6 +31,12 @@ export interface IMenuItemSchema extends Document {
   itemPrice: number;
 
   /**
+   * @property {string} itemImagePath
+   * @description The image path of the menu item.
+   */
+  itemImagePath: string;
+
+  /**
    * @property {boolean} recordDeleted
    * @description Indicates whether the item has been soft deleted. Default value is false.
    */

@@ -162,30 +162,6 @@ class MenuItemSchema implements IMenuItemService {
     }
   }
 
-  // /**
-  //  * Retrieve all menu items by category ID.
-  //  * @param {string} categoryId - The ID of the category to retrieve menu items from.
-  //  * @returns {Promise<IMenuItemSchema[]>} - An array of menu items.
-  //  * @throws {ErrorHandler} - Throws an error if the menu items cannot be retrieved.
-  //  */
-  // async getMenuItemsByCategoryId(
-  //   categoryId: string,
-  //   paginationData: IPaginationBody
-  // ): Promise<{ data: IMenuItemSchema[]; totalCount: number }> {
-  //   try {
-  //     const menuItems = await this.menuItemDao.getMenuItemsByCategoryId(
-  //       categoryId,
-  //       paginationData
-  //     );
-  //     return menuItems;
-  //   } catch (error: any) {
-  //     throw new ErrorHandler({
-  //       statusCode: 500,
-  //       message: error.message || "Failed to retrieve menu items",
-  //     });
-  //   }
-  // }
-
   /**
    * Update a menu item by its ID.
    * @param {string} id - The ID of the menu item to update.

@@ -4,6 +4,7 @@ import Generator from "../../utils/generator";
 import { ErrorHandler } from "../../utils/common-function";
 import CategoryValidation from "./validation";
 import { IPaginationBody } from "./interface";
+import { RequestWithUser } from "../auth/interface";
 
 /**
  * @class CategoryController
@@ -44,18 +45,11 @@ class CategoryController {
    * @returns {Promise<any>}
    * @description Creates a new category based on the request body.
    */
-  public createCategory = async (req: Request, res: Response): Promise<any> => {
+  public createCategory = async (
+    req: RequestWithUser,
+    res: Response
+  ): Promise<any> => {
     try {
-      const user = (req as any).user;
-      if (!user) {
-        return Generator.sendResponse({
-          res,
-          statusCode: 401,
-          success: false,
-          message: "Unauthorized",
-        });
-      }
-
       // Validate the request body using the validation schema
       const { error } = this.categoryValidation.createCategoryBody.validate(
         req.body
@@ -72,8 +66,7 @@ class CategoryController {
       }
 
       const categoryData = req.body;
-      categoryData.createdBy = user._id;
-
+      categoryData.createdBy = req?.user?._id;
       const category = await this.categoryService.createCategory(categoryData);
       return Generator.sendResponse({
         res,
@@ -96,7 +89,9 @@ class CategoryController {
    * @description Retrieves all categories.
    */
   public getCategories = async (req: Request, res: Response): Promise<any> => {
-    const validateBody = this.categoryValidation.validatePaginationBody(req.query);
+    const validateBody = this.categoryValidation.validatePaginationBody(
+      req.query
+    );
 
     if (validateBody.error) {
       return Generator.sendResponse({
@@ -111,7 +106,9 @@ class CategoryController {
       const page = Number(req.query.page);
       const limit = Number(req.query.limit);
       const paginationData: IPaginationBody = { page, limit };
-      const categories = await this.categoryService.getCategories(paginationData);
+      const categories = await this.categoryService.getCategories(
+        paginationData
+      );
       return Generator.sendResponse({
         res,
         statusCode: 200,
@@ -167,17 +164,11 @@ class CategoryController {
    * @returns {Promise<any>}
    * @description Updates an existing category by its ID.
    */
-  public updateCategory = async (req: Request, res: Response): Promise<any> => {
+  public updateCategory = async (
+    req: RequestWithUser,
+    res: Response
+  ): Promise<any> => {
     try {
-      const user = (req as any).user;
-      if (!user) {
-        return Generator.sendResponse({
-          res,
-          statusCode: 401,
-          success: false,
-          message: "Unauthorized",
-        });
-      }
       const { id } = req.params;
       const idValidation = this.categoryValidation.validateId(id); // Validate ID
 
@@ -202,7 +193,7 @@ class CategoryController {
         });
       }
       let categoryData = req.body;
-      categoryData.updatedBy = user._id;
+      categoryData.updatedBy = req?.user?._id;
       const updatedCategory = await this.categoryService.updateCategory(
         id,
         categoryData

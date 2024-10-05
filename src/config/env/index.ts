@@ -18,16 +18,10 @@ interface Config {
       password: string;
     };
   };
-  googleConfig: {
-    clientId: string;
-    clientSecret: string;
-  };
-  mailerConfig: {
-    outgoingServer: string;
-    outgoingServerSMTP: string;
-    username: string;
-    password: string;
-    userId: string;
+  cloudinaryConfig: {
+    cloudName: string;
+    apiKey: string;
+    apiSecret: string;
   };
 }
 
@@ -59,16 +53,10 @@ const dev: Config = {
       password: process.env.MONGO_DB_PASSWORD || "",
     },
   },
-  googleConfig: {
-    clientId: process.env.GOOGLE_CLIENT_ID || "",
-    clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
-  },
-  mailerConfig: {
-    outgoingServer: process.env.MAIL_HOST || "",
-    outgoingServerSMTP: process.env.MAIL_PORT || "465" || "",
-    username: process.env.MAIL_USER_NAME || "",
-    password: process.env.MAIL_PASS || "",
-    userId: process.env.MAIL_USER_ID || "",
+  cloudinaryConfig: {
+    cloudName: process.env.CLOUDINARY_CLOUD_NAME || "",
+    apiKey: process.env.CLOUDINARY_API_KEY || "",
+    apiSecret: process.env.CLOUDINARY_API_SECRET || "",
   },
 };
 
@@ -100,16 +88,10 @@ const qa: Config = {
       password: process.env.MONGO_DB_PASSWORD || "",
     },
   },
-  googleConfig: {
-    clientId: process.env.GOOGLE_CLIENT_ID || "",
-    clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
-  },
-  mailerConfig: {
-    outgoingServer: process.env.MAIL_HOST || "",
-    outgoingServerSMTP: process.env.MAIL_PORT || "465" || "",
-    username: process.env.MAIL_USER_NAME || "",
-    password: process.env.MAIL_PASS || "",
-    userId: process.env.MAIL_USER_ID || "",
+  cloudinaryConfig: {
+    cloudName: process.env.CLOUDINARY_CLOUD_NAME || "",
+    apiKey: process.env.CLOUDINARY_API_KEY || "",
+    apiSecret: process.env.CLOUDINARY_API_SECRET || "",
   },
 };
 
@@ -141,16 +123,10 @@ const prod: Config = {
       password: process.env.MONGO_DB_PASSWORD || "",
     },
   },
-  googleConfig: {
-    clientId: process.env.GOOGLE_CLIENT_ID || "",
-    clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
-  },
-  mailerConfig: {
-    outgoingServer: process.env.MAIL_HOST || "",
-    outgoingServerSMTP: process.env.MAIL_PORT || "465" || "",
-    username: process.env.MAIL_USER_NAME || "",
-    password: process.env.MAIL_PASS || "",
-    userId: process.env.MAIL_USER_ID || "",
+  cloudinaryConfig: {
+    cloudName: process.env.CLOUDINARY_CLOUD_NAME || "",
+    apiKey: process.env.CLOUDINARY_API_KEY || "",
+    apiSecret: process.env.CLOUDINARY_API_SECRET || "",
   },
 };
 

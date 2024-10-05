@@ -5,7 +5,7 @@
  */
 import { Router } from "express";
 import ContactRequestFormController from "./controller";
-import authenticate from "../../config/middleware/auth";
+import AuthMiddleware from "../../config/middleware/auth";
 
 /**
  * Express Router for handling contact request form related requests
@@ -30,7 +30,11 @@ router.post("/", ContactRequestFormController.createContactRequestForm);
  * @returns {Promise<IContactRequestSchema | null>} updated contact request form
  * @throws {ErrorHandler} if error occurs while updating contact request form
  */
-router.patch("/:id", authenticate.authenticate, ContactRequestFormController.updateContactRequestForm);
+router.patch(
+  "/:id",
+  AuthMiddleware.authenticate,
+  ContactRequestFormController.updateContactRequestForm
+);
 
 /**
  * Gets all Contact Request Forms
@@ -38,7 +42,11 @@ router.patch("/:id", authenticate.authenticate, ContactRequestFormController.upd
  * @returns {Promise<IContactRequestSchema[] | null>} list of all contact request forms
  * @throws {ErrorHandler} if error occurs while getting contact request forms
  */
-router.get("/", authenticate.authenticate, ContactRequestFormController.getContactRequestForm);
+router.get(
+  "/",
+  AuthMiddleware.authenticate,
+  ContactRequestFormController.getContactRequestForm
+);
 
 /**
  * Deletes a Contact Request Form
@@ -47,7 +55,11 @@ router.get("/", authenticate.authenticate, ContactRequestFormController.getConta
  * @returns {Promise<IContactRequestSchema | null>} deleted contact request form
  * @throws {ErrorHandler} if error occurs while deleting contact request form
  */
-router.delete("/:id", authenticate.authenticate, ContactRequestFormController.deleteContactRequestForm);
+router.delete(
+  "/:id",
+  AuthMiddleware.authenticate,
+  ContactRequestFormController.deleteContactRequestForm
+);
 
 /**
  * @export {Router} router

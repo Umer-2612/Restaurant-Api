@@ -5,7 +5,8 @@
  */
 import { Router } from "express";
 import MenuItemController from "./controller";
-import authenticate from "../../config/middleware/auth";
+import AuthMiddleware from "../../config/middleware/auth";
+import { uploadToCloudinary } from "../../config/cloudinary/index";
 
 /**
  * Express Router for handling menu item related requests
@@ -21,7 +22,12 @@ const router = Router();
  * @returns {Promise<IMenuItemSchema>} newly created menu item
  * @throws {ErrorHandler} if error occurs while creating menu item
  */
-router.post("/", authenticate.authenticate, MenuItemController.createMenuItem);
+router.post(
+  "/",
+  //   AuthMiddleware.authenticate,
+  uploadToCloudinary,
+  MenuItemController.createMenuItem
+);
 
 /**
  * Gets all menu items
@@ -40,15 +46,6 @@ router.get("/", MenuItemController.getAllMenuItems);
  */
 router.get("/:id", MenuItemController.getMenuItemById);
 
-// /**
-//  * Gets all menu items for a specific category
-//  * @method GET /category/:categoryId
-//  * @param {string} request.params.categoryId - id of the category
-//  * @returns {Promise<IMenuItemSchema[] | null>} list of menu items
-//  * @throws {ErrorHandler} if error occurs while getting menu items
-//  */
-// router.get("/category/:categoryId", MenuItemController.getMenuItemByCategory);
-
 /**
  * Updates an existing menu item
  * @method PATCH /:id
@@ -57,7 +54,11 @@ router.get("/:id", MenuItemController.getMenuItemById);
  * @returns {Promise<IMenuItemSchema | null>} updated menu item
  * @throws {ErrorHandler} if error occurs while updating menu item
  */
-router.patch("/:id", authenticate.authenticate, MenuItemController.updateMenuItem);
+router.patch(
+  "/:id",
+  AuthMiddleware.authenticate,
+  MenuItemController.updateMenuItem
+);
 
 /**
  * Deletes a menu item
@@ -66,6 +67,10 @@ router.patch("/:id", authenticate.authenticate, MenuItemController.updateMenuIte
  * @returns {Promise<IMenuItemSchema | null>} deleted menu item
  * @throws {ErrorHandler} if error occurs while deleting menu item
  */
-router.delete("/:id", authenticate.authenticate, MenuItemController.deleteMenuItem);
+router.delete(
+  "/:id",
+  AuthMiddleware.authenticate,
+  MenuItemController.deleteMenuItem
+);
 
 export default router;

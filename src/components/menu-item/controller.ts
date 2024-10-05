@@ -7,6 +7,7 @@ import { ErrorHandler } from "../../utils/common-function";
 import MenuItemValidation from "./validation";
 // import { IPaginationBody } from "./interface";
 import { IQueryBody } from "./interface";
+import { RequestWithUser } from "../auth/interface";
 
 /**
  * @class MenuController
@@ -93,18 +94,11 @@ class MenuItemController {
    * @returns {Promise<any>}
    * @description Creates a new menu-item based on the request body.
    */
-  public createMenuItem = async (req: Request, res: Response): Promise<any> => {
+  public createMenuItem = async (
+    req: RequestWithUser,
+    res: Response
+  ): Promise<any> => {
     try {
-      const user = (req as any).user;
-      if (!user) {
-        return Generator.sendResponse({
-          res,
-          statusCode: 401,
-          success: false,
-          message: "Unauthorized",
-        });
-      }
-
       // Validate the request body using the validation schema
       const { error } = this.menuItemValidation.createMenuItemBody.validate(
         req.body
@@ -119,7 +113,8 @@ class MenuItemController {
       }
 
       let menuData = req.body;
-      menuData.createdBy = user._id;
+      menuData.createdBy = req?.user?._id;
+      menuData.itemImagePath = req?.body?.filePath;
 
       // Call the service to create the menu item
       const menuItem = await this.menuItemService.createMenuItem(menuData);
@@ -180,18 +175,11 @@ class MenuItemController {
    * @returns {Promise<any>}
    * @description Updates an existing menu item by its ID.
    */
-  public updateMenuItem = async (req: Request, res: Response): Promise<any> => {
+  public updateMenuItem = async (
+    req: RequestWithUser,
+    res: Response
+  ): Promise<any> => {
     try {
-      const user = (req as any).user;
-      if (!user) {
-        return Generator.sendResponse({
-          res,
-          statusCode: 401,
-          success: false,
-          message: "Unauthorized",
-        });
-      }
-
       const { id } = req.params;
       const idValidation = this.menuItemValidation.validateId(id); // Validate ID
 
@@ -217,7 +205,7 @@ class MenuItemController {
       }
 
       let menuData = req.body;
-      menuData.updatedBy = user._id;
+      menuData.updatedBy = req?.user?._id;
 
       const updatedMenuItem = await this.menuItemService.updateMenuItem(
         id,
@@ -233,61 +221,6 @@ class MenuItemController {
       await this.handleError(res, error);
     }
   };
-
-  // /**
-  //  * @public
-  //  * @method getMenuItemByCategory
-  //  * @param {Request} req - The request object from Express.
-  //  * @param {Response} res - The response object from Express.
-  //  * @returns {Promise<any>}
-  //  * @description Retrieves menu items by their category ID.
-  //  */
-  // public getMenuItemByCategory = async (
-  //   req: Request,
-  //   res: Response
-  // ): Promise<any> => {
-  //   const { categoryId } = req.params;
-  //   const validateBody = this.menuItemValidation.validatePaginationBody(
-  //     req.query
-  //   );
-  //   const categoryValidation = this.menuItemValidation.validateId(categoryId); // Validate Category
-
-  //   if (validateBody.error) {
-  //     return Generator.sendResponse({
-  //       res,
-  //       statusCode: 400,
-  //       success: false,
-  //       message: validateBody.error.details[0].message,
-  //     });
-  //   }
-
-  //   if (categoryValidation.error) {
-  //     return Generator.sendResponse({
-  //       res,
-  //       statusCode: 400,
-  //       success: false,
-  //       message: categoryValidation.error.details[0].message,
-  //     });
-  //   }
-
-  //   try {
-  //     const page = Number(req.query.page);
-  //     const limit = Number(req.query.limit);
-  //     const paginationData: IPaginationBody = { page, limit };
-  //     const menuItems = await this.menuItemService.getMenuItemsByCategoryId(
-  //       categoryId,
-  //       paginationData
-  //     );
-  //     return Generator.sendResponse({
-  //       res,
-  //       statusCode: 200,
-  //       message: "Menu items retrieved successfully",
-  //       data: menuItems,
-  //     });
-  //   } catch (error: any) {
-  //     await this.handleError(res, error);
-  //   }
-  // };
 
   /**
    * @public
@@ -308,7 +241,7 @@ class MenuItemController {
           message: "Unauthorized",
         });
       }
-      
+
       const { id } = req.params;
       const idValidation = this.menuItemValidation.validateId(id); // Validate ID
 

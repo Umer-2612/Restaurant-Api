@@ -49,7 +49,7 @@ export default class ReservationRequestsValidation {
       "any.required": "No of people is required",
       "string.empty": "No of people cannot be empty",
     }),
-    date_of_reservation: Joi.date().required().messages({
+    reservationDate: Joi.date().required().messages({
       "any.required": "Date of reservation is required",
       "string.empty": "Date of reservation cannot be empty",
     }),
@@ -71,7 +71,7 @@ export default class ReservationRequestsValidation {
     phoneNo: Joi.number().optional().default(null),
     email: Joi.string().optional().default(null),
     noOfPeople: Joi.number().optional().default(0),
-    date_of_reservation: Joi.date().optional().default(null),
+    reservationDate: Joi.date().optional().default(null),
     message: Joi.string().optional().default(null),
     recordDeleted: Joi.boolean().optional().default(false),
   });

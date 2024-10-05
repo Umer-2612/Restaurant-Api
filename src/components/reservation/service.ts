@@ -88,7 +88,7 @@ export default class ReservationRequestFormService {
                   _id: 1,
                   name: 1,
                   email: 1,
-                  date_of_reservation: 1,
+                  reservationDate: 1,
                   createdAt: 1,
                 },
               },
@@ -109,8 +109,8 @@ export default class ReservationRequestFormService {
       ) {
         reservationForms.data = reservationForms.data.map((e) => {
           // e is now a plain JS object, so no need for .toObject()
-          if (e.date_of_reservation) {
-            e.actual_date = new Date(e.date_of_reservation).toLocaleDateString(
+          if (e.reservationDate) {
+            e.actual_date = new Date(e.reservationDate).toLocaleDateString(
               undefined,
               {
                 weekday: "long",
@@ -119,9 +119,7 @@ export default class ReservationRequestFormService {
                 day: "numeric",
               }
             );
-            e.actual_time = new Date(
-              e.date_of_reservation
-            ).toLocaleTimeString();
+            e.actual_time = new Date(e.reservationDate).toLocaleTimeString();
           }
           return e;
         });

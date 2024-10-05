@@ -9,7 +9,6 @@ import { ErrorHandler } from "../../utils/common-function";
 import { IContactRequestSchema, IPaginationBody } from "./interface";
 
 export default class ContactRequestsDAO {
-
   /**
    * Creates a new Contact Request Form
    * @method createContactRequestForm
@@ -17,14 +16,19 @@ export default class ContactRequestsDAO {
    * @returns {Promise<IContactRequestSchema>} newly created contact request form
    * @throws {ErrorHandler} if error occurs while creating contact request form
    */
-  public static async createContactRequestForm(data: IContactRequestSchema): Promise<IContactRequestSchema> {
+  public static async createContactRequestForm(
+    data: IContactRequestSchema
+  ): Promise<IContactRequestSchema> {
     try {
       const contactForm = await ContactRequestSchema.create(data);
       return contactForm;
     } catch (error: any) {
       if (error.code === 11000) {
         const field = Object.keys(error.keyPattern)[0];
-        throw new ErrorHandler({ statusCode: 409, message: `${field} already exists.`, });
+        throw new ErrorHandler({
+          statusCode: 409,
+          message: `${field} already exists.`,
+        });
       }
       throw new ErrorHandler({ statusCode: 500, message: "Database Error" });
     }
@@ -38,9 +42,16 @@ export default class ContactRequestsDAO {
    * @returns {Promise<IContactRequestSchema | null>} updated contact request form
    * @throws {ErrorHandler} if error occurs while updating contact request form
    */
-  public static async updateContactRequestForm(id: string, data: IContactRequestSchema): Promise<IContactRequestSchema | null> {
+  public static async updateContactRequestForm(
+    id: string,
+    data: IContactRequestSchema
+  ): Promise<IContactRequestSchema | null> {
     try {
-      const contactFrom = await ContactRequestSchema.findByIdAndUpdate(id, data, { new: true });
+      const contactFrom = await ContactRequestSchema.findByIdAndUpdate(
+        id,
+        data,
+        { new: true }
+      );
 
       return contactFrom;
     } catch (error: any) {
@@ -54,23 +65,9 @@ export default class ContactRequestsDAO {
    * @returns {Promise<{data: IContactRequestSchema[] | null, totalCount: number}>} list of all contact request forms
    * @throws {ErrorHandler} if error occurs while getting contact request forms
    */
-  // public static async getContactRequestForm(data: IPaginationBody): Promise<{ data: IContactRequestSchema[] | null, totalCount: number }> {
-  //   try {
-  //     let rowLimit = data.limit ? data.limit : 10;
-  //     let rowSkip = data.page ? (data.page * rowLimit) - rowLimit : 0;
-  //     const query: any = { recordDeleted: false };
-  //     let getContactForms = await ContactRequestSchema.find(query).skip(rowSkip).limit(rowLimit);
-  //     const total = await ContactRequestSchema.countDocuments({ recordDeleted: false });
-  //     const result = {
-  //       data: getContactForms,
-  //       totalCount: total
-  //     }
-  //     return result;
-  //   } catch (error: any) {
-  //     throw new ErrorHandler({ statusCode: 500, message: "Database Error" });
-  //   }
-  // }
-  public static async getContactRequestForm(pipeline: any): Promise<{ data: IContactRequestSchema[], totalCount: number }> {
+  public static async getContactRequestForm(
+    pipeline: any
+  ): Promise<{ data: IContactRequestSchema[]; totalCount: number }> {
     try {
       const result = await ContactRequestSchema.aggregate(pipeline);
 
@@ -79,7 +76,9 @@ export default class ContactRequestsDAO {
       }
 
       const contactForms = result[0].data || [];
-      const totalCount = result[0].paginationData.length ? result[0].paginationData[0].total : 0;
+      const totalCount = result[0].paginationData.length
+        ? result[0].paginationData[0].total
+        : 0;
 
       return { data: contactForms, totalCount: totalCount };
     } catch (error: any) {
@@ -90,8 +89,6 @@ export default class ContactRequestsDAO {
     }
   }
 
-
-
   /**
    * Deletes a Contact Request Form
    * @method deleteContactRequestForm
@@ -99,10 +96,13 @@ export default class ContactRequestsDAO {
    * @returns {Promise<IContactRequestSchema | null>} deleted contact request form
    * @throws {ErrorHandler} if error occurs while deleting contact request form
    */
-  public static async deleteContactRequestForm(id: string): Promise<IContactRequestSchema | null> {
+  public static async deleteContactRequestForm(
+    id: string
+  ): Promise<IContactRequestSchema | null> {
     try {
       const query = { recordDeleted: true };
-      const deleteContactRequestForm = await ContactRequestSchema.findByIdAndUpdate(id, query, { new: true });
+      const deleteContactRequestForm =
+        await ContactRequestSchema.findByIdAndUpdate(id, query, { new: true });
       return deleteContactRequestForm;
     } catch (error: any) {
       throw new ErrorHandler({ statusCode: 500, message: "Database Error" });

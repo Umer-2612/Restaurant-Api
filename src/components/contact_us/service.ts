@@ -10,7 +10,6 @@ import { ErrorHandler } from "../../utils/common-function";
 import { IContactRequestSchema, IPaginationBody } from "./interface";
 
 export default class ContactRequestFormService {
-
   /**
    * Creates a new contact request form.
    *
@@ -19,9 +18,13 @@ export default class ContactRequestFormService {
    * @returns {Promise<IContactRequestSchema>} newly created contact request form.
    * @throws {ErrorHandler} if error occurs while creating contact request form.
    */
-  public async createContactRequestForm(data: IContactRequestSchema): Promise<IContactRequestSchema> {
+  public async createContactRequestForm(
+    data: IContactRequestSchema
+  ): Promise<IContactRequestSchema> {
     try {
-      const contactForm = await ContactRequestsDAO.createContactRequestForm(data);
+      const contactForm = await ContactRequestsDAO.createContactRequestForm(
+        data
+      );
       return contactForm;
     } catch (error) {
       throw error;
@@ -37,11 +40,20 @@ export default class ContactRequestFormService {
    * @returns {Promise<IContactRequestSchema | null>} updated contact request form.
    * @throws {ErrorHandler} if error occurs while updating contact request form.
    */
-  public async updateContactRequestForm(id: string, data: IContactRequestSchema): Promise<IContactRequestSchema | null> {
+  public async updateContactRequestForm(
+    id: string,
+    data: IContactRequestSchema
+  ): Promise<IContactRequestSchema | null> {
     try {
-      const contactForm = await ContactRequestsDAO.updateContactRequestForm(id, data);
+      const contactForm = await ContactRequestsDAO.updateContactRequestForm(
+        id,
+        data
+      );
       if (!contactForm) {
-        throw new ErrorHandler({ statusCode: 404, message: "Contact form not found for update" });
+        throw new ErrorHandler({
+          statusCode: 404,
+          message: "Contact form not found for update",
+        });
       }
       return contactForm;
     } catch (error) {
@@ -56,15 +68,9 @@ export default class ContactRequestFormService {
    * @returns {Promise<{data: IContactRequestSchema[] | null, totalCount: number}>} list of all contact request forms.
    * @throws {ErrorHandler} if error occurs while getting contact request forms.
    */
-  // public async getContactRequestForm(data: IPaginationBody): Promise<{ data: IContactRequestSchema[] | null, totalCount: number }> {
-  //   try {
-  //     const contactForms = await ContactRequestsDAO.getContactRequestForm(data);
-  //     return contactForms;
-  //   } catch (error) {
-  //     throw error;
-  //   }
-  // }
-  public async getContactRequestForm(data: IPaginationBody): Promise<{ data: IContactRequestSchema[] | null, totalCount: number }> {
+  public async getContactRequestForm(
+    data: IPaginationBody
+  ): Promise<{ data: IContactRequestSchema[] | null; totalCount: number }> {
     try {
       const rowLimit = data.limit ? data.limit : 10;
       const rowSkip = data.page ? (data.page - 1) * rowLimit : 0;
@@ -105,7 +111,9 @@ export default class ContactRequestFormService {
       ];
 
       // Pass the pipeline to the DAO layer
-      const contactForms = await ContactRequestsDAO.getContactRequestForm(pipeline);
+      const contactForms = await ContactRequestsDAO.getContactRequestForm(
+        pipeline
+      );
 
       return contactForms;
     } catch (error: any) {
@@ -116,8 +124,6 @@ export default class ContactRequestFormService {
     }
   }
 
-
-
   /**
    * Deletes a contact request form.
    *
@@ -126,7 +132,9 @@ export default class ContactRequestFormService {
    * @returns {Promise<IContactRequestSchema | null>} deleted contact request form.
    * @throws {ErrorHandler} if error occurs while deleting contact request form.
    */
-  public async deleteContactRequestForm(id: string): Promise<IContactRequestSchema | null> {
+  public async deleteContactRequestForm(
+    id: string
+  ): Promise<IContactRequestSchema | null> {
     try {
       const contactForm = await ContactRequestsDAO.deleteContactRequestForm(id);
       return contactForm;

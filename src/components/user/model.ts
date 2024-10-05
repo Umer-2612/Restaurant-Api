@@ -8,6 +8,8 @@ const UserSchema: Schema = new Schema(
     lastName: { type: String },
     userName: { type: String },
     password: { type: String },
+    otp: { type: String, default: null },
+    otpExpiry: { type: Date, default: null },
     token: { type: String },
     email: { type: String },
     profile: { type: String },

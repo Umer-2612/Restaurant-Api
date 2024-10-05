@@ -63,23 +63,24 @@ class AuthController {
 
   public signOut = async (req: Request, res: Response): Promise<void> => {
     try {
-      const user = await AuthService.signOut(req.body.email);
+      const user = (req as any).user;
+      const userDetails = await AuthService.signOut(user.email);
       Generator.sendResponse({
         res,
         statusCode: 200,
         success: true,
         message: "User signed out successfully",
-        data: user,
+        data: userDetails,
       });
     } catch (error: any) {
       this.handleError(res, error);
     }
   };
 
-  public test = async (req: Request, res: Response): Promise<void> => {
+  public getUserDetails = async (req: Request, res: Response): Promise<void> => {
     try {
       const user = (req as any).user;
-      
+
       Generator.sendResponse({
         res,
         statusCode: 200,
@@ -92,6 +93,80 @@ class AuthController {
     }
   };
 
+  public updateProfile = async (req: Request, res: Response): Promise<void> => {
+    try {
+      let data = req.body;
+      const user = (req as any).user;
+      const updatedUser = await AuthService.updateProfile(user.email, data);
+      Generator.sendResponse({
+        res,
+        statusCode: 200,
+        success: true,
+        message: "Profile updated successfully",
+        data: updatedUser,
+      });
+    } catch (error: any) {
+      this.handleError(res, error);
+    }
+  };
+
+  public changePassword = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const data = req.body;
+      const user = (req as any).user;
+      const updatedUser = await AuthService.changePassword(user.email, data);
+      Generator.sendResponse({
+        res,
+        statusCode: 200,
+        success: true,
+        message: "Password changed successfully",
+        data: updatedUser,
+      });
+    } catch (error: any) {
+      this.handleError(res, error);
+    }
+  };
+
+  public forgotPassword = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const data = req.body;
+      const updatedUser = await AuthService.forgotPassword(data);
+      Generator.sendResponse({
+        res,
+        statusCode: 200,
+        success: true,
+        message: "Otp is sent to your email",
+        data: updatedUser,
+      });
+    } catch (error: any) {
+      this.handleError(res, error);
+    }
+  };
+
+  public resetPassword = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const data = req.body;
+      const updatedUser = await AuthService.resetPassword(data);
+
+      if (updatedUser) {
+        // Generate a JWT token
+        const token = await jwtService.generateToken(updatedUser);
+
+        // Save the token in the database
+        await AuthService.saveToken(updatedUser.email, token);
+      }
+
+      Generator.sendResponse({
+        res,
+        statusCode: 200,
+        success: true,
+        message: "Password changed successfully",
+        data: updatedUser,
+      });
+    } catch (error: any) {
+      this.handleError(res, error);
+    }
+  };
 }
 
 export default new AuthController();

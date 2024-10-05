@@ -95,6 +95,16 @@ class MenuItemController {
    */
   public createMenuItem = async (req: Request, res: Response): Promise<any> => {
     try {
+      const user = (req as any).user;
+      if (!user) {
+        return Generator.sendResponse({
+          res,
+          statusCode: 401,
+          success: false,
+          message: "Unauthorized",
+        });
+      }
+
       // Validate the request body using the validation schema
       const { error } = this.menuItemValidation.createMenuItemBody.validate(
         req.body
@@ -108,8 +118,11 @@ class MenuItemController {
         });
       }
 
+      let menuData = req.body;
+      menuData.createdBy = user._id;
+
       // Call the service to create the menu item
-      const menuItem = await this.menuItemService.createMenuItem(req.body);
+      const menuItem = await this.menuItemService.createMenuItem(menuData);
       return Generator.sendResponse({
         res,
         statusCode: 201,
@@ -169,6 +182,16 @@ class MenuItemController {
    */
   public updateMenuItem = async (req: Request, res: Response): Promise<any> => {
     try {
+      const user = (req as any).user;
+      if (!user) {
+        return Generator.sendResponse({
+          res,
+          statusCode: 401,
+          success: false,
+          message: "Unauthorized",
+        });
+      }
+
       const { id } = req.params;
       const idValidation = this.menuItemValidation.validateId(id); // Validate ID
 
@@ -193,9 +216,12 @@ class MenuItemController {
         });
       }
 
+      let menuData = req.body;
+      menuData.updatedBy = user._id;
+
       const updatedMenuItem = await this.menuItemService.updateMenuItem(
         id,
-        req.body
+        menuData
       );
       return Generator.sendResponse({
         res,
@@ -273,6 +299,16 @@ class MenuItemController {
    */
   public deleteMenuItem = async (req: Request, res: Response): Promise<any> => {
     try {
+      const user = (req as any).user;
+      if (!user) {
+        return Generator.sendResponse({
+          res,
+          statusCode: 401,
+          success: false,
+          message: "Unauthorized",
+        });
+      }
+      
       const { id } = req.params;
       const idValidation = this.menuItemValidation.validateId(id); // Validate ID
 

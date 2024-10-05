@@ -1,5 +1,3 @@
-// controller.ts
-
 import { Request, Response } from "express";
 import CategoryService from "./service";
 import Generator from "../../utils/generator";
@@ -48,6 +46,16 @@ class CategoryController {
    */
   public createCategory = async (req: Request, res: Response): Promise<any> => {
     try {
+      const user = (req as any).user;
+      if (!user) {
+        return Generator.sendResponse({
+          res,
+          statusCode: 401,
+          success: false,
+          message: "Unauthorized",
+        });
+      }
+
       // Validate the request body using the validation schema
       const { error } = this.categoryValidation.createCategoryBody.validate(
         req.body
@@ -64,6 +72,7 @@ class CategoryController {
       }
 
       const categoryData = req.body;
+      categoryData.createdBy = user._id;
 
       const category = await this.categoryService.createCategory(categoryData);
       return Generator.sendResponse({
@@ -160,6 +169,15 @@ class CategoryController {
    */
   public updateCategory = async (req: Request, res: Response): Promise<any> => {
     try {
+      const user = (req as any).user;
+      if (!user) {
+        return Generator.sendResponse({
+          res,
+          statusCode: 401,
+          success: false,
+          message: "Unauthorized",
+        });
+      }
       const { id } = req.params;
       const idValidation = this.categoryValidation.validateId(id); // Validate ID
 
@@ -183,10 +201,11 @@ class CategoryController {
           message: bodyValidation.error.details[0].message,
         });
       }
-
+      let categoryData = req.body;
+      categoryData.updatedBy = user._id;
       const updatedCategory = await this.categoryService.updateCategory(
         id,
-        req.body
+        categoryData
       );
       return Generator.sendResponse({
         res,
@@ -209,6 +228,15 @@ class CategoryController {
    */
   public deleteCategory = async (req: Request, res: Response): Promise<any> => {
     try {
+      const user = (req as any).user;
+      if (!user) {
+        return Generator.sendResponse({
+          res,
+          statusCode: 401,
+          success: false,
+          message: "Unauthorized",
+        });
+      }
       const { id } = req.params;
       const idValidation = this.categoryValidation.validateId(id); // Validate ID
 

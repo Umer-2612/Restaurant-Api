@@ -4,6 +4,7 @@
  */
 import { Router } from "express";
 import ReservationRequestFormController from "./controller";
+import authenticate from "../../config/middleware/auth";
 
 /**
  * Express Router for handling reservation request form related requests
@@ -28,7 +29,7 @@ router.post("/", ReservationRequestFormController.createReservationRequestForm);
  * @returns {Promise<IReservationRequestSchema | null>} updated Reservation Request Form
  * @throws {ErrorHandler} if error occurs while updating Reservation Request Form
  */
-router.patch("/:id", ReservationRequestFormController.updateReservationRequestForm);
+router.patch("/:id", authenticate.authenticate, ReservationRequestFormController.updateReservationRequestForm);
 
 /**
  * Gets all Reservation Request Forms
@@ -36,7 +37,7 @@ router.patch("/:id", ReservationRequestFormController.updateReservationRequestFo
  * @returns {Promise<IReservationRequestSchema[] | null>} list of all Reservation Request Forms
  * @throws {ErrorHandler} if error occurs while getting Reservation Request Forms
  */
-router.get("/", ReservationRequestFormController.getReservationRequestForm);
+router.get("/", authenticate.authenticate, ReservationRequestFormController.getReservationRequestForm);
 
 /**
  * Deletes a Reservation Request Form
@@ -45,7 +46,7 @@ router.get("/", ReservationRequestFormController.getReservationRequestForm);
  * @returns {Promise<IReservationRequestSchema | null>} deleted Reservation Request Form
  * @throws {ErrorHandler} if error occurs while deleting Reservation Request Form
  */
-router.delete("/:id", ReservationRequestFormController.deleteReservationRequestForm);
+router.delete("/:id", authenticate.authenticate, ReservationRequestFormController.deleteReservationRequestForm);
 
 
 /**

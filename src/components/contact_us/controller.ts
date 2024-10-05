@@ -94,6 +94,16 @@ class ContactRequestFormController {
    * @description Updates an existing contact request form.
    */
   public updateContactRequestForm = async (req: Request, res: Response): Promise<any> => {
+    const user = (req as any).user;
+    if (!user) {
+      return Generator.sendResponse({
+        res,
+        statusCode: 401,
+        success: false,
+        message: "Unauthorized",
+      });
+    }
+
     const { id } = req.params;
     const bodyValidation = this.contactRequestsValidation.validateUpdateContactRequestForm.validate(req.body);
     const idValidation = this.contactRequestsValidation.validateId(id);
@@ -138,6 +148,16 @@ class ContactRequestFormController {
    * @description Retrieves all contact request forms.
    */
   public getContactRequestForm = async (req: Request, res: Response): Promise<any> => {
+    const user = (req as any).user;
+    if (!user) {
+      return Generator.sendResponse({
+        res,
+        statusCode: 401,
+        success: false,
+        message: "Unauthorized",
+      });
+    }
+
     const validateBody = this.contactRequestsValidation.validatePaginationBody(req.query);
 
     if (validateBody.error) {
@@ -174,6 +194,16 @@ class ContactRequestFormController {
    * @description Deletes a contact request form.
    */
   public deleteContactRequestForm = async (req: Request, res: Response): Promise<any> => {
+    const user = (req as any).user;
+    if (!user) {
+      return Generator.sendResponse({
+        res,
+        statusCode: 401,
+        success: false,
+        message: "Unauthorized",
+      });
+    }
+    
     const { id } = req.params;
     const idValidation = this.contactRequestsValidation.validateId(id);
 

@@ -103,6 +103,16 @@ class ReservationRequestFormController {
    * @public
    */
   public updateReservationRequestForm = async (req: Request, res: Response): Promise<any> => {
+    const user = (req as any).user;
+    if (!user) {
+      return Generator.sendResponse({
+        res,
+        statusCode: 401,
+        success: false,
+        message: "Unauthorized",
+      });
+    }
+
     const { id } = req.params;
     const bodyValidation = this.reservationRequestsValidation.validateUpdateReservationRequestForm.validate(req.body);
     const idValidation = this.reservationRequestsValidation.validateId(id);
@@ -135,8 +145,8 @@ class ReservationRequestFormController {
     } catch (error: any) {
       console.log({ error });
       await this.handleError(res, error);
-      }
     }
+  }
 
   /**
    * @description Retrieves all reservation request forms.
@@ -145,6 +155,16 @@ class ReservationRequestFormController {
    * @public
    */
   public getReservationRequestForm = async (req: Request, res: Response): Promise<any> => {
+    const user = (req as any).user;
+    if (!user) {
+      return Generator.sendResponse({
+        res,
+        statusCode: 401,
+        success: false,
+        message: "Unauthorized",
+      });
+    }
+
     const validateBody = this.reservationRequestsValidation.validatePaginationBody(req.query);
 
     if (validateBody.error) {
@@ -181,6 +201,16 @@ class ReservationRequestFormController {
    * @public
    */
   public deleteReservationRequestForm = async (req: Request, res: Response): Promise<any> => {
+    const user = (req as any).user;
+    if (!user) {
+      return Generator.sendResponse({
+        res,
+        statusCode: 401,
+        success: false,
+        message: "Unauthorized",
+      });
+    }
+
     const { id } = req.params;
     const idValidation = this.reservationRequestsValidation.validateId(id);
 

@@ -3,7 +3,6 @@ import cors, { CorsOptions } from "cors";
 import bodyParser from "body-parser";
 import routes from "../../routes/index";
 import Config from "../env/index";
-var passport = require("passport");
 
 export function setupMiddleware(app: Application): void {
   const corsOptions = {
@@ -26,10 +25,6 @@ export function setupMiddleware(app: Application): void {
 
   // Middleware for parsing URL-encoded bodies
   app.use(bodyParser.urlencoded({ extended: true }));
-
-  // Initialize Passport and restore authentication state
-  app.use(passport.initialize());
-  app.use(passport.session());
 
   // Mount the routes to the Express app
   app.use(routes);

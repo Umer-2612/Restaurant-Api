@@ -5,6 +5,7 @@
  */
 import { Router } from "express";
 import MenuItemController from "./controller";
+import authenticate from "../../config/middleware/auth";
 
 /**
  * Express Router for handling menu item related requests
@@ -20,7 +21,7 @@ const router = Router();
  * @returns {Promise<IMenuItemSchema>} newly created menu item
  * @throws {ErrorHandler} if error occurs while creating menu item
  */
-router.post("/", MenuItemController.createMenuItem);
+router.post("/", authenticate.authenticate, MenuItemController.createMenuItem);
 
 /**
  * Gets all menu items
@@ -56,7 +57,7 @@ router.get("/:id", MenuItemController.getMenuItemById);
  * @returns {Promise<IMenuItemSchema | null>} updated menu item
  * @throws {ErrorHandler} if error occurs while updating menu item
  */
-router.patch("/:id", MenuItemController.updateMenuItem);
+router.patch("/:id", authenticate.authenticate, MenuItemController.updateMenuItem);
 
 /**
  * Deletes a menu item
@@ -65,6 +66,6 @@ router.patch("/:id", MenuItemController.updateMenuItem);
  * @returns {Promise<IMenuItemSchema | null>} deleted menu item
  * @throws {ErrorHandler} if error occurs while deleting menu item
  */
-router.delete("/:id", MenuItemController.deleteMenuItem);
+router.delete("/:id", authenticate.authenticate, MenuItemController.deleteMenuItem);
 
 export default router;

@@ -37,14 +37,14 @@ class AuthController {
   public signIn = async (req: Request, res: Response): Promise<void> => {
     try {
       const user = await AuthService.signIn(req.body);
-      let data: any = { user };
+      let data: any = user;
       if (user) {
         // Generate a JWT token
         const token = await jwtService.generateAccessToken(user);
         const refreshToken = await jwtService.generateRefreshToken(user);
 
-        data.user.token = token;
-        data.user.refreshToken = refreshToken;
+        data.token = token;
+        data.refreshToken = refreshToken;
       }
 
       Generator.sendResponse({

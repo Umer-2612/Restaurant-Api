@@ -8,6 +8,7 @@ const UserSchema: Schema = new Schema(
     lastName: { type: String },
     userName: { type: String },
     password: { type: String },
+    token: { type: String },
     email: { type: String },
     profile: { type: String },
     recordDeleted: { type: Boolean, default: false },

@@ -42,14 +42,10 @@ class AuthController {
         // Generate a JWT token
         const token = await jwtService.generateToken(user);
         data.user.token = token;
+
+        // Save the token in the database
+        await AuthService.saveToken(req.body.email, token);
       }
-      // // Set token as an HTTP-only cookie
-      // res.cookie("token", data.user.token, {
-      //   httpOnly: true,
-      //   // secure: process.env.NODE_ENV === 'production',  // Use secure in production
-      //   // sameSite: "Strict", // Protect against CSRF attacks
-      //   maxAge: 24 * 60 * 60 * 1000, // 1 day expiration
-      // });
 
       Generator.sendResponse({
         res,
@@ -59,18 +55,43 @@ class AuthController {
         data,
       });
     } catch (error: any) {
+
+      console.log(error);
       this.handleError(res, error);
     }
   };
 
-  public googleCallback = async (req: any, res: Response): Promise<void> => {
+  public signOut = async (req: Request, res: Response): Promise<void> => {
     try {
-      const token = req.user?.token; // Attach token to user object
-      res.redirect(`http://localhost:5173/dashboard?token=${token}`);
+      const user = await AuthService.signOut(req.body.email);
+      Generator.sendResponse({
+        res,
+        statusCode: 200,
+        success: true,
+        message: "User signed out successfully",
+        data: user,
+      });
     } catch (error: any) {
       this.handleError(res, error);
     }
   };
+
+  public test = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const user = (req as any).user;
+      
+      Generator.sendResponse({
+        res,
+        statusCode: 200,
+        success: true,
+        message: "success",
+        data: user,
+      });
+    } catch (error: any) {
+      this.handleError(res, error);
+    }
+  };
+
 }
 
 export default new AuthController();

@@ -2,7 +2,6 @@ import { Application } from "express";
 import cors, { CorsOptions } from "cors";
 import bodyParser from "body-parser";
 import routes from "../../routes/index";
-import session from "express-session";
 import Config from "../env/index";
 import { setupSwaggerDocs } from "../swagger/swagger";
 var passport = require("passport");
@@ -17,7 +16,7 @@ export function setupMiddleware(app: Application): void {
         callback(new Error("Not allowed by CORS"));
       }
     },
-    credentials: true, // Allow credentials (cookies, authorization headers, etc.)
+    credentials: true, // Allow credentials ( authorization headers, etc.)
   } as CorsOptions;
 
   // Middleware for CORS

@@ -1,7 +1,6 @@
-import { Response, Router } from "express";
+import { Router } from "express";
 import AuthController from "./controller";
-
-var passport = require("passport");
+import authenticate  from "../../config/middleware/auth";
 
 const router = Router();
 
@@ -9,14 +8,8 @@ router.post("/sign-up", AuthController.signUp);
 
 router.post("/sign-in", AuthController.signIn);
 
-router.get(
-  "/google",
-  passport.authenticate("google", { scope: ["profile", "email"] })
-);
+router.post("/sign-out", AuthController.signOut);
 
-router.get(
-  "/google/callback",
-  passport.authenticate("google", { session: false }),
-  AuthController.googleCallback
-);
+router.get("/", authenticate.authenticate, AuthController.test);
+
 export default router;

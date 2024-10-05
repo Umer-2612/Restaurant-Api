@@ -61,6 +61,38 @@ class AuthService implements IAuthService {
       throw new ErrorHandler({ statusCode: 400, message: error.message });
     }
   }
+
+  public async saveToken(email: string, token: string) {
+    let existedUser = await UserSchema.findOne({ email: email });
+
+    if (!existedUser) {
+      throw new ErrorHandler({ statusCode: 404, message: "User not found" })
+    }
+
+    if (!token) {
+      throw new ErrorHandler({ statusCode: 400, message: "Token not found" })
+    }
+
+    try {
+      await UserSchema.findOneAndUpdate({ email: email }, { token: token });
+    } catch (error: any) {
+      throw new ErrorHandler({ statusCode: 400, message: error.message });
+    }
+  }
+
+  public async signOut(email: string) {
+    let existedUser = await UserSchema.findOne({ email: email });
+
+    if (!existedUser) {
+      throw new ErrorHandler({ statusCode: 404, message: "User not found" })
+    }
+
+    try {
+      await UserSchema.findOneAndUpdate({ email: email }, { token: "" });
+    } catch (error: any) {
+      throw new ErrorHandler({ statusCode: 400, message: error.message });
+    }
+  }
 }
 
 export default new AuthService();

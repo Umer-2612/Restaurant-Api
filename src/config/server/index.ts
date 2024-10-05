@@ -4,7 +4,6 @@ import config from "../env/index";
 import Database from "../database/index";
 import { ErrorHandler } from "../../utils/common-function";
 import { setupMiddleware } from "../middleware/setup";
-import "../../passport-js/strategies/google";
 import Config from "../env/index";
 
 class Server {

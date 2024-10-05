@@ -21,7 +21,8 @@ export const objectIdValidator = (
   helpers: Joi.CustomHelpers<any>
 ) => {
   if (!value.match(/^[0-9a-fA-F]{24}$/)) {
-    return helpers.error("any.invalid");
+    // Instead of using "any.invalid", you can use a custom message
+    return helpers.error("string.custom", { message: "Invalid ID format" });
   }
   return value;
 };

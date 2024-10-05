@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import jwtService from "../../utils/jwtService";
 import { IUserSchema } from "../../components/user/interface";
-import UserDAO from "../../components/user/dao";
 import { ErrorHandler } from "../../utils/common-function";
 import { RequestWithUser } from "../../components/auth/interface";
 import UserService from "../../components/user/service";

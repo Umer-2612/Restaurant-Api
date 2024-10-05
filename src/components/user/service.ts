@@ -28,7 +28,11 @@ class UserService {
     }
 
     try {
-      const user = await this.userDao.getUser({ _id: id });
+      const user = await this.userDao.getUser(id);
+
+      if (!user) {
+        throw new ErrorHandler({ statusCode: 404, message: "User not found." });
+      }
       return user;
     } catch (error) {
       throw error;

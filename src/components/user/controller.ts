@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import UserService from "./service";
 import { ErrorHandler } from "../../utils/common-function";
 import Generator from "../../utils/generator";
+import { RequestWithUser } from "../auth/interface";
 
 class UserController {
   private userService: UserService;
@@ -23,15 +24,37 @@ class UserController {
   public getUserById = async (req: Request, res: Response): Promise<void> => {
     try {
       const user = await this.userService.getUserById(req.params.id);
-      if (!user) {
+
+      Generator.sendResponse({
+        res,
+        message: "User found",
+        data: user,
+      });
+    } catch (error: any) {
+      if (error instanceof ErrorHandler) {
         Generator.sendResponse({
-          res,
-          statusCode: 404,
+          res: res,
+          statusCode: error.statusCode,
           success: false,
-          message: "User not found",
+          message: error.message,
         });
-        return;
+      } else {
+        Generator.sendResponse({
+          res: res,
+          statusCode: 500,
+          success: false,
+          message: "Internal Server Error",
+        });
       }
+    }
+  };
+
+  public userInfo = async (
+    req: RequestWithUser,
+    res: Response
+  ): Promise<void> => {
+    try {
+      const user = await this.userService.getUserById(String(req?.user?._id));
 
       Generator.sendResponse({
         res,

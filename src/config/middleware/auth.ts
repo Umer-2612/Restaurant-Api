@@ -4,6 +4,7 @@ import { IUserSchema } from "../../components/user/interface";
 import UserDAO from "../../components/user/dao";
 import { ErrorHandler } from "../../utils/common-function";
 import { RequestWithUser } from "../../components/auth/interface";
+import UserService from "../../components/user/service";
 
 type IDecodedTokenResponse = {
   _id: string;
@@ -13,6 +14,12 @@ type IDecodedTokenResponse = {
 };
 
 class AuthMiddleware {
+  private userService: UserService;
+
+  constructor() {
+    this.userService = new UserService();
+  }
+
   async authenticate(req: Request, res: Response, next: NextFunction) {
     try {
       const authHeader = req.headers.authorization;
@@ -31,9 +38,8 @@ class AuthMiddleware {
           )) as IDecodedTokenResponse;
 
           // Fetch the user from the database
-          const user: IUserSchema | null = await UserDAO.getUser(
-            { _id: decoded._id, email: decoded.email },
-            ["-password"]
+          const user: IUserSchema | null = await this.userService.getUserById(
+            String(decoded._id)
           );
 
           if (!user) {

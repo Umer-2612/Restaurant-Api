@@ -2,8 +2,8 @@ import UserSchema from "./model";
 import { ErrorHandler } from "../../utils/common-function";
 import { IUserSchema } from "./interface";
 
-export default class UserDAO {
-  public static async createUser(data: IUserSchema): Promise<IUserSchema> {
+class UserDAO {
+  public async createUser(data: IUserSchema): Promise<IUserSchema> {
     try {
       const user = await UserSchema.create(data);
       return user;
@@ -19,7 +19,7 @@ export default class UserDAO {
     }
   }
 
-  public static async getUser(
+  public async getUser(
     params: { _id?: string; email?: string },
     fields?: string[]
   ): Promise<IUserSchema | null> {
@@ -43,3 +43,5 @@ export default class UserDAO {
     }
   }
 }
+
+export default UserDAO;

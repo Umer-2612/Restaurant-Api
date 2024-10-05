@@ -11,18 +11,7 @@ import { IPaginationBody } from "./interface";
 import { RequestWithUser } from "../auth/interface";
 
 class ContactRequestFormController {
-  /**
-   * @private
-   * @type {ContactRequestFormService}
-   * @description Instance of ContactRequestFormService.
-   */
   private contactRequestFormService: ContactRequestFormService;
-
-  /**
-   * @private
-   * @type {ContactRequestsValidation}
-   * @description Instance of ContactRequestsValidation.
-   */
   private contactRequestsValidation: ContactRequestsValidation;
 
   /**

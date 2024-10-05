@@ -1,10 +1,3 @@
-/**
- * Service class for contact request form operations.
- *
- * @class ContactRequestFormService
- * @author Neel Rana <neelranga@gmail.com>
- * @since 2024-10-01
- */
 import ContactRequestsDAO from "./dao";
 import { ErrorHandler } from "../../utils/common-function";
 import { IContactRequestSchema, IPaginationBody } from "./interface";

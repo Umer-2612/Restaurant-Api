@@ -114,7 +114,7 @@ class CategoryController {
         statusCode: 200,
         message: "Categories retrieved successfully",
         data: categories[0].data,
-        paginationData: categories[0].paginationData,
+        paginationData: categories[0].paginationData[0],
       });
     } catch (error: any) {
       await this.handleError(res, error);

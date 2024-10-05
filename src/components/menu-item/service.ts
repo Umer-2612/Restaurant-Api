@@ -1,13 +1,9 @@
-import {
-  IMenuItemSchema,
-  IMenuItemService,
-  // IPaginationBody,
-  IQueryBody,
-} from "./interface";
+import { IMenuItemSchema, IMenuItemService, IQueryBody } from "./interface";
 import MenuItemDAO from "./dao";
 import { ErrorHandler } from "../../utils/common-function";
 import CategoryService from "../category/service";
 import mongoose from "mongoose";
+import CloudinaryService from "../../config/cloudinary/service";
 
 /**
  * Service class for handling menu-related operations.
@@ -15,24 +11,14 @@ import mongoose from "mongoose";
  * @implements {IMenuItemService}
  */
 class MenuItemSchema implements IMenuItemService {
-  /**
-   * Data Access Object for interacting with the menu item database.
-   * @type {MenuItemDAO}
-   */
   private menuItemDao: MenuItemDAO;
-
-  /**
-   * Service for handling category-related operations.
-   * @type {CategoryService}
-   */
   private categoryService: CategoryService;
+  private cloudinaryService: CloudinaryService;
 
-  /**
-   * Constructor for the MenuItemSchema service class.
-   */
   constructor() {
     this.menuItemDao = new MenuItemDAO();
     this.categoryService = new CategoryService();
+    this.cloudinaryService = new CloudinaryService();
   }
 
   /**
@@ -174,6 +160,19 @@ class MenuItemSchema implements IMenuItemService {
     data: Partial<IMenuItemSchema>
   ): Promise<IMenuItemSchema> {
     try {
+      if (data.itemImagePath) {
+        const menuItemDetails = await this.getMenuItemById(id);
+
+        if (menuItemDetails.itemImagePath) {
+          const previousImagePublicId = menuItemDetails.itemImagePath
+            .split("/")
+            .slice(-2)
+            .join("/")
+            .replace(/\.[^/.]+$/, "");
+          await this.cloudinaryService.destroy(previousImagePublicId);
+        }
+      }
+
       const updatedMenuItem = await this.menuItemDao.updateMenuItem(id, data);
       if (!updatedMenuItem) {
         throw new ErrorHandler({

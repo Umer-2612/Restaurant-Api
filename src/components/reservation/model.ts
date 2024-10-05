@@ -8,17 +8,17 @@ const ReservationRequestsSchema: Schema = new Schema(
     phoneNo: { type: Number },
     email: { type: String },
     noOfPeople: { type: Number },
-    date_of_reservation: { type: Date },
+    reservationDate: { type: Date },
     message: { type: String },
     recordDeleted: { type: Boolean, default: false },
   },
   {
     timestamps: true,
-    collection: "reservation_request",
+    collection: "reservations",
   }
 );
 
 export default mongoose.model<IReservationRequestSchema>(
-  "ReservationRequest",
+  "Reservation",
   ReservationRequestsSchema
 );

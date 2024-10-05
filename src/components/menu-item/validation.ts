@@ -1,10 +1,3 @@
-/**
- * Class that provides methods for validating menu item-related data using Joi.
- *
- * @class MenuItemValidation
- * @author Neel Rana
- * @since 2024-10-01
- */
 import Joi from "joi";
 import { objectIdValidator } from "../../utils/common-function";
 
@@ -38,26 +31,11 @@ export class MenuItemValidation {
    * @type {Joi.ObjectSchema}
    */
   public updateMenuItemBody: Joi.ObjectSchema = Joi.object({
-    /**
-     * Item name
-     * @type {Joi.StringSchema}
-     */
     itemName: Joi.string().optional(),
-    /**
-     * Category ID
-     * @type {Joi.StringSchema}
-     */
     category: Joi.string().optional(),
-    /**
-     * Item description
-     * @type {Joi.StringSchema}
-     */
     itemDescription: Joi.string().optional(),
-    /**
-     * Item price
-     * @type {Joi.NumberSchema}
-     */
     itemPrice: Joi.number().optional(),
+    filePath: Joi.string().optional(),
   });
 
   /**

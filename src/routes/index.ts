@@ -3,7 +3,7 @@ import userRouter from "../components/user/router";
 import authRouter from "../components/auth/router";
 import menuRouter from "../components/menu-item/router";
 import categoryRouter from "../components/category/router";
-import contactRequestRouter from "../components/contact_us/router";
+import contactRequestRouter from "../components/contact-request/router";
 import ReservationRequestFormRouter from "../components/reservation/router";
 
 const router = Router();

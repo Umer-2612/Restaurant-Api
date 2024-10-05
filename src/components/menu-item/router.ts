@@ -6,7 +6,7 @@
 import { Router } from "express";
 import MenuItemController from "./controller";
 import AuthMiddleware from "../../config/middleware/auth";
-import { uploadToCloudinary } from "../../config/cloudinary/index";
+import { uploadToCloudinary } from "../../config/cloudinary/uploadMiddleware";
 
 /**
  * Express Router for handling menu item related requests
@@ -56,7 +56,8 @@ router.get("/:id", MenuItemController.getMenuItemById);
  */
 router.patch(
   "/:id",
-  AuthMiddleware.authenticate,
+  //   AuthMiddleware.authenticate,
+  uploadToCloudinary,
   MenuItemController.updateMenuItem
 );
 

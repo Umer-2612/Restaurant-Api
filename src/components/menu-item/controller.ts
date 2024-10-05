@@ -114,6 +114,7 @@ class MenuItemController {
 
       let menuData = req.body;
       menuData.createdBy = req?.user?._id;
+      menuData.lastUpdatedBy = req?.user?._id;
       menuData.itemImagePath = req?.body?.filePath;
 
       // Call the service to create the menu item
@@ -206,6 +207,7 @@ class MenuItemController {
 
       let menuData = req.body;
       menuData.updatedBy = req?.user?._id;
+      menuData.itemImagePath = req?.body?.filePath;
 
       const updatedMenuItem = await this.menuItemService.updateMenuItem(
         id,

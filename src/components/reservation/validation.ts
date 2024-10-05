@@ -49,10 +49,14 @@ export default class ReservationRequestsValidation {
       "any.required": "No of people is required",
       "string.empty": "No of people cannot be empty",
     }),
-    reservationDate: Joi.date().required().messages({
-      "any.required": "Date of reservation is required",
-      "string.empty": "Date of reservation cannot be empty",
-    }),
+    reservationDate: Joi.date()
+      .required()
+      .greater("now") // This ensures the reservationDate is in the future
+      .messages({
+        "any.required": "Date of reservation is required",
+        "string.empty": "Date of reservation cannot be empty",
+        "date.greater": "Reservation date must be a future date",
+      }),
     message: Joi.string().required().messages({
       "any.required": "Message is required",
       "string.empty": "Message cannot be empty",

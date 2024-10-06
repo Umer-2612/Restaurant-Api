@@ -39,6 +39,8 @@ const dev: Config = {
     "http://127.0.0.1:80",
     "http://localhost:5173",
     "http://localhost",
+    "https://api.umer-karachiwala.tech",
+    "http://api.umer-karachiwala.tech",
   ],
   jwtConfig: {
     secretKey: "xjfqktewbghncmayzoipsvuldr",
@@ -73,7 +75,8 @@ const qa: Config = {
     "http://127.0.0.1:80",
     "http://localhost:5173",
     "http://localhost",
-    "https://stg.narad.io",
+    "https://api.umer-karachiwala.tech",
+    "http://api.umer-karachiwala.tech",
   ],
   jwtConfig: {
     secretKey: "xjfqktewbghncmayzoipsvuldr",
@@ -108,7 +111,8 @@ const prod: Config = {
     "http://127.0.0.1:80",
     "http://localhost:5173",
     "http://localhost",
-    "https://stg.narad.io",
+    "https://api.umer-karachiwala.tech",
+    "http://api.umer-karachiwala.tech",
   ],
   jwtConfig: {
     secretKey: "xjfqktewbghncmayzoipsvuldr",

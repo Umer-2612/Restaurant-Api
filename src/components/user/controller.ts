@@ -31,52 +31,25 @@ class UserController {
         data: user,
       });
     } catch (error: any) {
-      if (error instanceof ErrorHandler) {
-        Generator.sendResponse({
-          res: res,
-          statusCode: error.statusCode,
-          success: false,
-          message: error.message,
-        });
-      } else {
-        Generator.sendResponse({
-          res: res,
-          statusCode: 500,
-          success: false,
-          message: "Internal Server Error",
-        });
-      }
+      await this.handleError(res, error);
     }
   };
 
   public userInfo = async (
     req: RequestWithUser,
     res: Response
-  ): Promise<void> => {
+  ): Promise<any> => {
     try {
       const user = await this.userService.getUserById(String(req?.user?._id));
 
-      Generator.sendResponse({
-        res,
+      // Send a successful response directly
+      return res.status(200).json({
+        success: true,
         message: "User found",
         data: user,
       });
     } catch (error: any) {
-      if (error instanceof ErrorHandler) {
-        Generator.sendResponse({
-          res: res,
-          statusCode: error.statusCode,
-          success: false,
-          message: error.message,
-        });
-      } else {
-        Generator.sendResponse({
-          res: res,
-          statusCode: 500,
-          success: false,
-          message: "Internal Server Error",
-        });
-      }
+      await this.handleError(res, error);
     }
   };
 }

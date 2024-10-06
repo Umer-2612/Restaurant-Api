@@ -3,7 +3,7 @@ import jwtService from "../../utils/jwtService";
 import { IUserSchema } from "../../components/user/interface";
 import { ErrorHandler } from "../../utils/common-function";
 import { RequestWithUser } from "../../components/auth/interface";
-import UserService from "../../components/user/service";
+import UserSchema from "../../components/user/model";
 
 type IDecodedTokenResponse = {
   _id: string;
@@ -13,16 +13,9 @@ type IDecodedTokenResponse = {
 };
 
 class AuthMiddleware {
-  private userService: UserService;
-
-  constructor() {
-    this.userService = new UserService();
-  }
-
   async authenticate(req: Request, res: Response, next: NextFunction) {
     try {
-      const authHeader = req.headers.authorization;
-      const token = authHeader && authHeader.split(" ")[1]; // Extract token from header
+      const token = req.headers.authorization;
 
       if (!token) {
         return res
@@ -37,9 +30,10 @@ class AuthMiddleware {
           )) as IDecodedTokenResponse;
 
           // Fetch the user from the database
-          const user: IUserSchema | null = await this.userService.getUserById(
-            String(decoded._id)
-          );
+          const user: IUserSchema | null = await UserSchema.findOne({
+            _id: decoded._id,
+            recordDeleted: false,
+          });
 
           if (!user) {
             throw new ErrorHandler({
@@ -55,8 +49,6 @@ class AuthMiddleware {
           return res.status(401).json({ message: "Invalid or expired token" });
         }
       }
-
-      next();
     } catch (error) {
       return res.status(401).json({ message: "Unauthorized" });
     }

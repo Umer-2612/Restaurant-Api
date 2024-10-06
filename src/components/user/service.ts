@@ -29,11 +29,14 @@ class UserService {
 
     try {
       const user = await this.userDao.getUser(id);
-
       if (!user) {
         throw new ErrorHandler({ statusCode: 404, message: "User not found." });
       }
-      return user;
+
+      const userObj = JSON.parse(JSON.stringify(user));
+      delete userObj.password;
+
+      return userObj;
     } catch (error) {
       throw error;
     }

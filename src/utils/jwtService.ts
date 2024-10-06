@@ -7,7 +7,7 @@ class JwtService {
   public async generateAccessToken(user: IUserSchema) {
     try {
       const token = jwt.sign(
-        { id: user._id, email: user.email },
+        { _id: user._id, email: user.email },
         Config.jwtConfig.secretKey,
         { expiresIn: String(Config.jwtConfig.accessTokenExpiryTime) }
       );
@@ -21,7 +21,7 @@ class JwtService {
   public async generateRefreshToken(user: IUserSchema) {
     try {
       const token = jwt.sign(
-        { id: user._id, email: user.email },
+        { _id: user._id, email: user.email },
         Config.jwtConfig.secretKey,
         { expiresIn: String(Config.jwtConfig.refreshTokenExpiryTime) }
       );

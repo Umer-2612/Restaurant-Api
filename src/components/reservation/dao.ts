@@ -56,22 +56,11 @@ export default class ReservationRequestsDAO {
    * @returns {Promise<{data: IReservationRequestSchema[] | null, totalCount: number}>} list of all reservation requests
    * @throws {ErrorHandler} if error occurs while getting reservation requests
    */
-  public static async getReservationRequestForm(
-    pipeline: any
-  ): Promise<{ data: IReservationRequestSchema[]; totalCount: number }> {
+  public static async getReservationRequestForm(pipeline: any): Promise<any> {
     try {
       const result = await ReservationRequestsSchema.aggregate(pipeline);
 
-      if (result.length === 0) {
-        return { data: [], totalCount: 0 };
-      }
-
-      const reservationForms = result[0].data || [];
-      const totalCount = result[0].paginationData.length
-        ? result[0].paginationData[0].total
-        : 0;
-
-      return { data: reservationForms, totalCount: totalCount };
+      return result;
     } catch (error: any) {
       throw new ErrorHandler({
         statusCode: 500,

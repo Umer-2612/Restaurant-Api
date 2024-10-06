@@ -170,16 +170,6 @@ class ReservationRequestFormController {
     req: Request,
     res: Response
   ): Promise<any> => {
-    const user = (req as any).user;
-    if (!user) {
-      return Generator.sendResponse({
-        res,
-        statusCode: 401,
-        success: false,
-        message: "Unauthorized",
-      });
-    }
-
     const validateBody =
       this.reservationRequestsValidation.validatePaginationBody(req.query);
 
@@ -203,7 +193,8 @@ class ReservationRequestFormController {
       Generator.sendResponse({
         res,
         message: "Reservation form found",
-        data: reservationForms,
+        data: reservationForms[0].data,
+        paginationData: reservationForms[0].paginationData[0],
       });
     } catch (error: any) {
       console.log({ error });

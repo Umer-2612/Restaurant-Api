@@ -15,6 +15,14 @@ interface mailPayload {
   html: string;
 }
 
+interface mailOptionsPayload {
+  from: object;
+  to: Array<string>;
+  subject: string;
+  text: string;
+  html: string;
+}
+
 export class ErrorHandler extends Error {
   statusCode: number;
 
@@ -74,7 +82,7 @@ export async function sendMail(contentBody: mailPayload) {
   const mailOptions = {
     from: {
       name: "Admin",
-      address: process.env.EMAIL,
+      address: process.env.NODEMAILER_USER_ID,
     }, // sender address
     to: [contentBody.email], // list of receivers
     subject: `${contentBody.subject}`, // Subject line
@@ -82,7 +90,7 @@ export async function sendMail(contentBody: mailPayload) {
     html: `${contentBody.html}`, // html body
   };
 
-  const main = async (transporter: any, mailOptions: any) => {
+  const main = async (transporter: any, mailOptions: mailOptionsPayload) => {
     try {
       await transporter.sendMail(mailOptions);
       console.log("Email sent successfully");

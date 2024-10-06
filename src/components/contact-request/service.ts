@@ -61,9 +61,7 @@ export default class ContactRequestFormService {
    * @returns {Promise<{data: IContactRequestSchema[] | null, totalCount: number}>} list of all contact request forms.
    * @throws {ErrorHandler} if error occurs while getting contact request forms.
    */
-  public async getContactRequestForm(
-    data: IPaginationBody
-  ): Promise<{ data: IContactRequestSchema[] | null; totalCount: number }> {
+  public async getContactRequestForm(data: IPaginationBody): Promise<any> {
     try {
       const rowLimit = data.limit ? data.limit : 10;
       const rowSkip = data.page ? (data.page - 1) * rowLimit : 0;

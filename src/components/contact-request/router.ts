@@ -44,7 +44,7 @@ router.patch(
  */
 router.get(
   "/",
-  // AuthMiddleware.authenticate,
+  AuthMiddleware.authenticate,
   ContactRequestFormController.getContactRequestForm
 );
 

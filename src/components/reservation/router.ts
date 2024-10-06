@@ -43,7 +43,7 @@ router.patch(
  */
 router.get(
   "/",
-  //   AuthMiddleware.authenticate,
+  AuthMiddleware.authenticate,
   ReservationRequestFormController.getReservationRequestForm
 );
 

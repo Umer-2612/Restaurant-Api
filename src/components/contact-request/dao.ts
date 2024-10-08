@@ -62,25 +62,14 @@ export default class ContactRequestsDAO {
   /**
    * Gets all Contact Request Forms
    * @method getContactRequestForm
-   * @returns {Promise<{data: IContactRequestSchema[] | null, totalCount: number}>} list of all contact request forms
+   * @returns {Promise<any>} list of all contact request forms
    * @throws {ErrorHandler} if error occurs while getting contact request forms
    */
-  public static async getContactRequestForm(
-    pipeline: any
-  ): Promise<{ data: IContactRequestSchema[]; totalCount: number }> {
+  public static async getContactRequestForm(pipeline: any): Promise<any> {
     try {
       const result = await ContactRequestSchema.aggregate(pipeline);
 
-      if (result.length === 0) {
-        return { data: [], totalCount: 0 };
-      }
-
-      const contactForms = result[0].data || [];
-      const totalCount = result[0].paginationData.length
-        ? result[0].paginationData[0].total
-        : 0;
-
-      return { data: contactForms, totalCount: totalCount };
+      return result;
     } catch (error: any) {
       throw new ErrorHandler({
         statusCode: 500,

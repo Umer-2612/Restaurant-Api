@@ -5,10 +5,10 @@ interface Config {
   nodeEnv: string;
   port: number | string;
   whiteList: string[];
-  sessionSecret: string;
   jwtConfig: {
     secretKey: string;
-    expiryTime: string;
+    accessTokenExpiryTime: string;
+    refreshTokenExpiryTime: string;
   };
   mongoDBConfig: {
     MONGODB_URI: string;
@@ -39,11 +39,14 @@ const dev: Config = {
     "http://127.0.0.1:80",
     "http://localhost:5173",
     "http://localhost",
+    "https://umer-karachiwala.tech",
+    "https://api.umer-karachiwala.tech",
+    "http://api.umer-karachiwala.tech",
   ],
-  sessionSecret: "umer",
   jwtConfig: {
-    secretKey: "umer",
-    expiryTime: "24h",
+    secretKey: "xjfqktewbghncmayzoipsvuldr",
+    accessTokenExpiryTime: "24h",
+    refreshTokenExpiryTime: "72h",
   },
   mongoDBConfig: {
     MONGODB_URI: process.env.MONGO_URI || "",
@@ -73,12 +76,14 @@ const qa: Config = {
     "http://127.0.0.1:80",
     "http://localhost:5173",
     "http://localhost",
-    "https://stg.narad.io",
+    "https://umer-karachiwala.tech",
+    "https://api.umer-karachiwala.tech",
+    "http://api.umer-karachiwala.tech",
   ],
-  sessionSecret: "umer",
   jwtConfig: {
-    secretKey: "umer",
-    expiryTime: "24h",
+    secretKey: "xjfqktewbghncmayzoipsvuldr",
+    accessTokenExpiryTime: "24h",
+    refreshTokenExpiryTime: "72h",
   },
   mongoDBConfig: {
     MONGODB_URI: process.env.MONGO_URI || "",
@@ -108,12 +113,14 @@ const prod: Config = {
     "http://127.0.0.1:80",
     "http://localhost:5173",
     "http://localhost",
-    "https://stg.narad.io",
+    "https://umer-karachiwala.tech",
+    "https://api.umer-karachiwala.tech",
+    "http://api.umer-karachiwala.tech",
   ],
-  sessionSecret: "umer",
   jwtConfig: {
-    secretKey: "umer",
-    expiryTime: "24h",
+    secretKey: "xjfqktewbghncmayzoipsvuldr",
+    accessTokenExpiryTime: "24h",
+    refreshTokenExpiryTime: "72h",
   },
   mongoDBConfig: {
     MONGODB_URI: process.env.MONGO_URI || "",

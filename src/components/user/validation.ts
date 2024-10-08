@@ -3,9 +3,13 @@ import { objectIdValidator } from "../../utils/common-function";
 
 export default class UserValidation {
   public static createUserSchema = Joi.object({
-    userName: Joi.string().required().messages({
-      "any.required": "User name is required",
-      "string.empty": "User name cannot be empty",
+    firstName: Joi.string().required().messages({
+      "any.required": "First name is required",
+      "string.empty": "First name cannot be empty",
+    }),
+    lastName: Joi.string().required().messages({
+      "any.required": "Last name is required",
+      "string.empty": "Last name cannot be empty",
     }),
     email: Joi.string().email().required().messages({
       "any.required": "Email is required",

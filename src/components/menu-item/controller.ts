@@ -79,7 +79,7 @@ class MenuItemController {
         statusCode: 200,
         message: "Menu items retrieved successfully",
         data: menuItems[0].data,
-        paginationData: menuItems[0].paginationData,
+        paginationData: menuItems[0].paginationData[0],
       });
     } catch (error: any) {
       await this.handleError(res, error);

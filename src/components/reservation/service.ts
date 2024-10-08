@@ -55,9 +55,7 @@ export default class ReservationRequestFormService {
    * @returns {Promise<{data: IReservationRequestSchema[] | null, totalCount: number}>} list of all Reservation Request Forms
    * @throws {ErrorHandler} if error occurs while getting Reservation Request Forms
    */
-  public async getReservationRequestForm(
-    data: IPaginationBody
-  ): Promise<{ data: IReservationRequestSchema[] | null; totalCount: number }> {
+  public async getReservationRequestForm(data: IPaginationBody): Promise<any> {
     try {
       const rowLimit = data.limit ? data.limit : 10;
       const rowSkip = data.page ? (data.page - 1) * rowLimit : 0;
@@ -72,24 +70,26 @@ export default class ReservationRequestFormService {
         {
           $facet: {
             paginationData: [
-              { $count: "total" },
+              { $count: "total" }, // Count the total number of records
               {
                 $addFields: {
-                  currentPage: data.page > 0 ? Number(data.page) : 1,
+                  currentPage: data.page > 0 ? Number(data.page) : 1, // Return the current page
                 },
               },
             ],
             data: [
-              { $sort: { createdAt: -1 } },
-              { $skip: rowSkip },
-              { $limit: rowLimit },
+              { $sort: { createdAt: -1 } }, // Sort by creation date
+              { $skip: rowSkip }, // Skip the documents for pagination
+              { $limit: rowLimit }, // Limit the number of documents returned
               {
                 $project: {
-                  _id: 1,
-                  name: 1,
+                  firstName: 1,
+                  lastName: 1,
+                  phoneNo: 1,
                   email: 1,
+                  noOfPeople: 1,
                   reservationDate: 1,
-                  createdAt: 1,
+                  message: 1,
                 },
               },
             ],
@@ -101,29 +101,29 @@ export default class ReservationRequestFormService {
       let reservationForms =
         await ReservationRequestsDAO.getReservationRequestForm(pipeline);
 
-      // Post-processing the data if necessary
-      if (
-        reservationForms &&
-        reservationForms.data &&
-        reservationForms.data.length
-      ) {
-        reservationForms.data = reservationForms.data.map((e) => {
-          // e is now a plain JS object, so no need for .toObject()
-          if (e.reservationDate) {
-            e.actual_date = new Date(e.reservationDate).toLocaleDateString(
-              undefined,
-              {
-                weekday: "long",
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              }
-            );
-            e.actual_time = new Date(e.reservationDate).toLocaleTimeString();
-          }
-          return e;
-        });
-      }
+      // // Post-processing the data if necessary
+      // if (
+      //   reservationForms &&
+      //   reservationForms.data &&
+      //   reservationForms.data.length
+      // ) {
+      //   reservationForms.data = reservationForms.data.map((e) => {
+      //     // e is now a plain JS object, so no need for .toObject()
+      //     if (e.reservationDate) {
+      //       e.actual_date = new Date(e.reservationDate).toLocaleDateString(
+      //         undefined,
+      //         {
+      //           weekday: "long",
+      //           year: "numeric",
+      //           month: "long",
+      //           day: "numeric",
+      //         }
+      //       );
+      //       e.actual_time = new Date(e.reservationDate).toLocaleTimeString();
+      //     }
+      //     return e;
+      //   });
+      // }
 
       return reservationForms;
     } catch (error: any) {

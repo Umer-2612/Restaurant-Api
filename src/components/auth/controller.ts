@@ -40,11 +40,11 @@ class AuthController {
       let data: any = { user };
       if (user) {
         // Generate a JWT token
-        const token = await jwtService.generateToken(user);
-        data.user.token = token;
+        const token = await jwtService.generateAccessToken(user);
+        const refreshToken = await jwtService.generateRefreshToken(user);
 
-        // Save the token in the database
-        await AuthService.saveToken(req.body.email, token);
+        data.token = token;
+        data.refreshToken = refreshToken;
       }
 
       Generator.sendResponse({
@@ -55,7 +55,6 @@ class AuthController {
         data,
       });
     } catch (error: any) {
-
       console.log(error);
       this.handleError(res, error);
     }
@@ -150,7 +149,7 @@ class AuthController {
 
       if (updatedUser) {
         // Generate a JWT token
-        const token = await jwtService.generateToken(updatedUser);
+        const token = await jwtService.generateAccessToken(updatedUser);
 
         // Save the token in the database
         await AuthService.saveToken(updatedUser.email, token);

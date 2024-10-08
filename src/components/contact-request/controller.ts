@@ -157,16 +157,6 @@ class ContactRequestFormController {
     req: Request,
     res: Response
   ): Promise<any> => {
-    const user = (req as any).user;
-    if (!user) {
-      return Generator.sendResponse({
-        res,
-        statusCode: 401,
-        success: false,
-        message: "Unauthorized",
-      });
-    }
-
     const validateBody = this.contactRequestsValidation.validatePaginationBody(
       req.query
     );
@@ -191,7 +181,8 @@ class ContactRequestFormController {
       Generator.sendResponse({
         res,
         message: "Contact form found",
-        data: contactForms,
+        data: contactForms[0].data,
+        paginationData: contactForms[0].paginationData[0],
       });
     } catch (error: any) {
       console.log({ error });

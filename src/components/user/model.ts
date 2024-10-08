@@ -6,7 +6,6 @@ const UserSchema: Schema = new Schema(
   {
     firstName: { type: String },
     lastName: { type: String },
-    userName: { type: String },
     password: { type: String },
     otp: { type: String, default: null },
     otpExpiry: { type: Date, default: null },

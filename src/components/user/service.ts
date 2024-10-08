@@ -4,19 +4,43 @@ import { ErrorHandler } from "../../utils/common-function";
 import { IUserSchema } from "./interface";
 
 class UserService {
-  public async getUserById(id: string): Promise<IUserSchema | null> {
+  private userDao: UserDAO;
+
+  constructor() {
+    this.userDao = new UserDAO();
+  }
+
+  async createCategory(data: IUserSchema): Promise<IUserSchema> {
+    try {
+      return await this.userDao.createUser(data);
+    } catch (error: any) {
+      throw new ErrorHandler({
+        statusCode: 500,
+        message: error.message || "Failed to create category",
+      });
+    }
+  }
+
+  async getUserById(id: string): Promise<IUserSchema | null> {
     const { error } = UserValidation.validateId(id);
     if (error) {
       throw new ErrorHandler({ statusCode: 400, message: error.message });
     }
 
     try {
-      const user = await UserDAO.getUser({ _id: id });
-      return user;
+      const user = await this.userDao.getUser(id);
+      if (!user) {
+        throw new ErrorHandler({ statusCode: 404, message: "User not found." });
+      }
+
+      const userObj = JSON.parse(JSON.stringify(user));
+      delete userObj.password;
+
+      return userObj;
     } catch (error) {
       throw error;
     }
   }
 }
 
-export default new UserService();
+export default UserService;

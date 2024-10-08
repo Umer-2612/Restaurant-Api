@@ -5,6 +5,7 @@ import menuRouter from "../components/menu-item/router";
 import categoryRouter from "../components/category/router";
 import contactRequestRouter from "../components/contact-request/router";
 import ReservationRequestFormRouter from "../components/reservation/router";
+import StripeRouter from "../config/stripe/service";
 
 const router = Router();
 
@@ -19,5 +20,7 @@ router.use("/menu", menuRouter);
 router.use("/contact-us", contactRequestRouter);
 
 router.use("/reservation", ReservationRequestFormRouter);
+
+router.use("/stripe", StripeRouter);
 
 export default router;

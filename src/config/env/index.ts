@@ -23,6 +23,11 @@ interface Config {
     apiKey: string;
     apiSecret: string;
   };
+  stripeConfig: {
+    secretKey: string;
+    publishableKey: string;
+    webhookSecretKey: string;
+  };
 }
 
 const dev: Config = {
@@ -61,6 +66,11 @@ const dev: Config = {
     apiKey: process.env.CLOUDINARY_API_KEY || "",
     apiSecret: process.env.CLOUDINARY_API_SECRET || "",
   },
+  stripeConfig: {
+    secretKey: process.env.STRIPE_SECRET_KEY || "",
+    publishableKey: process.env.STRIPE_PUBLISHABLE_KEY || "",
+    webhookSecretKey: process.env.STRIPE_WEBHOOK_SECRET || "",
+  },
 };
 
 const qa: Config = {
@@ -98,6 +108,11 @@ const qa: Config = {
     apiKey: process.env.CLOUDINARY_API_KEY || "",
     apiSecret: process.env.CLOUDINARY_API_SECRET || "",
   },
+  stripeConfig: {
+    secretKey: process.env.STRIPE_SECRET_KEY || "",
+    publishableKey: process.env.STRIPE_PUBLISHABLE_KEY || "",
+    webhookSecretKey: process.env.STRIPE_WEBHOOK_SECRET || "",
+  },
 };
 
 const prod: Config = {
@@ -134,6 +149,11 @@ const prod: Config = {
     cloudName: process.env.CLOUDINARY_CLOUD_NAME || "",
     apiKey: process.env.CLOUDINARY_API_KEY || "",
     apiSecret: process.env.CLOUDINARY_API_SECRET || "",
+  },
+  stripeConfig: {
+    secretKey: process.env.STRIPE_SECRET_KEY || "",
+    publishableKey: process.env.STRIPE_PUBLISHABLE_KEY || "",
+    webhookSecretKey: process.env.STRIPE_WEBHOOK_SECRET || "",
   },
 };
 

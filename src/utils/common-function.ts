@@ -2,6 +2,7 @@ import Joi from "joi";
 import nodemailer from "nodemailer";
 import UserSchema from "../components/user/model";
 const CryptoJS = require("crypto-js");
+import { IReservationRequestSchema } from "../components/reservation/interface";
 
 interface IErrorHandlerParam {
   statusCode: number;
@@ -107,7 +108,7 @@ export async function sendMail(contentBody: mailPayload) {
   }
 };
 
-export function sendOtpAtForgotPassword(user_name: string, email: string, otp: number) {
+export function forgotPasswordTemplate(user_name: string, email: string, otp: number) {
   return {
     email: email,
     subject: `OTP For Forgot Password - ${user_name}`,
@@ -209,9 +210,114 @@ export function sendOtpAtForgotPassword(user_name: string, email: string, otp: n
   }
 };
 
+export function statusChangeTemplate(user_name: string, email: string, status: string, reservationDate: Date) {
+  return {
+    email: email,
+    subject: `Your reservation has been ${status} - ${user_name}`,
+    text: `Here is your conformation mail`,
+    html: `
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Restaurant Reservation Notification</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+      width: 100%;
+    }
+    .email-wrapper {
+      width: 100%;
+      background-color: #f4f4f4;
+      padding: 20px 0;
+      text-align: center;
+    }
+    .container {
+      max-width: 600px;
+      width: 100%;
+      margin: 0 auto;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      background-color: #ffffff;
+    }
+    .header {
+      text-align: center;
+      padding: 20px;
+      background-color: #007BFF;
+      color: #ffffff;
+    }
+    .header h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+    .content {
+      padding: 20px;
+      line-height: 1.6;
+      color: #555555;
+    }
+    .status {
+      display: inline-block;
+      padding: 12px 20px;
+      margin-top: 20px;
+      background-color: #3498db;
+      color: #ffffff;
+      text-decoration: none;
+      border-radius: 5px;
+      text-align: center;
+      font-size: 18px;
+      border: none;
+    }
+    .status.accepted {
+      background-color: #28a745;
+    }
+    .status.rejected {
+      background-color: #dc3545;
+    }
+    .footer {
+      text-align: center;
+      padding: 30px 20px;
+      background-color: #f8f9fa;
+      font-size: 14px;
+      color: #777777;
+      border-top: 1px solid #ddd;
+    }
+    .footer p {
+      margin: 0;
+      padding: 5px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="email-wrapper">
+    <div class="container">
+      <div class="header">
+        <h1>Your Reservation Status</h1>
+      </div>
+      <div class="content">
+        <p>Hello ${user_name},</p>
+        <p>We are pleased to inform you that your reservation for <strong>Punjabi Touch Indian Restuarant</strong> on <strong>${reservationDate}</strong> has been:</p>
+        <p class="status ${status == 'accepted' ? 'accepted' : 'rejected'}">${status}</p>
+        <p>Thank you for choosing us! We look forward to serving you.</p>
+      </div>
+      <div class="footer">
+        <p>If you have any questions or need further assistance, feel free to contact us.</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+    `
+  }
+}
+
 export async function sendOtp(userName: string, email: string, otp: number) {
   try {
-    let makePayload = sendOtpAtForgotPassword(userName, email, otp);
+    let makePayload = forgotPasswordTemplate(userName, email, otp);
     try {
       await sendMail(makePayload);
       const date = new Date();
@@ -228,6 +334,21 @@ export async function sendOtp(userName: string, email: string, otp: number) {
       } else {
         return false;
       }
+    } catch (error: any) {
+      throw new ErrorHandler({ statusCode: 400, message: error.message });
+    }
+  } catch (error: any) {
+    throw new ErrorHandler({ statusCode: 400, message: error.message });
+  }
+};
+
+export async function sendMailOfStatusChange(status: string, userDetails: IReservationRequestSchema) {
+  try {
+    let userName = userDetails.firstName + " " + userDetails.lastName;
+    let makePayload = statusChangeTemplate(userName, userDetails.email, status, userDetails.reservationDate);
+    try {
+      await sendMail(makePayload);
+      return true;
     } catch (error: any) {
       throw new ErrorHandler({ statusCode: 400, message: error.message });
     }

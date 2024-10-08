@@ -135,6 +135,25 @@ export default class ReservationRequestFormService {
     }
   }
 
+  public async updateStatusforReservationRequestForm(id: string, status: string): Promise<any> {
+    try {
+      const reservationForm = await ReservationRequestsDAO.updateStatusforReservationRequestForm(id, status);
+      if (!reservationForm) { 
+        throw new ErrorHandler({
+          statusCode: 404,
+          message: "Reservation form not found for update",
+        });
+      }
+      return reservationForm;
+    } catch (error: any) {
+      throw new ErrorHandler({
+        statusCode: 500,
+        message:
+          error.message || "Failed to update the status of reservation request forms",
+      });
+    }
+  }
+
   /**
    * Deletes a Reservation Request Form
    * @method deleteReservationRequestForm

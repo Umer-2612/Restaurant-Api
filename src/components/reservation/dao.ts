@@ -1,6 +1,6 @@
 import ReservationRequestsSchema from "./model";
-import { ErrorHandler } from "../../utils/common-function";
-import { IReservationRequestSchema, IPaginationBody } from "./interface";
+import { ErrorHandler, sendMailOfStatusChange } from "../../utils/common-function";
+import { IReservationRequestSchema } from "./interface";
 
 export default class ReservationRequestsDAO {
   /**
@@ -65,6 +65,37 @@ export default class ReservationRequestsDAO {
       throw new ErrorHandler({
         statusCode: 500,
         message: "Database Error: Unable to retrieve reservation request forms",
+      });
+    }
+  }
+
+  public static async updateStatusforReservationRequestForm(id: string, status: string): Promise<any> {
+    try {
+      const reservationRequestForm = await ReservationRequestsSchema.updateOne({ _id: id }, { $set: { isStatus: status } });
+      if (!reservationRequestForm) {
+        throw new ErrorHandler({
+          statusCode: 500,
+          message: "Database Error: Unable to update reservation request forms status",
+        });
+      }
+      let userDetails = await ReservationRequestsSchema.findById(id);
+      if (!userDetails) {
+        throw new ErrorHandler({
+          statusCode: 500,
+          message: "Database Error: Unable to retrieve reservation request forms",
+        });
+      }
+      let sendEmail = await sendMailOfStatusChange(status, userDetails);
+
+      if (sendEmail) {
+        return 'Email sent successfully';
+      } else {
+        return 'Email not sent';
+      }
+    } catch (error: any) {
+      throw new ErrorHandler({
+        statusCode: 500,
+        message: "Database Error: Unable to update reservation request forms status",
       });
     }
   }

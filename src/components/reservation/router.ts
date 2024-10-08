@@ -47,6 +47,12 @@ router.get(
   ReservationRequestFormController.getReservationRequestForm
 );
 
+router.put(
+  "/:id",
+  AuthMiddleware.authenticate,
+  ReservationRequestFormController.updateStatusforReservationRequestForm
+);
+
 /**
  * Deletes a Reservation Request Form
  * @method DELETE /:id

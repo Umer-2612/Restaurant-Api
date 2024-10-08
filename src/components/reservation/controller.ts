@@ -202,6 +202,70 @@ class ReservationRequestFormController {
     }
   };
 
+  public updateStatusforReservationRequestForm = async (
+    req: Request,
+    res: Response
+  ): Promise<any> => {
+    // const user = (req as any).user;
+    const user = {
+      "_id": "67054813cf2dca8edff52b41",
+      "firstName": "Testing",
+      "lastName": "Purpose",
+      "otp": null,
+      "otpExpiry": null,
+      "email": "neelrana.it20@scet.ac.in",
+      "recordDeleted": false,
+      "createdAt": "2024-10-08T14:56:19.823Z",
+      "updatedAt": "2024-10-08T14:56:19.823Z",
+      "__v": 0
+    };
+    if (!user) {
+      return Generator.sendResponse({
+        res,
+        statusCode: 401,
+        success: false,
+        message: "Unauthorized",
+      });
+    }
+    const { id } = req.params;
+    const idValidation = this.reservationRequestsValidation.validateId(id);
+    const bodyValidation = this.reservationRequestsValidation.validateStatus.validate(req.body);
+
+    if (idValidation.error) {
+      return Generator.sendResponse({
+        res,
+        statusCode: 400,
+        success: false,
+        message: idValidation.error.details[0].message,
+      });
+    }
+
+    if (bodyValidation.error) {
+      return Generator.sendResponse({
+        res,
+        statusCode: 400,
+        success: false,
+        message: bodyValidation.error.details[0].message,
+      });
+    }
+
+    try {
+      const reservationForms =
+        await this.reservationRequestFormService.updateStatusforReservationRequestForm(
+          req.params.id,
+          req.body.status
+        );
+      Generator.sendResponse({
+        res,
+        message: "Reservation form status updated successfully",
+        data: reservationForms,
+      });
+    } catch (error: any) {
+      console.log({ error });
+      await this.handleError(res, error);
+    }
+  };
+
   /**
    * @description Deletes a reservation request form.
    * @param {Request} req - The request object from Express.

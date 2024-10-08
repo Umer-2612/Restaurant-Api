@@ -80,6 +80,13 @@ export default class ReservationRequestsValidation {
     recordDeleted: Joi.boolean().optional().default(false),
   });
 
+  public validateStatus: Joi.ObjectSchema = Joi.object({
+    status: Joi.string().required().messages({
+      "any.required": "Status is required",
+      "string.empty": "Status cannot be empty",
+    }),
+  });
+
   /**
    * Validates a pagination query object.
    *

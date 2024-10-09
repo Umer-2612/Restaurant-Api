@@ -14,7 +14,7 @@ const router = Router();
  * @returns {Error} 500 - Internal server error
  * @description Create a new category.
  */
-router.post("/", authenticate.authenticate, CategoryController.createCategory);
+router.post("/", authenticate.authenticate, CategoryController.create);
 
 /**
  * @route GET /
@@ -23,7 +23,7 @@ router.post("/", authenticate.authenticate, CategoryController.createCategory);
  * @returns {Error} 500 - Internal server error
  * @description Retrieve all categories.
  */
-router.get("/", CategoryController.getCategories);
+router.get("/", CategoryController.getAll);
 
 /**
  * @route GET /:id
@@ -35,7 +35,7 @@ router.get("/", CategoryController.getCategories);
  * @returns {Error} 500 - Internal server error
  * @description Retrieve a category by its ID.
  */
-router.get("/:id", CategoryController.getCategoryById);
+router.get("/:id", CategoryController.getOne);
 
 /**
  * @route PUT /:id
@@ -48,7 +48,7 @@ router.get("/:id", CategoryController.getCategoryById);
  * @returns {Error} 500 - Internal server error
  * @description Update a category by its ID.
  */
-router.put("/:id", authenticate.authenticate, CategoryController.updateCategory);
+router.put("/:id", authenticate.authenticate, CategoryController.update);
 
 /**
  * @route DELETE /:id
@@ -60,6 +60,6 @@ router.put("/:id", authenticate.authenticate, CategoryController.updateCategory)
  * @returns {Error} 500 - Internal server error
  * @description Delete a category by its ID.
  */
-router.delete("/:id", authenticate.authenticate, CategoryController.deleteCategory);
+router.delete("/:id", authenticate.authenticate, CategoryController.delete);
 
 export default router;

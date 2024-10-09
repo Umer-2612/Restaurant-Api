@@ -126,12 +126,25 @@ export function forgotPasswordTemplate(user_name: string, email: string, otp: nu
       font-family: Arial, sans-serif;
       margin: 0;
       padding: 0;
-      background-color: #f4f4f4;
+      background-color: #f8f8f8;
       width: 100%;
+    }
+    img {
+      max-width: 150px;
+      margin-bottom: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      margin-top: 10px;
+      border: 2px solid #ddd;
+      padding: 10px;
+      background-color: #ffffff;
     }
     .email-wrapper {
       width: 100%;
-      background-color: #f4f4f4;
+      background-color: #f8f8f8;
       padding: 20px 0;
       text-align: center;
     }
@@ -140,14 +153,14 @@ export function forgotPasswordTemplate(user_name: string, email: string, otp: nu
       width: 100%;
       margin: 0 auto;
       border: 1px solid #ddd;
-      border-radius: 8px;
+      border-radius: 12px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
       background-color: #ffffff;
     }
     .header {
       text-align: center;
       padding: 20px;
-      background-color: #007BFF;
+      background-color: #E63946;
       color: #ffffff;
     }
     .header h1 {
@@ -194,6 +207,7 @@ export function forgotPasswordTemplate(user_name: string, email: string, otp: nu
       <div class="header">
         <h1>Reset Your Password</h1>
       </div>
+      <img src="https://umer-karachiwala.tech/assets/punjabi-touch-cropped-BSNMGgT6.png" alt="Company Logo">
       <div class="content">
         <p>Hello ${user_name},</p>
         <p>We received a request to reset your password. Please use the following OTP to proceed with the password reset:</p>
@@ -202,6 +216,7 @@ export function forgotPasswordTemplate(user_name: string, email: string, otp: nu
       </div>
       <div class="footer">
         <p>If you did not request this password reset, please ignore this email.</p>
+        <p>T2/356 Middle Rd 356 Middle Rd, Greenbank QLD 4124, Australia</p>
       </div>
     </div>
   </div>
@@ -228,12 +243,25 @@ export function statusChangeTemplate(user_name: string, email: string, status: s
       font-family: Arial, sans-serif;
       margin: 0;
       padding: 0;
-      background-color: #f4f4f4;
+      background-color: #f8f8f8;
       width: 100%;
+    }
+    img {
+      max-width: 150px;
+      margin-bottom: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      margin-top: 10px;
+      border: 2px solid #ddd;
+      padding: 10px;
+      background-color: #ffffff;
     }
     .email-wrapper {
       width: 100%;
-      background-color: #f4f4f4;
+      background-color: #f8f8f8;
       padding: 20px 0;
       text-align: center;
     }
@@ -242,14 +270,14 @@ export function statusChangeTemplate(user_name: string, email: string, status: s
       width: 100%;
       margin: 0 auto;
       border: 1px solid #ddd;
-      border-radius: 8px;
+      border-radius: 12px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
       background-color: #ffffff;
     }
     .header {
       text-align: center;
       padding: 20px;
-      background-color: #007BFF;
+      background-color: #E63946;
       color: #ffffff;
     }
     .header h1 {
@@ -299,6 +327,7 @@ export function statusChangeTemplate(user_name: string, email: string, status: s
       <div class="header">
         <h1>Your Reservation Status</h1>
       </div>
+      <img src="https://umer-karachiwala.tech/assets/punjabi-touch-cropped-BSNMGgT6.png" alt="Company Logo">
       <div class="content">
         <p>Hello ${user_name},</p>
         <p>We are pleased to inform you that your reservation for <strong>Punjabi Touch Indian Restuarant</strong> on <strong>${reservationDate}</strong> has been:</p>
@@ -307,6 +336,7 @@ export function statusChangeTemplate(user_name: string, email: string, status: s
       </div>
       <div class="footer">
         <p>If you have any questions or need further assistance, feel free to contact us.</p>
+        <p>T2/356 Middle Rd 356 Middle Rd, Greenbank QLD 4124, Australia</p>
       </div>
     </div>
   </div>
@@ -322,7 +352,7 @@ export function orderTemplate(userInfo: IOrderSchema, orderDate: String) {
     subject: `Your order has been placed - ${userInfo.orderdName}`,
     text: `Here is your conformation mail`,
     html: `
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -333,12 +363,25 @@ export function orderTemplate(userInfo: IOrderSchema, orderDate: String) {
       font-family: Arial, sans-serif;
       margin: 0;
       padding: 0;
-      background-color: #f4f4f4;
+      background-color: #f8f8f8;
       width: 100%;
+    }
+    img {
+      max-width: 150px;
+      margin-bottom: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      margin-top: 10px;
+      border: 2px solid #ddd; 
+      padding: 10px;
+      background-color: #ffffff;
     }
     .email-wrapper {
       width: 100%;
-      background-color: #f4f4f4;
+      background-color: #f8f8f8;
       padding: 20px 0;
       text-align: center;
     }
@@ -347,15 +390,16 @@ export function orderTemplate(userInfo: IOrderSchema, orderDate: String) {
       width: 100%;
       margin: 0 auto;
       border: 1px solid #ddd;
-      border-radius: 8px;
+      border-radius: 12px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
       background-color: #ffffff;
     }
     .header {
       text-align: center;
       padding: 20px;
-      background-color: #007BFF;
+      background-color: #E63946;
       color: #ffffff;
+      position: relative;
     }
     .header h1 {
       margin: 0;
@@ -377,7 +421,7 @@ export function orderTemplate(userInfo: IOrderSchema, orderDate: String) {
       text-align: left;
     }
     .order-summary th {
-      background-color: #f2f2f2;
+      background-color: #f8f8f8;
     }
     .footer {
       text-align: center;
@@ -418,8 +462,9 @@ export function orderTemplate(userInfo: IOrderSchema, orderDate: String) {
   <div class="email-wrapper">
     <div class="container">
       <div class="header">
-        <h1>Order Confirmation</h1>
+      <h1>Order Confirmation</h1>
       </div>
+      <img src="https://umer-karachiwala.tech/assets/punjabi-touch-cropped-BSNMGgT6.png" alt="Company Logo">
       <div class="content">
         <p>Hello <strong>${userInfo.orderdName}</strong>,</p>
         <p>Thank you for your order! Below are the details of your order:</p>
@@ -457,9 +502,9 @@ export function orderTemplate(userInfo: IOrderSchema, orderDate: String) {
           </thead>
           <tbody>
             ${userInfo.items.map(item => `
-            <tr>
-              <td>${item.menu}</td>
-              <td>${item.quantity}</td>
+              <tr>
+              <td>${item.menu} </td>
+              <td> ${item.quantity} </td>
             </tr>`).join('')}
           </tbody>
         </table>
@@ -468,11 +513,13 @@ export function orderTemplate(userInfo: IOrderSchema, orderDate: String) {
       </div>
       <div class="footer">
         <p>Thank you for choosing us!</p>
+        <p>T2/356 Middle Rd 356 Middle Rd, Greenbank QLD 4124, Australia</p>
       </div>
     </div>
   </div>
 </body>
 </html>
+
     `,
   }
 }

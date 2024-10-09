@@ -179,12 +179,14 @@ class AuthService implements IAuthService {
 
     const { email } = data;
     try {
-      const user = await UserSchema.findOne({ email: email });
+      let user = await UserSchema.findOne({ email: email });
       if (!user) {
         throw new ErrorHandler({ statusCode: 404, message: "User not found" });
       }
       let otp = Math.floor(Math.random() * (999999 - 100000 + 1)) + 100000;
-      let sendOtpAtEmail = await sendOtp(user.userName, email, otp);
+      user = user.toObject();
+      let userName = user.userName;
+      let sendOtpAtEmail = await sendOtp(userName, email, otp);
       if (!sendOtpAtEmail) {
         throw new ErrorHandler({ statusCode: 400, message: "Email not sent" });
       } else {

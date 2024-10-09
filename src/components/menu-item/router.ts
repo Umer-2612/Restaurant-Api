@@ -24,7 +24,7 @@ const router = Router();
  */
 router.post(
   "/",
-  //   AuthMiddleware.authenticate,
+  AuthMiddleware.authenticate,
   uploadToCloudinary,
   MenuItemController.createMenuItem
 );
@@ -56,7 +56,7 @@ router.get("/:id", MenuItemController.getMenuItemById);
  */
 router.patch(
   "/:id",
-  //   AuthMiddleware.authenticate,
+  AuthMiddleware.authenticate,
   uploadToCloudinary,
   MenuItemController.updateMenuItem
 );

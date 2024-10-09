@@ -3,12 +3,6 @@ import { ErrorHandler } from "../../utils/common-function";
 import { IReservationRequestSchema, IPaginationBody } from "./interface";
 
 export default class ReservationRequestsDAO {
-  /**
-   * @description Create a new Reservation Request
-   * @param {IReservationRequestSchema} data reservation request data
-   * @returns {Promise<IReservationRequestSchema>} newly created reservation request
-   * @throws {ErrorHandler} if error occurs while creating reservation request
-   */
   public async createReservationRequestForm(
     data: IReservationRequestSchema
   ): Promise<IReservationRequestSchema> {
@@ -27,13 +21,6 @@ export default class ReservationRequestsDAO {
     }
   }
 
-  /**
-   * @description Update an existing Reservation Request
-   * @param {string} id id of the reservation request to be updated
-   * @param {IReservationRequestSchema} data reservation request data
-   * @returns {Promise<IReservationRequestSchema | null>} updated reservation request
-   * @throws {ErrorHandler} if error occurs while updating reservation request
-   */
   public async updateReservationRequestForm(
     id: string,
     data: IReservationRequestSchema
@@ -52,11 +39,6 @@ export default class ReservationRequestsDAO {
     }
   }
 
-  /**
-   * @description Get all Reservation Requests
-   * @returns {Promise<{data: IReservationRequestSchema[] | null, totalCount: number}>} list of all reservation requests
-   * @throws {ErrorHandler} if error occurs while getting reservation requests
-   */
   public async getReservationRequestForm(pipeline: any): Promise<any> {
     try {
       const result = await ReservationRequestsSchema.aggregate(pipeline);
@@ -87,12 +69,6 @@ export default class ReservationRequestsDAO {
     }
   }
 
-  /**
-   * @description Delete a Reservation Request
-   * @param {string} id id of the reservation request to be deleted
-   * @returns {Promise<IReservationRequestSchema | null>} deleted reservation request
-   * @throws {ErrorHandler} if error occurs while deleting reservation request
-   */
   public async deleteReservationRequestForm(
     id: string
   ): Promise<IReservationRequestSchema | null> {

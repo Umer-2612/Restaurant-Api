@@ -90,19 +90,9 @@ class ContactRequestFormController {
    * @description Updates an existing contact request form.
    */
   public updateContactRequestForm = async (
-    req: Request,
+    req: RequestWithUser,
     res: Response
   ): Promise<any> => {
-    const user = (req as any).user;
-    if (!user) {
-      return Generator.sendResponse({
-        res,
-        statusCode: 401,
-        success: false,
-        message: "Unauthorized",
-      });
-    }
-
     const { id } = req.params;
     const bodyValidation =
       this.contactRequestsValidation.validateUpdateContactRequestForm.validate(

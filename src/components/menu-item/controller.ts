@@ -232,18 +232,11 @@ class MenuItemController {
    * @returns {Promise<any>}
    * @description Deletes a menu item by its ID.
    */
-  public deleteMenuItem = async (req: Request, res: Response): Promise<any> => {
+  public deleteMenuItem = async (
+    req: RequestWithUser,
+    res: Response
+  ): Promise<any> => {
     try {
-      const user = (req as any).user;
-      if (!user) {
-        return Generator.sendResponse({
-          res,
-          statusCode: 401,
-          success: false,
-          message: "Unauthorized",
-        });
-      }
-
       const { id } = req.params;
       const idValidation = this.menuItemValidation.validateId(id); // Validate ID
 

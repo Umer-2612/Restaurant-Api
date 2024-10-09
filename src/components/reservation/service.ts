@@ -13,13 +13,6 @@ export default class ReservationRequestFormService {
     this.reservationRequestUtils = new ReservationRequestFormUtils();
   }
 
-  /**
-   * Creates a new Reservation Request Form
-   * @method createReservationRequestForm
-   * @param {IReservationRequestSchema} data Reservation Request Form data
-   * @returns {Promise<IReservationRequestSchema>} newly created Reservation Request Form
-   * @throws {ErrorHandler} if error occurs while creating Reservation Request Form
-   */
   public async createReservationRequestForm(
     data: IReservationRequestSchema
   ): Promise<IReservationRequestSchema> {
@@ -32,14 +25,6 @@ export default class ReservationRequestFormService {
     }
   }
 
-  /**
-   * Updates an existing Reservation Request Form
-   * @method updateReservationRequestForm
-   * @param {string} id id of the Reservation Request Form to be updated
-   * @param {IReservationRequestSchema} data Reservation Request Form data
-   * @returns {Promise<IReservationRequestSchema | null>} updated Reservation Request Form
-   * @throws {ErrorHandler} if error occurs while updating Reservation Request Form
-   */
   public async updateReservationRequestForm(
     id: string,
     data: IReservationRequestSchema
@@ -76,12 +61,6 @@ export default class ReservationRequestFormService {
     }
   }
 
-  /**
-   * Gets all Reservation Request Forms
-   * @method getReservationRequestForm
-   * @returns {Promise<{data: IReservationRequestSchema[] | null, totalCount: number}>} list of all Reservation Request Forms
-   * @throws {ErrorHandler} if error occurs while getting Reservation Request Forms
-   */
   public async getReservationRequestForm(data: IPaginationBody): Promise<any> {
     try {
       const rowLimit = data.limit ? data.limit : 10;
@@ -128,30 +107,6 @@ export default class ReservationRequestFormService {
       let reservationForms =
         await this.reservationRequestDao.getReservationRequestForm(pipeline);
 
-      // // Post-processing the data if necessary
-      // if (
-      //   reservationForms &&
-      //   reservationForms.data &&
-      //   reservationForms.data.length
-      // ) {
-      //   reservationForms.data = reservationForms.data.map((e) => {
-      //     // e is now a plain JS object, so no need for .toObject()
-      //     if (e.reservationDate) {
-      //       e.actual_date = new Date(e.reservationDate).toLocaleDateString(
-      //         undefined,
-      //         {
-      //           weekday: "long",
-      //           year: "numeric",
-      //           month: "long",
-      //           day: "numeric",
-      //         }
-      //       );
-      //       e.actual_time = new Date(e.reservationDate).toLocaleTimeString();
-      //     }
-      //     return e;
-      //   });
-      // }
-
       return reservationForms;
     } catch (error: any) {
       throw new ErrorHandler({
@@ -162,13 +117,6 @@ export default class ReservationRequestFormService {
     }
   }
 
-  /**
-   * Deletes a Reservation Request Form
-   * @method deleteReservationRequestForm
-   * @param {string} id id of the Reservation Request Form to be deleted
-   * @returns {Promise<IReservationRequestSchema | null>} deleted Reservation Request Form
-   * @throws {ErrorHandler} if error occurs while deleting Reservation Request Form
-   */
   public async deleteReservationRequestForm(
     id: string
   ): Promise<IReservationRequestSchema | null> {

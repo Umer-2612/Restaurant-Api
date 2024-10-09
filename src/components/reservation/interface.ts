@@ -16,13 +16,6 @@ export interface IReservationRequestSchema extends Document {
   actual_time?: string;
 }
 
-/**
- * Represents the body of a pagination query.
- *
- * @interface IPaginationBody
- * @property {number} page - The page number to retrieve.
- * @property {number} limit - The number of records to retrieve per page.
- */
 export interface IPaginationBody {
   page: number;
   limit: number;

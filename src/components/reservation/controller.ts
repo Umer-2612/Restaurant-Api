@@ -5,35 +5,16 @@ import { ErrorHandler } from "../../utils/common-function";
 import Generator from "../../utils/generator";
 import { IPaginationBody } from "./interface";
 
-/**
- * @description Handles errors and sends an appropriate response.
- * @param {Response} res - The response object from Express.
- * @param {any} error - The error object.
- * @returns {Promise<any>}
- * @private
- */
-
 class ReservationRequestFormController {
   private reservationRequestFormService: ReservationRequestFormService;
   private reservationRequestsValidation: ReservationRequestsValidation;
 
-  /**
-   * @constructor
-   */
   constructor() {
     this.handleError = this.handleError.bind(this);
     this.reservationRequestFormService = new ReservationRequestFormService();
     this.reservationRequestsValidation = new ReservationRequestsValidation();
   }
 
-  /**
-   * @private
-   * @method handleError
-   * @param {Response} res - The response object from Express.
-   * @param {any} error - The error object.
-   * @returns {Promise<any>}
-   * @description Handles errors and sends an appropriate response.
-   */
   private async handleError(res: Response, error: any): Promise<any> {
     const statusCode = error instanceof ErrorHandler ? error.statusCode : 500;
     const message =
@@ -43,19 +24,6 @@ class ReservationRequestFormController {
     Generator.sendResponse({ res, statusCode, success: false, message });
   }
 
-  /**
-   * @public
-   * @method createReservationRequestForm
-   * @param {Request} req - The request object from Express.
-   * @param {Response} res - The response object from Express.
-   * @returns {Promise<any>}
-   * @description Creates a new reservation request form.
-   * @param {Request} req - The request object from Express.
-   * @param {Response} res - The response object from Express.
-   * @returns {Promise<any>}
-   * @throws {ErrorHandler} - If any error occurs in the process.
-   * @public
-   */
   public createReservationRequestForm = async (
     req: Request,
     res: Response
@@ -91,19 +59,6 @@ class ReservationRequestFormController {
     }
   };
 
-  /**
-   * @public
-   * @method updateReservationRequestForm
-   * @param {Request} req - The request object from Express.
-   * @param {Response} res - The response object from Express.
-   * @returns {Promise<any>}
-   * @description Updates a reservation request form.
-   * @param {Request} req - The request object from Express.
-   * @param {Response} res - The response object from Express.
-   * @returns {Promise<any>}
-   * @throws {ErrorHandler} - If any error occurs in the process.
-   * @public
-   */
   public updateReservationRequestForm = async (
     req: Request,
     res: Response
@@ -161,12 +116,6 @@ class ReservationRequestFormController {
     }
   };
 
-  /**
-   * @description Retrieves all reservation request forms.
-   * @returns {Promise<any>}
-   * @throws {ErrorHandler} - If any error occurs in the process.
-   * @public
-   */
   public getReservationRequestForm = async (
     req: Request,
     res: Response
@@ -203,14 +152,6 @@ class ReservationRequestFormController {
     }
   };
 
-  /**
-   * @description Deletes a reservation request form.
-   * @param {Request} req - The request object from Express.
-   * @param {Response} res - The response object from Express.
-   * @returns {Promise<any>}
-   * @throws {ErrorHandler} - If any error occurs in the process.
-   * @public
-   */
   public deleteReservationRequestForm = async (
     req: Request,
     res: Response

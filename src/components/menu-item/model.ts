@@ -1,12 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 import { IMenuItemSchema } from "./interface";
 
-/**
- * @constant MenuItemSchema
- * @type {Schema}
- * @description Mongoose schema for the menu item model.
- * This schema defines the structure of a  menu item document in the database.
- */
 const MenuItemSchema: Schema = new Schema(
   {
     itemName: { type: String },
@@ -24,9 +18,4 @@ const MenuItemSchema: Schema = new Schema(
   }
 );
 
-/**
- * Mongoose model for the menu item schema.
- *
- * @type {import('mongoose').Model<IMenuItemSchema, Record<string, unknown>, IMenuItemSchema>}
- */
 export default mongoose.model<IMenuItemSchema>("Menu", MenuItemSchema);

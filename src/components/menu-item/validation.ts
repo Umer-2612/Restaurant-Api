@@ -1,15 +1,7 @@
 import Joi from "joi";
 import { objectIdValidator } from "../../utils/common-function";
 
-/**
- * Schema for validating the request body when creating a menu item.
- * @type {Joi.ObjectSchema}
- */
 export class MenuItemValidation {
-  /**
-   * Schema for validating the request body when creating a menu item.
-   * @type {Joi.ObjectSchema}
-   */
   public createMenuItemBody: Joi.ObjectSchema = Joi.object({
     itemName: Joi.string().required().messages({
       "any.required": "Item name is required",
@@ -26,10 +18,6 @@ export class MenuItemValidation {
     filePath: Joi.string().optional(),
   });
 
-  /**
-   * Schema for validating the request body when updating a menu item.
-   * @type {Joi.ObjectSchema}
-   */
   public updateMenuItemBody: Joi.ObjectSchema = Joi.object({
     itemName: Joi.string().optional(),
     category: Joi.string().optional(),
@@ -38,25 +26,12 @@ export class MenuItemValidation {
     filePath: Joi.string().optional(),
   });
 
-  /**
-   * Validates a MongoDB ObjectID.
-   *
-   * @param {string} id - The ID to validate.
-   * @returns {Joi.ValidationResult} - The result of the validation.
-   * @throws {Joi.ValidationError} - Throws an error if the ID format is invalid.
-   */
   public validateId(id: string): Joi.ValidationResult {
     return Joi.string()
       .custom(objectIdValidator, "MongoDB ObjectID")
       .validate(id, { messages: { "string.custom": "Invalid ID format" } });
   }
 
-  /**
-   * Validates a pagination query object.
-   *
-   * @param {Object} body - The pagination query object to validate.
-   * @returns {Joi.ValidationResult} - The result of the validation.
-   */
   public validatePaginationBody(body: any): Joi.ValidationResult {
     return Joi.object({
       page: Joi.number().optional(),

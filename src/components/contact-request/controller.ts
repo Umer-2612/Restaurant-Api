@@ -1,7 +1,3 @@
-/**
- * @class ContactRequestFormController
- * @description Handles contact request form related operations.
- */
 import { Request, Response } from "express";
 import ContactRequestFormService from "./service";
 import { ErrorHandler } from "../../utils/common-function";
@@ -14,24 +10,12 @@ class ContactRequestFormController {
   private contactRequestFormService: ContactRequestFormService;
   private contactRequestsValidation: ContactRequestsValidation;
 
-  /**
-   * @constructor
-   * @description Initializes the controller.
-   */
   constructor() {
     this.handleError = this.handleError.bind(this);
     this.contactRequestFormService = new ContactRequestFormService();
     this.contactRequestsValidation = new ContactRequestsValidation();
   }
 
-  /**
-   * @private
-   * @method handleError
-   * @param {Response} res - The response object from Express.
-   * @param {any} error - The error object.
-   * @returns {Promise<any>}
-   * @description Handles errors and sends an appropriate response.
-   */
   private async handleError(res: Response, error: any): Promise<any> {
     const statusCode = error instanceof ErrorHandler ? error.statusCode : 500;
     const message =
@@ -41,14 +25,6 @@ class ContactRequestFormController {
     Generator.sendResponse({ res, statusCode, success: false, message });
   }
 
-  /**
-   * @public
-   * @method createContactRequestForm
-   * @param {Request} req - The request object from Express.
-   * @param {Response} res - The response object from Express.
-   * @returns {Promise<any>}
-   * @description Creates a new contact request form.
-   */
   public createContactRequestForm = async (
     req: Request,
     res: Response
@@ -81,14 +57,6 @@ class ContactRequestFormController {
     }
   };
 
-  /**
-   * @public
-   * @method updateContactRequestForm
-   * @param {Request} req - The request object from Express.
-   * @param {Response} res - The response object from Express.
-   * @returns {Promise<any>}
-   * @description Updates an existing contact request form.
-   */
   public updateContactRequestForm = async (
     req: RequestWithUser,
     res: Response
@@ -135,14 +103,6 @@ class ContactRequestFormController {
     }
   };
 
-  /**
-   * @public
-   * @method getContactRequestForm
-   * @param {Request} req - The request object from Express.
-   * @param {Response} res - The response object from Express.
-   * @returns {Promise<any>}
-   * @description Retrieves all contact request forms.
-   */
   public getContactRequestForm = async (
     req: Request,
     res: Response
@@ -180,14 +140,6 @@ class ContactRequestFormController {
     }
   };
 
-  /**
-   * @public
-   * @method deleteContactRequestForm
-   * @param {Request} req - The request object from Express.
-   * @param {Response} res - The response object from Express.
-   * @returns {Promise<any>}
-   * @description Deletes a contact request form.
-   */
   public deleteContactRequestForm = async (
     req: RequestWithUser,
     res: Response

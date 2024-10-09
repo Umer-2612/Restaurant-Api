@@ -8,6 +8,7 @@ export interface IReservationRequestSchema extends Document {
   noOfPeople: number;
   reservationDate: Date;
   message: string;
+  status: string;
   recordDeleted: boolean;
   createdAt: Date;
   updatedAt: Date;

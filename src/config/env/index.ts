@@ -28,6 +28,13 @@ interface Config {
     publishableKey: string;
     webhookSecretKey: string;
   };
+  nodeMailerConfig: {
+    outgoingServer: string;
+    outgoingServerSMTP: string;
+    username: string;
+    password: string;
+    userId: string;
+  };
 }
 
 const dev: Config = {
@@ -71,6 +78,13 @@ const dev: Config = {
     publishableKey: process.env.STRIPE_PUBLISHABLE_KEY || "",
     webhookSecretKey: process.env.STRIPE_WEBHOOK_SECRET || "",
   },
+  nodeMailerConfig: {
+    outgoingServer: process.env.NODE_MAILER_OUTGOING_SERVER || "",
+    outgoingServerSMTP: process.env.NODE_MAILER_SERVER_SMTP || "465",
+    username: process.env.NODE_MAILER_USER || "",
+    password: process.env.NODE_MAILER_PASS || "",
+    userId: process.env.NODE_MAILER_USER_ID || "",
+  },
 };
 
 const qa: Config = {
@@ -113,6 +127,13 @@ const qa: Config = {
     publishableKey: process.env.STRIPE_PUBLISHABLE_KEY || "",
     webhookSecretKey: process.env.STRIPE_WEBHOOK_SECRET || "",
   },
+  nodeMailerConfig: {
+    outgoingServer: process.env.NODE_MAILER_OUTGOING_SERVER || "",
+    outgoingServerSMTP: process.env.NODE_MAILER_SERVER_SMTP || "465",
+    username: process.env.NODE_MAILER_USER || "",
+    password: process.env.NODE_MAILER_PASS || "",
+    userId: process.env.NODE_MAILER_USER_ID || "",
+  },
 };
 
 const prod: Config = {
@@ -154,6 +175,13 @@ const prod: Config = {
     secretKey: process.env.STRIPE_SECRET_KEY || "",
     publishableKey: process.env.STRIPE_PUBLISHABLE_KEY || "",
     webhookSecretKey: process.env.STRIPE_WEBHOOK_SECRET || "",
+  },
+  nodeMailerConfig: {
+    outgoingServer: process.env.NODE_MAILER_OUTGOING_SERVER || "",
+    outgoingServerSMTP: process.env.NODE_MAILER_SERVER_SMTP || "465",
+    username: process.env.NODE_MAILER_USER || "",
+    password: process.env.NODE_MAILER_PASS || "",
+    userId: process.env.NODE_MAILER_USER_ID || "",
   },
 };
 

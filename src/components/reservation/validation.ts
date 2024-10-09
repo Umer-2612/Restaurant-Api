@@ -74,6 +74,7 @@ export default class ReservationRequestsValidation {
     lastName: Joi.string().optional().default(null),
     phoneNo: Joi.number().optional().default(null),
     email: Joi.string().optional().default(null),
+    status: Joi.string().optional().default(null),
     noOfPeople: Joi.number().optional().default(0),
     reservationDate: Joi.date().optional().default(null),
     message: Joi.string().optional().default(null),

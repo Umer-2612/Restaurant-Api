@@ -10,6 +10,11 @@ const ReservationRequestsSchema: Schema = new Schema(
     noOfPeople: { type: Number },
     reservationDate: { type: Date },
     message: { type: String },
+    status: {
+      type: String,
+      enum: ["Pending", "Accepted", "Rejected"],
+      default: "Pending",
+    },
     recordDeleted: { type: Boolean, default: false },
   },
   {

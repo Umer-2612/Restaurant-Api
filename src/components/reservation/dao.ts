@@ -9,7 +9,7 @@ export default class ReservationRequestsDAO {
    * @returns {Promise<IReservationRequestSchema>} newly created reservation request
    * @throws {ErrorHandler} if error occurs while creating reservation request
    */
-  public static async createReservationRequestForm(
+  public async createReservationRequestForm(
     data: IReservationRequestSchema
   ): Promise<IReservationRequestSchema> {
     try {
@@ -34,19 +34,20 @@ export default class ReservationRequestsDAO {
    * @returns {Promise<IReservationRequestSchema | null>} updated reservation request
    * @throws {ErrorHandler} if error occurs while updating reservation request
    */
-  public static async updateReservationRequestForm(
+  public async updateReservationRequestForm(
     id: string,
     data: IReservationRequestSchema
   ): Promise<IReservationRequestSchema | null> {
     try {
-      const reservationFrom = await ReservationRequestsSchema.findByIdAndUpdate(
-        id,
+      const reservationFrom = await ReservationRequestsSchema.findOneAndUpdate(
+        { _id: id, recordDeleted: false },
         data,
         { new: true }
       );
 
       return reservationFrom;
     } catch (error: any) {
+      console.log({ error });
       throw new ErrorHandler({ statusCode: 500, message: "Database Error" });
     }
   }
@@ -56,7 +57,7 @@ export default class ReservationRequestsDAO {
    * @returns {Promise<{data: IReservationRequestSchema[] | null, totalCount: number}>} list of all reservation requests
    * @throws {ErrorHandler} if error occurs while getting reservation requests
    */
-  public static async getReservationRequestForm(pipeline: any): Promise<any> {
+  public async getReservationRequestForm(pipeline: any): Promise<any> {
     try {
       const result = await ReservationRequestsSchema.aggregate(pipeline);
 
@@ -69,13 +70,30 @@ export default class ReservationRequestsDAO {
     }
   }
 
+  public async getReservationRequestFormById(
+    id: string
+  ): Promise<IReservationRequestSchema | null> {
+    try {
+      const res = await ReservationRequestsSchema.findOne({
+        _id: id,
+        recordDeleted: false,
+      });
+      return res;
+    } catch (error: any) {
+      throw new ErrorHandler({
+        statusCode: 500,
+        message: "Database Error: Unable to retrieve menu item",
+      });
+    }
+  }
+
   /**
    * @description Delete a Reservation Request
    * @param {string} id id of the reservation request to be deleted
    * @returns {Promise<IReservationRequestSchema | null>} deleted reservation request
    * @throws {ErrorHandler} if error occurs while deleting reservation request
    */
-  public static async deleteReservationRequestForm(
+  public async deleteReservationRequestForm(
     id: string
   ): Promise<IReservationRequestSchema | null> {
     try {

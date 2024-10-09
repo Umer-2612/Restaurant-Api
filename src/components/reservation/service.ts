@@ -1,8 +1,18 @@
 import ReservationRequestsDAO from "./dao";
 import { ErrorHandler } from "../../utils/common-function";
 import { IReservationRequestSchema, IPaginationBody } from "./interface";
+import NodeMailerService from "../../config/node-mailer/service";
+import ReservationRequestFormUtils from "./utils";
 
 export default class ReservationRequestFormService {
+  private reservationRequestDao: ReservationRequestsDAO;
+  private reservationRequestUtils: ReservationRequestFormUtils;
+
+  constructor() {
+    this.reservationRequestDao = new ReservationRequestsDAO();
+    this.reservationRequestUtils = new ReservationRequestFormUtils();
+  }
+
   /**
    * Creates a new Reservation Request Form
    * @method createReservationRequestForm
@@ -15,7 +25,7 @@ export default class ReservationRequestFormService {
   ): Promise<IReservationRequestSchema> {
     try {
       const reservationForm =
-        await ReservationRequestsDAO.createReservationRequestForm(data);
+        await this.reservationRequestDao.createReservationRequestForm(data);
       return reservationForm;
     } catch (error) {
       throw error;
@@ -35,14 +45,31 @@ export default class ReservationRequestFormService {
     data: IReservationRequestSchema
   ): Promise<IReservationRequestSchema | null> {
     try {
-      const reservationForm =
-        await ReservationRequestsDAO.updateReservationRequestForm(id, data);
-      if (!reservationForm) {
+      const isReservationExist =
+        await this.reservationRequestDao.getReservationRequestFormById(id);
+
+      if (!isReservationExist) {
         throw new ErrorHandler({
           statusCode: 404,
           message: "Reservation form not found for update",
         });
       }
+
+      const reservationForm =
+        await this.reservationRequestDao.updateReservationRequestForm(id, data);
+
+      if (!reservationForm) {
+        throw new ErrorHandler({
+          statusCode: 404,
+          message: "Unable to update",
+        });
+      }
+
+      await this.reservationRequestUtils.sendReservationStatusUpdateEmail({
+        oldReservationData: isReservationExist,
+        updatedReservationData: reservationForm,
+      });
+
       return reservationForm;
     } catch (error) {
       throw error;
@@ -99,7 +126,7 @@ export default class ReservationRequestFormService {
 
       // Fetch reservation forms from DAO
       let reservationForms =
-        await ReservationRequestsDAO.getReservationRequestForm(pipeline);
+        await this.reservationRequestDao.getReservationRequestForm(pipeline);
 
       // // Post-processing the data if necessary
       // if (
@@ -147,7 +174,7 @@ export default class ReservationRequestFormService {
   ): Promise<IReservationRequestSchema | null> {
     try {
       const reservationForm =
-        await ReservationRequestsDAO.deleteReservationRequestForm(id);
+        await this.reservationRequestDao.deleteReservationRequestForm(id);
       return reservationForm;
     } catch (error) {
       throw error;

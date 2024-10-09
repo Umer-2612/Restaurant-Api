@@ -56,7 +56,7 @@ router.get(
  */
 router.delete(
   "/:id",
-  AuthMiddleware.authenticate,
+  // AuthMiddleware.authenticate,
   ReservationRequestFormController.deleteReservationRequestForm
 );
 

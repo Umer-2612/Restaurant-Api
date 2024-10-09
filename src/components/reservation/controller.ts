@@ -149,6 +149,7 @@ class ReservationRequestFormController {
           req.params.id,
           req.body
         );
+
       Generator.sendResponse({
         res,
         message: "Reservation form updated successfully",
@@ -214,16 +215,6 @@ class ReservationRequestFormController {
     req: Request,
     res: Response
   ): Promise<any> => {
-    const user = (req as any).user;
-    if (!user) {
-      return Generator.sendResponse({
-        res,
-        statusCode: 401,
-        success: false,
-        message: "Unauthorized",
-      });
-    }
-
     const { id } = req.params;
     const idValidation = this.reservationRequestsValidation.validateId(id);
 

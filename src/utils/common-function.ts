@@ -3,6 +3,7 @@ import nodemailer from "nodemailer";
 import UserSchema from "../components/user/model";
 const CryptoJS = require("crypto-js");
 import { IReservationRequestSchema } from "../components/reservation/interface";
+import { IOrderSchema } from "../components/order/interface";
 
 interface IErrorHandlerParam {
   statusCode: number;
@@ -210,7 +211,7 @@ export function forgotPasswordTemplate(user_name: string, email: string, otp: nu
   }
 };
 
-export function statusChangeTemplate(user_name: string, email: string, status: string, reservationDate: Date) {
+export function statusChangeTemplate(user_name: string, email: string, status: string, reservationDate: String) {
   return {
     email: email,
     subject: `Your reservation has been ${status} - ${user_name}`,
@@ -315,6 +316,167 @@ export function statusChangeTemplate(user_name: string, email: string, status: s
   }
 }
 
+export function orderTemplate(userInfo: IOrderSchema, orderDate: String) {
+  return {
+    email: userInfo.orderdEmail,
+    subject: `Your order has been placed - ${userInfo.orderdName}`,
+    text: `Here is your conformation mail`,
+    html: `
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order Confirmation</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+      width: 100%;
+    }
+    .email-wrapper {
+      width: 100%;
+      background-color: #f4f4f4;
+      padding: 20px 0;
+      text-align: center;
+    }
+    .container {
+      max-width: 600px;
+      width: 100%;
+      margin: 0 auto;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      background-color: #ffffff;
+    }
+    .header {
+      text-align: center;
+      padding: 20px;
+      background-color: #007BFF;
+      color: #ffffff;
+    }
+    .header h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+    .content {
+      padding: 20px;
+      line-height: 1.6;
+      color: #555555;
+    }
+    .order-summary {
+      width: 100%;
+      margin-top: 20px;
+      border-collapse: collapse;
+    }
+    .order-summary th, .order-summary td {
+      border: 1px solid #dddddd;
+      padding: 8px;
+      text-align: left;
+    }
+    .order-summary th {
+      background-color: #f2f2f2;
+    }
+    .footer {
+      text-align: center;
+      padding: 30px 20px;
+      background-color: #f8f9fa;
+      font-size: 14px;
+      color: #777777;
+      border-top: 1px solid #ddd;
+    }
+    .footer p {
+      margin: 0;
+      padding: 5px 0;
+    }
+    .status {
+      display: inline-block;
+      padding: 12px 20px;
+      margin-top: 20px;
+      background-color: #3498db;
+      color: #ffffff;
+      text-decoration: none;
+      border-radius: 5px;
+      text-align: center;
+      font-size: 18px;
+      border: none;
+    }
+    .status.pending {
+      background-color: #ffc107;
+    }
+    .status.paid {
+      background-color: #28a745;
+    }
+    .status.unpaid {
+      background-color: #dc3545;
+    }
+  </style>
+</head>
+<body>
+  <div class="email-wrapper">
+    <div class="container">
+      <div class="header">
+        <h1>Order Confirmation</h1>
+      </div>
+      <div class="content">
+        <p>Hello <strong>${userInfo.orderdName}</strong>,</p>
+        <p>Thank you for your order! Below are the details of your order:</p>
+
+        <table class="order-summary">
+          <tr>
+            <th>Order Date</th>
+            <td>${orderDate}</td>
+          </tr>
+          <tr>
+            <th>Order Status</th>
+            <td>${userInfo.status}</td>
+          </tr>
+          <tr>
+            <th>Total Price</th>
+            <td>$${userInfo.totalPrice}</td>
+          </tr>
+          <tr>
+            <th>Payment Method</th>
+            <td>${userInfo.paymentMethod}</td>
+          </tr>
+          <tr>
+            <th>Payment Status</th>
+            <td>${userInfo.paymentStatus}</td>
+          </tr>
+        </table>
+
+        <h3>Order Items</h3>
+        <table class="order-summary">
+          <thead>
+            <tr>
+              <th>Menu ID</th>
+              <th>Quantity</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${userInfo.items.map(item => `
+            <tr>
+              <td>${item.menu}</td>
+              <td>${item.quantity}</td>
+            </tr>`).join('')}
+          </tbody>
+        </table>
+
+        <p>We hope to serve you again soon. If you have any questions or concerns, feel free to contact us.</p>
+      </div>
+      <div class="footer">
+        <p>Thank you for choosing us!</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+    `,
+  }
+}
+
 export async function sendOtp(userName: string, email: string, otp: number) {
   try {
     let makePayload = forgotPasswordTemplate(userName, email, otp);
@@ -345,9 +507,25 @@ export async function sendOtp(userName: string, email: string, otp: number) {
 export async function sendMailOfStatusChange(status: string, userDetails: IReservationRequestSchema) {
   try {
     let userName = userDetails.firstName + " " + userDetails.lastName;
-    let makePayload = statusChangeTemplate(userName, userDetails.email, status, userDetails.reservationDate);
+    let date = userDetails.reservationDate.toISOString().split("T")[0];
+    let makePayload = statusChangeTemplate(userName, userDetails.email, status, date);
     try {
       await sendMail(makePayload);
+      return true;
+    } catch (error: any) {
+      throw new ErrorHandler({ statusCode: 400, message: error.message });
+    }
+  } catch (error: any) {
+    throw new ErrorHandler({ statusCode: 400, message: error.message });
+  }
+};
+
+export async function sendMailForOrder(userInfo: IOrderSchema) {
+  try {
+    let date = userInfo.orderDate.toISOString().split("T")[0];
+    let payload = orderTemplate(userInfo, date);
+    try {
+      await sendMail(payload);
       return true;
     } catch (error: any) {
       throw new ErrorHandler({ statusCode: 400, message: error.message });

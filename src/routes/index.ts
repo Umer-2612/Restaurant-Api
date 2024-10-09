@@ -4,7 +4,8 @@ import authRouter from "../components/auth/router";
 import menuRouter from "../components/menu-item/router";
 import categoryRouter from "../components/category/router";
 import contactRequestRouter from "../components/contact-request/router";
-import ReservationRequestFormRouter from "../components/reservation/router";
+import reservationRequestFormRouter from "../components/reservation/router";
+import orderRouter from "../components/order/router";
 
 const router = Router();
 
@@ -18,6 +19,8 @@ router.use("/menu", menuRouter);
 
 router.use("/contact-us", contactRequestRouter);
 
-router.use("/reservation", ReservationRequestFormRouter);
+router.use("/reservation", reservationRequestFormRouter);
+
+router.use("/order", orderRouter);
 
 export default router;

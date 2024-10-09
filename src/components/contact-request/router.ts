@@ -4,24 +4,24 @@ import AuthMiddleware from "../../config/middleware/auth";
 
 const router = Router();
 
-router.post("/", ContactRequestFormController.createContactRequestForm);
+router.post("/", ContactRequestFormController.create);
 
 router.patch(
   "/:id",
   AuthMiddleware.authenticate,
-  ContactRequestFormController.updateContactRequestForm
+  ContactRequestFormController.update
 );
 
 router.get(
   "/",
   AuthMiddleware.authenticate,
-  ContactRequestFormController.getContactRequestForm
+  ContactRequestFormController.getAll
 );
 
 router.delete(
   "/:id",
   AuthMiddleware.authenticate,
-  ContactRequestFormController.deleteContactRequestForm
+  ContactRequestFormController.delete
 );
 
 export default router;

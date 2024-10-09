@@ -45,10 +45,7 @@ class CategoryController {
    * @returns {Promise<any>}
    * @description Creates a new category based on the request body.
    */
-  public createCategory = async (
-    req: RequestWithUser,
-    res: Response
-  ): Promise<any> => {
+  public create = async (req: RequestWithUser, res: Response): Promise<any> => {
     try {
       // Validate the request body using the validation schema
       const { error } = this.categoryValidation.createCategoryBody.validate(
@@ -88,7 +85,7 @@ class CategoryController {
    * @returns {Promise<any>}
    * @description Retrieves all categories.
    */
-  public getCategories = async (req: Request, res: Response): Promise<any> => {
+  public getAll = async (req: Request, res: Response): Promise<any> => {
     const validateBody = this.categoryValidation.validatePaginationBody(
       req.query
     );
@@ -129,10 +126,7 @@ class CategoryController {
    * @returns {Promise<any>}
    * @description Retrieves a category by its ID.
    */
-  public getCategoryById = async (
-    req: Request,
-    res: Response
-  ): Promise<any> => {
+  public getOne = async (req: Request, res: Response): Promise<any> => {
     try {
       const { id } = req.params;
       const idValidation = this.categoryValidation.validateId(id); // Validate ID
@@ -165,10 +159,7 @@ class CategoryController {
    * @returns {Promise<any>}
    * @description Updates an existing category by its ID.
    */
-  public updateCategory = async (
-    req: RequestWithUser,
-    res: Response
-  ): Promise<any> => {
+  public update = async (req: RequestWithUser, res: Response): Promise<any> => {
     try {
       const { id } = req.params;
       const idValidation = this.categoryValidation.validateId(id); // Validate ID
@@ -218,7 +209,7 @@ class CategoryController {
    * @returns {Promise<any>}
    * @description Deletes a category by its ID.
    */
-  public deleteCategory = async (req: Request, res: Response): Promise<any> => {
+  public delete = async (req: Request, res: Response): Promise<any> => {
     try {
       const user = (req as any).user;
       if (!user) {

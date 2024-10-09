@@ -25,10 +25,7 @@ class ContactRequestFormController {
     Generator.sendResponse({ res, statusCode, success: false, message });
   }
 
-  public createContactRequestForm = async (
-    req: Request,
-    res: Response
-  ): Promise<any> => {
+  public create = async (req: Request, res: Response): Promise<any> => {
     const { error } =
       this.contactRequestsValidation.validateCreateContactRequestForm.validate(
         req.body
@@ -57,10 +54,7 @@ class ContactRequestFormController {
     }
   };
 
-  public updateContactRequestForm = async (
-    req: RequestWithUser,
-    res: Response
-  ): Promise<any> => {
+  public update = async (req: RequestWithUser, res: Response): Promise<any> => {
     const { id } = req.params;
     const bodyValidation =
       this.contactRequestsValidation.validateUpdateContactRequestForm.validate(
@@ -103,10 +97,7 @@ class ContactRequestFormController {
     }
   };
 
-  public getContactRequestForm = async (
-    req: Request,
-    res: Response
-  ): Promise<any> => {
+  public getAll = async (req: Request, res: Response): Promise<any> => {
     const validateBody = this.contactRequestsValidation.validatePaginationBody(
       req.query
     );
@@ -140,10 +131,7 @@ class ContactRequestFormController {
     }
   };
 
-  public deleteContactRequestForm = async (
-    req: RequestWithUser,
-    res: Response
-  ): Promise<any> => {
+  public delete = async (req: RequestWithUser, res: Response): Promise<any> => {
     const { id } = req.params;
     const idValidation = this.contactRequestsValidation.validateId(id);
 

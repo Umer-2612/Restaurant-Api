@@ -14,24 +14,20 @@ router.post(
   "/",
   AuthMiddleware.authenticate,
   uploadToCloudinary,
-  MenuItemController.createMenuItem
+  MenuItemController.create
 );
 
-router.get("/", MenuItemController.getAllMenuItems);
+router.get("/", MenuItemController.getAll);
 
-router.get("/:id", MenuItemController.getMenuItemById);
+router.get("/:id", MenuItemController.getOne);
 
 router.patch(
   "/:id",
   AuthMiddleware.authenticate,
   uploadToCloudinary,
-  MenuItemController.updateMenuItem
+  MenuItemController.update
 );
 
-router.delete(
-  "/:id",
-  AuthMiddleware.authenticate,
-  MenuItemController.deleteMenuItem
-);
+router.delete("/:id", AuthMiddleware.authenticate, MenuItemController.delete);
 
 export default router;

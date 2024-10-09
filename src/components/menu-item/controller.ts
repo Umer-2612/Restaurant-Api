@@ -27,10 +27,7 @@ class MenuItemController {
     Generator.sendResponse({ res, statusCode, success: false, message });
   }
 
-  public getAllMenuItems = async (
-    req: Request,
-    res: Response
-  ): Promise<any> => {
+  public getAll = async (req: Request, res: Response): Promise<any> => {
     const validateBody = this.menuItemValidation.validatePaginationBody(
       req.query
     );
@@ -63,10 +60,7 @@ class MenuItemController {
     }
   };
 
-  public createMenuItem = async (
-    req: RequestWithUser,
-    res: Response
-  ): Promise<any> => {
+  public create = async (req: RequestWithUser, res: Response): Promise<any> => {
     try {
       // Validate the request body using the validation schema
       const { error } = this.menuItemValidation.createMenuItemBody.validate(
@@ -100,10 +94,7 @@ class MenuItemController {
     }
   };
 
-  public getMenuItemById = async (
-    req: Request,
-    res: Response
-  ): Promise<any> => {
+  public getOne = async (req: Request, res: Response): Promise<any> => {
     const { id } = req.params;
     const idValidation = this.menuItemValidation.validateId(id); // Validate ID
 
@@ -129,10 +120,7 @@ class MenuItemController {
     }
   };
 
-  public updateMenuItem = async (
-    req: RequestWithUser,
-    res: Response
-  ): Promise<any> => {
+  public update = async (req: RequestWithUser, res: Response): Promise<any> => {
     try {
       const { id } = req.params;
       const idValidation = this.menuItemValidation.validateId(id); // Validate ID
@@ -177,10 +165,7 @@ class MenuItemController {
     }
   };
 
-  public deleteMenuItem = async (
-    req: RequestWithUser,
-    res: Response
-  ): Promise<any> => {
+  public delete = async (req: RequestWithUser, res: Response): Promise<any> => {
     try {
       const { id } = req.params;
       const idValidation = this.menuItemValidation.validateId(id); // Validate ID

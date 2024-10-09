@@ -24,10 +24,7 @@ class ReservationRequestFormController {
     Generator.sendResponse({ res, statusCode, success: false, message });
   }
 
-  public createReservationRequestForm = async (
-    req: Request,
-    res: Response
-  ): Promise<any> => {
+  public create = async (req: Request, res: Response): Promise<any> => {
     const { error } =
       this.reservationRequestsValidation.validateCreateReservationRequestForm.validate(
         req.body
@@ -59,10 +56,7 @@ class ReservationRequestFormController {
     }
   };
 
-  public updateReservationRequestForm = async (
-    req: Request,
-    res: Response
-  ): Promise<any> => {
+  public update = async (req: Request, res: Response): Promise<any> => {
     const user = (req as any).user;
     if (!user) {
       return Generator.sendResponse({
@@ -116,10 +110,7 @@ class ReservationRequestFormController {
     }
   };
 
-  public getReservationRequestForm = async (
-    req: Request,
-    res: Response
-  ): Promise<any> => {
+  public getAll = async (req: Request, res: Response): Promise<any> => {
     const validateBody =
       this.reservationRequestsValidation.validatePaginationBody(req.query);
 
@@ -152,10 +143,7 @@ class ReservationRequestFormController {
     }
   };
 
-  public deleteReservationRequestForm = async (
-    req: Request,
-    res: Response
-  ): Promise<any> => {
+  public delete = async (req: Request, res: Response): Promise<any> => {
     const { id } = req.params;
     const idValidation = this.reservationRequestsValidation.validateId(id);
 

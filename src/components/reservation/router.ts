@@ -4,30 +4,30 @@ import AuthMiddleware from "../../config/middleware/auth";
 
 const router = Router();
 
-router.post("/", ReservationRequestFormController.createReservationRequestForm);
+router.post("/", ReservationRequestFormController.create);
 
 router.put(
   "/:id",
   AuthMiddleware.authenticate,
-  ReservationRequestFormController.updateReservationRequestForm
+  ReservationRequestFormController.update
 );
 
 router.patch(
   "/:id",
   AuthMiddleware.authenticate,
-  ReservationRequestFormController.updateReservationRequestForm
+  ReservationRequestFormController.update
 );
 
 router.get(
   "/",
   AuthMiddleware.authenticate,
-  ReservationRequestFormController.getReservationRequestForm
+  ReservationRequestFormController.getAll
 );
 
 router.delete(
   "/:id",
   AuthMiddleware.authenticate,
-  ReservationRequestFormController.deleteReservationRequestForm
+  ReservationRequestFormController.delete
 );
 
 export default router;

@@ -22,6 +22,7 @@ interface Config {
     cloudName: string;
     apiKey: string;
     apiSecret: string;
+    folderName: string;
   };
   stripeConfig: {
     secretKey: string;
@@ -72,6 +73,7 @@ const dev: Config = {
     cloudName: process.env.CLOUDINARY_CLOUD_NAME || "",
     apiKey: process.env.CLOUDINARY_API_KEY || "",
     apiSecret: process.env.CLOUDINARY_API_SECRET || "",
+    folderName: process.env.CLOUDINARY_FOLDER_NAME || "",
   },
   stripeConfig: {
     secretKey: process.env.STRIPE_SECRET_KEY || "",
@@ -121,6 +123,7 @@ const qa: Config = {
     cloudName: process.env.CLOUDINARY_CLOUD_NAME || "",
     apiKey: process.env.CLOUDINARY_API_KEY || "",
     apiSecret: process.env.CLOUDINARY_API_SECRET || "",
+    folderName: process.env.CLOUDINARY_FOLDER_NAME || "",
   },
   stripeConfig: {
     secretKey: process.env.STRIPE_SECRET_KEY || "",
@@ -170,6 +173,7 @@ const prod: Config = {
     cloudName: process.env.CLOUDINARY_CLOUD_NAME || "",
     apiKey: process.env.CLOUDINARY_API_KEY || "",
     apiSecret: process.env.CLOUDINARY_API_SECRET || "",
+    folderName: process.env.CLOUDINARY_FOLDER_NAME || "",
   },
   stripeConfig: {
     secretKey: process.env.STRIPE_SECRET_KEY || "",

@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { Readable } from "stream";
 import cloudinary from "./configuration";
 import upload from "../multer/index";
+import Config from "../env";
 
 // Middleware to handle file upload and directly upload to Cloudinary
 export const uploadToCloudinary = (
@@ -31,7 +32,7 @@ export const uploadToCloudinary = (
       const streamUpload = (stream: Readable): Promise<any> => {
         return new Promise((resolve, reject) => {
           const streamLoad = cloudinary.uploader.upload_stream(
-            { folder: "menu" },
+            { folder: Config.cloudinaryConfig.folderName },
             (error, result) => {
               if (result) {
                 resolve(result);

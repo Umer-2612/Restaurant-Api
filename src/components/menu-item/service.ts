@@ -10,7 +10,7 @@ import CloudinaryService from "../../config/cloudinary/service";
  * Implements IMenuItemService to provide methods for managing menu.
  * @implements {IMenuItemService}
  */
-class MenuItemSchema implements IMenuItemService {
+class MenuItemService implements IMenuItemService {
   private menuItemDao: MenuItemDAO;
   private categoryService: CategoryService;
   private cloudinaryService: CloudinaryService;
@@ -207,4 +207,4 @@ class MenuItemSchema implements IMenuItemService {
   }
 }
 
-export default MenuItemSchema;
+export default MenuItemService;

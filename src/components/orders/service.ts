@@ -61,7 +61,7 @@ class OrderService implements IOrderService {
         },
         {
           $addFields: {
-            userDetails: {
+            customerDetails: {
               firstName: "Umer",
               lastName: "Karachiwala",
               email: "karachiwalaumer2612@gmail.com",
@@ -78,7 +78,7 @@ class OrderService implements IOrderService {
                 quantity: "$items.quantity",
               },
             },
-            userDetails: { $first: "$userDetails" },
+            customerDetails: { $first: "$customerDetails" },
           },
         },
         {

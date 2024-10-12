@@ -61,7 +61,7 @@ class PaymentController {
           }
         ),
         totalPrice: Math.round(cartItems?.totalPrice),
-        userDetails: cartItems?.user,
+        customerDetails: cartItems?.user,
       };
 
       const orderDetails: IOrderSchema | null = await this.orderService.create(
@@ -141,7 +141,7 @@ class PaymentController {
             totalAmountReceivedInCents: session.amount_total,
             currency: session.currency,
             paymentStatus: session.payment_status,
-            customerDetails: {
+            customerCardDetails: {
               email: session.customer_details.email,
               name: session.customer_details.name,
               phone: session.customer_details.phone,

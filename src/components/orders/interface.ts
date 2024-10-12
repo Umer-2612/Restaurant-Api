@@ -11,7 +11,7 @@ export interface IOrderSchema extends Document {
   totalPrice: number;
   status: "Paid" | "Not Paid";
   orderDate: Date;
-  userDetails: {
+  customerDetails: {
     firstName: string;
     lastName: string;
     email: string;
@@ -24,7 +24,7 @@ export interface IOrderSchema extends Document {
     sessionId: string;
     totalAmountReceivedInCents: number;
     currency: string;
-    customerDetails: {
+    customerCardDetails: {
       email: string;
       name: string;
       phone: string;

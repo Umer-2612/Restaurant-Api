@@ -19,7 +19,7 @@ const OrderSchema = new Schema(
       type: Date,
       default: Date.now,
     },
-    userDetails: {
+    customerDetails: {
       firstName: { type: String },
       lastName: { type: String },
       email: { type: String },
@@ -33,7 +33,7 @@ const OrderSchema = new Schema(
       totalAmountReceivedInCents: { type: Number },
       currency: { type: String },
       paymentStatus: { type: String },
-      customerDetails: {
+      customerCardDetails: {
         email: { type: String },
         name: { type: String },
         phone: { type: String },

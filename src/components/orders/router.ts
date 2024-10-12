@@ -6,8 +6,14 @@ const router = Router();
 
 router.get(
   "/",
-  //   AuthMiddleware.authenticate,
+  AuthMiddleware.authenticate,
   ReservationRequestFormController.getAll
+);
+
+router.get(
+  "/:id",
+  // AuthMiddleware.authenticate,
+  ReservationRequestFormController.getOne
 );
 
 export default router;

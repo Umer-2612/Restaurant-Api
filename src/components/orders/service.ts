@@ -1,8 +1,9 @@
-import { IOrderSchema, IOrderService } from "./interface";
+import { IGetAllOrderBody, IOrderSchema, IOrderService } from "./interface";
 import OrderDAO from "./dao";
 import { ErrorHandler } from "../../utils/common-function";
 import { IQueryBody } from "../menu-item/interface";
 import { pipeline } from "stream/promises";
+import { Types } from "mongoose";
 
 class OrderService implements IOrderService {
   private orderDAO: OrderDAO;
@@ -22,7 +23,7 @@ class OrderService implements IOrderService {
     }
   }
 
-  async getAllOrders(body: IQueryBody): Promise<any> {
+  async getAllOrders(body: IGetAllOrderBody): Promise<any> {
     try {
       const rowLimit = body.limit ? body.limit : 10;
       const rowSkip = body.page ? (body.page - 1) * rowLimit : 0;
@@ -30,6 +31,10 @@ class OrderService implements IOrderService {
         recordDeleted: false,
         status: "Paid",
       };
+
+      if (body.id) {
+        matchCondition._id = new Types.ObjectId(body.id);
+      }
 
       const pipeline = [
         {
@@ -79,6 +84,7 @@ class OrderService implements IOrderService {
               },
             },
             customerDetails: { $first: "$customerDetails" },
+            status: { $first: "$status" },
           },
         },
         {
@@ -107,6 +113,32 @@ class OrderService implements IOrderService {
         statusCode: 500,
         message: error.message || "Failed to retrieve menu items",
       });
+    }
+  }
+
+  async getOrder(id: string): Promise<any> {
+    try {
+      const body = {
+        id,
+        page: 1,
+        limit: 1,
+      };
+      const orderDetails = await this.getAllOrders(body);
+      if (!orderDetails) {
+        throw new ErrorHandler({
+          statusCode: 404,
+          message: "Category not found",
+        });
+      }
+
+      return orderDetails[0].data[0];
+    } catch (error: any) {
+      throw error instanceof ErrorHandler
+        ? error
+        : new ErrorHandler({
+            statusCode: 500,
+            message: error.message || "Failed to retrieve category",
+          });
     }
   }
 }

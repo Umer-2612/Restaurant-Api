@@ -40,6 +40,21 @@ class MenuItemController {
       await this.handleError(res, error);
     }
   };
+
+  public getOne = async (req: Request, res: Response): Promise<any> => {
+    try {
+      const { id } = req.params;
+      const category = await this.menuItemService.getOrder(id);
+      return Generator.sendResponse({
+        res,
+        statusCode: 200,
+        message: "Order retrieved successfully",
+        data: category,
+      });
+    } catch (error: any) {
+      await this.handleError(res, error);
+    }
+  };
 }
 
 export default new MenuItemController();

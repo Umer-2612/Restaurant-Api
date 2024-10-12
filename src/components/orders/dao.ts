@@ -38,6 +38,17 @@ class OrderDAO {
       });
     }
   }
+
+  async getOrderById(id: string): Promise<any> {
+    try {
+      return await OrderSchema.findOne({ _id: id, recordDeleted: false });
+    } catch (error: any) {
+      throw new ErrorHandler({
+        statusCode: 500,
+        message: "Database Error: Unable to retrieve category",
+      });
+    }
+  }
 }
 
 export default OrderDAO;

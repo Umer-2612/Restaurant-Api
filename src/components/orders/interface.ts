@@ -1,10 +1,16 @@
 import mongoose from "mongoose";
-import { IQueryBody } from "../menu-item/interface";
 
 type IItem = {
   menu: mongoose.Schema.Types.ObjectId | string;
   quantity: number;
 };
+
+export interface IGetAllOrderBody {
+  id?: string;
+  page: number;
+  limit: number;
+}
+
 export interface IOrderSchema extends Document {
   _id: mongoose.Schema.Types.ObjectId;
   items: IItem[];
@@ -37,5 +43,5 @@ export interface IOrderSchema extends Document {
 
 export interface IOrderService {
   create(data: IOrderSchema): Promise<IOrderSchema>;
-  getAllOrders(data: IQueryBody): Promise<any>;
+  getAllOrders(data: IGetAllOrderBody): Promise<any>;
 }

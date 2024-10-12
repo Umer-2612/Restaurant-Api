@@ -41,7 +41,7 @@ class PaymentController {
           currency: "aud",
           product_data: {
             name: item.name,
-            images: [item.imagePath],
+            // images: [item.imagePath],
           },
           unit_amount: Math.round(item.price * 100),
         },
@@ -73,8 +73,8 @@ class PaymentController {
         payment_method_types: ["card"],
         mode: "payment",
         line_items: lineItems,
-        success_url: `${Config.domainUrl}/payment?status=success`,
-        cancel_url: `${Config.domainUrl}/payment?status=cancel`,
+        success_url: `${Config.domainUrl}/cart?status=success`,
+        cancel_url: `${Config.domainUrl}/cart?status=failed`,
         metadata: {
           orderId: String(orderDetails?._id), // Attach your order ID as metadata
         },

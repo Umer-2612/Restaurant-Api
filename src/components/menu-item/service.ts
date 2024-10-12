@@ -103,6 +103,7 @@ class MenuItemService implements IMenuItemService {
                   itemName: 1,
                   itemDescription: 1,
                   itemPrice: 1,
+                  itemImagePath: 1,
                   category: {
                     _id: "$categoryDetails._id",
                     name: "$categoryDetails.name",

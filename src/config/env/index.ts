@@ -146,7 +146,7 @@ const staging: Config = {
 };
 
 const prod: Config = {
-  nodeEnv: "PROD",
+  nodeEnv: "PRODUCTION",
   port: Number(process.env.PORT) || 3000,
   whiteList: [
     `http://localhost:${process.env.PORT || 3000}`,
@@ -200,7 +200,7 @@ const prod: Config = {
 let env: Config;
 
 switch (process.env.NODE_ENV) {
-  case "PROD":
+  case "PRODUCTION":
     env = prod;
     break;
   case "STAGING":

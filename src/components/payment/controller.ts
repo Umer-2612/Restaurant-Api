@@ -73,8 +73,8 @@ class PaymentController {
         payment_method_types: ["card"],
         mode: "payment",
         line_items: lineItems,
-        success_url: "http://localhost:5000/success",
-        cancel_url: "http://localhost:5000/cancel",
+        success_url: `${Config.domainUrl}/payment?status=success`,
+        cancel_url: `${Config.domainUrl}/payment?status=cancel`,
         metadata: {
           orderId: String(orderDetails?._id), // Attach your order ID as metadata
         },

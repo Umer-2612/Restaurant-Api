@@ -10,6 +10,7 @@ interface Config {
     accessTokenExpiryTime: string;
     refreshTokenExpiryTime: string;
   };
+  domainUrl: string;
   mongoDBConfig: {
     MONGODB_URI: string;
     MONGODB_DB_MAIN: string;
@@ -47,6 +48,7 @@ const dev: Config = {
     "http://127.0.0.1:3000",
     "http://localhost:3000",
     "http://localhost:8000",
+    "http://localhost:5000",
     "http://localhost:5001",
     "http://localhost:5000",
     "http://127.0.0.1:80",
@@ -55,7 +57,9 @@ const dev: Config = {
     "https://umer-karachiwala.tech",
     "https://api.umer-karachiwala.tech",
     "http://api.umer-karachiwala.tech",
+    "https://42ef-2409-40c1-500a-6ea2-e18d-8186-7fe1-bc30.ngrok-free.app",
   ],
+  domainUrl: "http://localhost:5000",
   jwtConfig: {
     secretKey: "xjfqktewbghncmayzoipsvuldr",
     accessTokenExpiryTime: "24h",
@@ -89,8 +93,8 @@ const dev: Config = {
   },
 };
 
-const qa: Config = {
-  nodeEnv: "QA",
+const staging: Config = {
+  nodeEnv: "STAGING",
   port: Number(process.env.PORT) || 3000,
   whiteList: [
     `http://localhost:${process.env.PORT || 3000}`,
@@ -98,6 +102,7 @@ const qa: Config = {
     "http://127.0.0.1:3000",
     "http://localhost:3000",
     "http://localhost:8000",
+    "http://localhost:5000",
     "http://localhost:5001",
     "http://127.0.0.1:80",
     "http://localhost:5173",
@@ -106,6 +111,7 @@ const qa: Config = {
     "https://api.umer-karachiwala.tech",
     "http://api.umer-karachiwala.tech",
   ],
+  domainUrl: "https://umer-karachiwala.tech",
   jwtConfig: {
     secretKey: "xjfqktewbghncmayzoipsvuldr",
     accessTokenExpiryTime: "24h",
@@ -148,6 +154,7 @@ const prod: Config = {
     "http://127.0.0.1:3000",
     "http://localhost:3000",
     "http://localhost:8000",
+    "http://localhost:5000",
     "http://localhost:5001",
     "http://127.0.0.1:80",
     "http://localhost:5173",
@@ -156,6 +163,7 @@ const prod: Config = {
     "https://api.umer-karachiwala.tech",
     "http://api.umer-karachiwala.tech",
   ],
+  domainUrl: "https://umer-karachiwala.tech",
   jwtConfig: {
     secretKey: "xjfqktewbghncmayzoipsvuldr",
     accessTokenExpiryTime: "24h",
@@ -195,8 +203,8 @@ switch (process.env.NODE_ENV) {
   case "PROD":
     env = prod;
     break;
-  case "QA":
-    env = qa;
+  case "STAGING":
+    env = staging;
     break;
   case "DEV":
   default:

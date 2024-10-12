@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { IQueryBody } from "../menu-item/interface";
 
 type IItem = {
   menu: mongoose.Schema.Types.ObjectId | string;
@@ -8,20 +9,26 @@ export interface IOrderSchema extends Document {
   _id: mongoose.Schema.Types.ObjectId;
   items: IItem[];
   totalPrice: number;
-  status: "Pending" | "Confirmed" | "Preparing" | "Delivered" | "Cancelled";
+  status: "Paid" | "Not Paid";
   orderDate: Date;
-  payment: {
+  userDetails: {
+    firstName: string;
+    lastName: string;
+    email: string;
+    phone: string;
+  };
+  paymentDetails: {
     method: "";
     paymentStatus: "";
     paymentIntent: string;
     sessionId: string;
     totalAmountReceivedInCents: number;
     currency: string;
-  };
-  customerDetails: {
-    email: string;
-    name: string;
-    phone: string;
+    customerDetails: {
+      email: string;
+      name: string;
+      phone: string;
+    };
   };
   recordDeleted: boolean;
   createdAt: Date;
@@ -30,4 +37,5 @@ export interface IOrderSchema extends Document {
 
 export interface IOrderService {
   create(data: IOrderSchema): Promise<IOrderSchema>;
+  getAllOrders(data: IQueryBody): Promise<any>;
 }

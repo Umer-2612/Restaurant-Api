@@ -30,9 +30,7 @@ export interface IQueryBody {
  */
 export interface IMenuItemService {
   createMenuItem(data: IMenuItemSchema): Promise<IMenuItemSchema>;
-  getAllMenuItems(
-    data: IPaginationBody
-  ): Promise<{ data: IMenuItemSchema[]; totalCount: number }>;
+  getAllMenuItems(data: IPaginationBody): Promise<any>;
   getMenuItemById(id: string): Promise<IMenuItemSchema>;
   updateMenuItem(
     id: string,

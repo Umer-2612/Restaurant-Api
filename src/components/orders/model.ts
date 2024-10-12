@@ -12,14 +12,20 @@ const OrderSchema = new Schema(
     totalPrice: { type: Number },
     status: {
       type: String,
-      enum: ["Pending", "Confirmed", "Preparing", "Delivered", "Cancelled"],
-      default: "Pending",
+      enum: ["Paid", "Not Paid"],
+      default: "Not Paid",
     },
     orderDate: {
       type: Date,
       default: Date.now,
     },
-    payment: {
+    userDetails: {
+      firstName: { type: String },
+      lastName: { type: String },
+      email: { type: String },
+      phone: { type: String },
+    },
+    paymentDetails: {
       method: { type: String },
       status: { type: String },
       paymentIntent: { type: String },
@@ -27,16 +33,11 @@ const OrderSchema = new Schema(
       totalAmountReceivedInCents: { type: Number },
       currency: { type: String },
       paymentStatus: { type: String },
-    },
-    customerDetails: {
-      email: { type: String },
-      name: { type: String },
-      phone: { type: String },
-    },
-    paymentOutcome: {
-      networkStatus: { type: String },
-      riskLevel: { type: String },
-      sellerMessage: { type: String },
+      customerDetails: {
+        email: { type: String },
+        name: { type: String },
+        phone: { type: String },
+      },
     },
     recordDeleted: { type: Boolean, default: false },
   },

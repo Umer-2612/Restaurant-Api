@@ -24,6 +24,20 @@ class OrderDAO {
       });
     }
   }
+
+  async getAllOrders(pipeline: any): Promise<any> {
+    try {
+      const result = await OrderSchema.aggregate(pipeline);
+
+      return result;
+    } catch (error: any) {
+      console.log({ error });
+      throw new ErrorHandler({
+        statusCode: 500,
+        message: "Database Error: Unable to retrieve orders",
+      });
+    }
+  }
 }
 
 export default OrderDAO;

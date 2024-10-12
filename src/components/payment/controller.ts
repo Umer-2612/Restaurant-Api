@@ -26,11 +26,12 @@ class PaymentController {
   }
 
   public createCheckoutSession = async (req: Request, res: Response) => {
-    const { cartItems, totalPrice } = req.body; // Get items from the request body
+    const { cartItems } = req.body; // Get items from the request body
 
     // Create line items for the checkout session
-    const lineItems = cartItems.map(
+    const lineItems = cartItems?.items?.map(
       (item: {
+        menuId: string;
         name: string;
         price: number;
         quantity: number;
@@ -40,9 +41,9 @@ class PaymentController {
           currency: "aud",
           product_data: {
             name: item.name,
-            image: item.imagePath,
+            images: [item.imagePath],
           },
-          unit_amount: item.price * 100,
+          unit_amount: Math.round(item.price * 100),
         },
         quantity: item.quantity,
       })
@@ -50,15 +51,17 @@ class PaymentController {
 
     try {
       // Create Order and save it to database
-
       const orderBody = {
-        items: cartItems.map((item: { menuId: string; quantity: number }) => {
-          return {
-            menu: item.menuId,
-            quantity: item.quantity,
-          };
-        }),
-        totalPrice,
+        items: cartItems?.items?.map(
+          (item: { menuId: string; quantity: number }) => {
+            return {
+              item: item.menuId,
+              quantity: item.quantity,
+            };
+          }
+        ),
+        totalPrice: Math.round(cartItems?.totalPrice),
+        userDetails: cartItems?.user,
       };
 
       const orderDetails: IOrderSchema | null = await this.orderService.create(
@@ -129,19 +132,20 @@ class PaymentController {
             });
           }
 
-          orderDetails.payment = {
+          orderDetails.status = "Paid";
+
+          orderDetails.paymentDetails = {
             method: session.payment_method_types[0],
             paymentIntent: session.payment_intent,
             sessionId: session.id,
             totalAmountReceivedInCents: session.amount_total,
             currency: session.currency,
             paymentStatus: session.payment_status,
-          };
-
-          orderDetails.customerDetails = {
-            email: session.customer_details.email,
-            name: session.customer_details.name,
-            phone: session.customer_details.phone,
+            customerDetails: {
+              email: session.customer_details.email,
+              name: session.customer_details.name,
+              phone: session.customer_details.phone,
+            },
           };
 
           await orderDetails.save();

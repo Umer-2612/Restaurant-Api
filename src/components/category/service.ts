@@ -41,7 +41,7 @@ class CategoryService implements ICategoryService {
    */
   async getCategories(data: IPaginationBody): Promise<any> {
     try {
-      const rowLimit = data.limit ? data.limit : 10;
+      const rowLimit = data.limit ? data.limit : 100;
       const rowSkip = data.page ? (data.page - 1) * rowLimit : 0;
       const matchCondition: any = {
         recordDeleted: false,

@@ -56,7 +56,7 @@ class MenuItemService implements IMenuItemService {
    */
   async getAllMenuItems(body: IQueryBody): Promise<any> {
     try {
-      const rowLimit = body.limit ? body.limit : 10;
+      const rowLimit = body.limit ? body.limit : 100;
       const rowSkip = body.page ? (body.page - 1) * rowLimit : 0;
       const matchCondition: any = {
         recordDeleted: false,

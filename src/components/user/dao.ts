@@ -2,8 +2,8 @@ import UserSchema from "./model";
 import { ErrorHandler } from "../../utils/common-function";
 import { IUserSchema } from "./interface";
 
-export default class UserDAO {
-  public static async createUser(data: IUserSchema): Promise<IUserSchema> {
+class UserDAO {
+  public async createUser(data: IUserSchema): Promise<IUserSchema> {
     try {
       const user = await UserSchema.create(data);
       return user;
@@ -19,23 +19,12 @@ export default class UserDAO {
     }
   }
 
-  public static async getUser(
-    params: { _id?: string; email?: string },
-    fields?: string[]
-  ): Promise<IUserSchema | null> {
+  public async getUser(id: string): Promise<IUserSchema | null> {
     try {
-      const { _id, email } = params;
-      const query: any = { recordDeleted: false };
-
-      if (_id) {
-        query._id = _id;
-      } else if (email) {
-        query.email = email;
-      }
-
-      // Convert the fields array into a space-separated string
-      const projection: string = fields ? fields.join(" ") : "";
-      const user = await UserSchema.findOne(query).select(projection);
+      const user = await UserSchema.findOne({
+        _id: id,
+        recordDeleted: false,
+      });
 
       return user;
     } catch (error) {
@@ -43,3 +32,5 @@ export default class UserDAO {
     }
   }
 }
+
+export default UserDAO;

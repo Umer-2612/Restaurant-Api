@@ -66,11 +66,11 @@ class AuthService implements IAuthService {
     let existedUser = await UserSchema.findOne({ email: email });
 
     if (!existedUser) {
-      throw new ErrorHandler({ statusCode: 404, message: "User not found" })
+      throw new ErrorHandler({ statusCode: 404, message: "User not found" });
     }
 
     if (!token) {
-      throw new ErrorHandler({ statusCode: 400, message: "Token not found" })
+      throw new ErrorHandler({ statusCode: 400, message: "Token not found" });
     }
 
     try {
@@ -84,7 +84,7 @@ class AuthService implements IAuthService {
     let existedUser = await UserSchema.findOne({ email: email });
 
     if (!existedUser) {
-      throw new ErrorHandler({ statusCode: 404, message: "User not found" })
+      throw new ErrorHandler({ statusCode: 404, message: "User not found" });
     }
 
     try {

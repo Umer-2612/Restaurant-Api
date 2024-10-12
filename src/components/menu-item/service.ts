@@ -1,38 +1,24 @@
-import {
-  IMenuItemSchema,
-  IMenuItemService,
-  // IPaginationBody,
-  IQueryBody,
-} from "./interface";
+import { IMenuItemSchema, IMenuItemService, IQueryBody } from "./interface";
 import MenuItemDAO from "./dao";
 import { ErrorHandler } from "../../utils/common-function";
 import CategoryService from "../category/service";
 import mongoose from "mongoose";
+import CloudinaryService from "../../config/cloudinary/service";
 
 /**
  * Service class for handling menu-related operations.
  * Implements IMenuItemService to provide methods for managing menu.
  * @implements {IMenuItemService}
  */
-class MenuItemSchema implements IMenuItemService {
-  /**
-   * Data Access Object for interacting with the menu item database.
-   * @type {MenuItemDAO}
-   */
+class MenuItemService implements IMenuItemService {
   private menuItemDao: MenuItemDAO;
-
-  /**
-   * Service for handling category-related operations.
-   * @type {CategoryService}
-   */
   private categoryService: CategoryService;
+  private cloudinaryService: CloudinaryService;
 
-  /**
-   * Constructor for the MenuItemSchema service class.
-   */
   constructor() {
     this.menuItemDao = new MenuItemDAO();
     this.categoryService = new CategoryService();
+    this.cloudinaryService = new CloudinaryService();
   }
 
   /**
@@ -117,6 +103,7 @@ class MenuItemSchema implements IMenuItemService {
                   itemName: 1,
                   itemDescription: 1,
                   itemPrice: 1,
+                  itemImagePath: 1,
                   category: {
                     _id: "$categoryDetails._id",
                     name: "$categoryDetails.name",
@@ -162,30 +149,6 @@ class MenuItemSchema implements IMenuItemService {
     }
   }
 
-  // /**
-  //  * Retrieve all menu items by category ID.
-  //  * @param {string} categoryId - The ID of the category to retrieve menu items from.
-  //  * @returns {Promise<IMenuItemSchema[]>} - An array of menu items.
-  //  * @throws {ErrorHandler} - Throws an error if the menu items cannot be retrieved.
-  //  */
-  // async getMenuItemsByCategoryId(
-  //   categoryId: string,
-  //   paginationData: IPaginationBody
-  // ): Promise<{ data: IMenuItemSchema[]; totalCount: number }> {
-  //   try {
-  //     const menuItems = await this.menuItemDao.getMenuItemsByCategoryId(
-  //       categoryId,
-  //       paginationData
-  //     );
-  //     return menuItems;
-  //   } catch (error: any) {
-  //     throw new ErrorHandler({
-  //       statusCode: 500,
-  //       message: error.message || "Failed to retrieve menu items",
-  //     });
-  //   }
-  // }
-
   /**
    * Update a menu item by its ID.
    * @param {string} id - The ID of the menu item to update.
@@ -198,6 +161,19 @@ class MenuItemSchema implements IMenuItemService {
     data: Partial<IMenuItemSchema>
   ): Promise<IMenuItemSchema> {
     try {
+      if (data.itemImagePath) {
+        const menuItemDetails = await this.getMenuItemById(id);
+
+        if (menuItemDetails.itemImagePath) {
+          const previousImagePublicId = menuItemDetails.itemImagePath
+            .split("/")
+            .slice(-2)
+            .join("/")
+            .replace(/\.[^/.]+$/, "");
+          await this.cloudinaryService.destroy(previousImagePublicId);
+        }
+      }
+
       const updatedMenuItem = await this.menuItemDao.updateMenuItem(id, data);
       if (!updatedMenuItem) {
         throw new ErrorHandler({
@@ -232,4 +208,4 @@ class MenuItemSchema implements IMenuItemService {
   }
 }
 
-export default MenuItemSchema;
+export default MenuItemService;

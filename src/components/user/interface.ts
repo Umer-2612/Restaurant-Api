@@ -7,7 +7,6 @@ export interface IUserSchema extends Document {
   profile: string;
   password: string;
   recordDeleted: boolean;
-  token?: string;
   createdAt: Date;
   updatedAt: Date;
 }

@@ -5,13 +5,9 @@ import MenuItemService from "./service";
 import Generator from "../../utils/generator";
 import { ErrorHandler } from "../../utils/common-function";
 import MenuItemValidation from "./validation";
-// import { IPaginationBody } from "./interface";
 import { IQueryBody } from "./interface";
+import { RequestWithUser } from "../auth/interface";
 
-/**
- * @class MenuController
- * @description Controller for handling menu-Item-related requests.
- */
 class MenuItemController {
   private menuItemService: MenuItemService;
   private menuItemValidation: MenuItemValidation;
@@ -22,14 +18,6 @@ class MenuItemController {
     this.menuItemValidation = new MenuItemValidation();
   }
 
-  /**
-   * @private
-   * @method handleError
-   * @param {Response} res - The response object from Express.
-   * @param {any} error - The error object.
-   * @returns {Promise<any>}
-   * @description Handles errors and sends an appropriate response.
-   */
   private async handleError(res: Response, error: any): Promise<any> {
     const statusCode = error instanceof ErrorHandler ? error.statusCode : 500;
     const message =
@@ -39,20 +27,7 @@ class MenuItemController {
     Generator.sendResponse({ res, statusCode, success: false, message });
   }
 
-  /**
-   * @public
-   * @method getMenuItems
-   * @param {Request} req - The request object from Express.
-   * @param {Response} res - The response object from Express.
-   * @returns {Promise<any>}
-   * @description Retrieves all menu items from the database, excluding deleted records.
-   * The request query parameters must include the page and limit of the pagination.
-   * The response will contain the retrieved menu items, along with the pagination data.
-   */
-  public getAllMenuItems = async (
-    req: Request,
-    res: Response
-  ): Promise<any> => {
+  public getAll = async (req: Request, res: Response): Promise<any> => {
     const validateBody = this.menuItemValidation.validatePaginationBody(
       req.query
     );
@@ -78,22 +53,14 @@ class MenuItemController {
         statusCode: 200,
         message: "Menu items retrieved successfully",
         data: menuItems[0].data,
-        paginationData: menuItems[0].paginationData,
+        paginationData: menuItems[0].paginationData[0],
       });
     } catch (error: any) {
       await this.handleError(res, error);
     }
   };
 
-  /**
-   * @public
-   * @method createMenuItem
-   * @param {Request} req - The request object from Express.
-   * @param {Response} res - The response object from Express.
-   * @returns {Promise<any>}
-   * @description Creates a new menu-item based on the request body.
-   */
-  public createMenuItem = async (req: Request, res: Response): Promise<any> => {
+  public create = async (req: RequestWithUser, res: Response): Promise<any> => {
     try {
       // Validate the request body using the validation schema
       const { error } = this.menuItemValidation.createMenuItemBody.validate(
@@ -108,8 +75,13 @@ class MenuItemController {
         });
       }
 
+      let menuData = req.body;
+      menuData.createdBy = req?.user?._id;
+      menuData.lastUpdatedBy = req?.user?._id;
+      menuData.itemImagePath = req?.body?.filePath;
+
       // Call the service to create the menu item
-      const menuItem = await this.menuItemService.createMenuItem(req.body);
+      const menuItem = await this.menuItemService.createMenuItem(menuData);
       return Generator.sendResponse({
         res,
         statusCode: 201,
@@ -122,18 +94,7 @@ class MenuItemController {
     }
   };
 
-  /**
-   * @public
-   * @method getMenuItemById
-   * @param {Request} req - The request object from Express.
-   * @param {Response} res - The response object from Express.
-   * @returns {Promise<any>}
-   * @description Retrieves a menu item by its ID.
-   */
-  public getMenuItemById = async (
-    req: Request,
-    res: Response
-  ): Promise<any> => {
+  public getOne = async (req: Request, res: Response): Promise<any> => {
     const { id } = req.params;
     const idValidation = this.menuItemValidation.validateId(id); // Validate ID
 
@@ -159,15 +120,7 @@ class MenuItemController {
     }
   };
 
-  /**
-   * @public
-   * @method updateMenuItem
-   * @param {Request} req - The request object from Express.
-   * @param {Response} res - The response object from Express.
-   * @returns {Promise<any>}
-   * @description Updates an existing menu item by its ID.
-   */
-  public updateMenuItem = async (req: Request, res: Response): Promise<any> => {
+  public update = async (req: RequestWithUser, res: Response): Promise<any> => {
     try {
       const { id } = req.params;
       const idValidation = this.menuItemValidation.validateId(id); // Validate ID
@@ -193,9 +146,13 @@ class MenuItemController {
         });
       }
 
+      let menuData = req.body;
+      menuData.updatedBy = req?.user?._id;
+      menuData.itemImagePath = req?.body?.filePath;
+
       const updatedMenuItem = await this.menuItemService.updateMenuItem(
         id,
-        req.body
+        menuData
       );
       return Generator.sendResponse({
         res,
@@ -208,70 +165,7 @@ class MenuItemController {
     }
   };
 
-  // /**
-  //  * @public
-  //  * @method getMenuItemByCategory
-  //  * @param {Request} req - The request object from Express.
-  //  * @param {Response} res - The response object from Express.
-  //  * @returns {Promise<any>}
-  //  * @description Retrieves menu items by their category ID.
-  //  */
-  // public getMenuItemByCategory = async (
-  //   req: Request,
-  //   res: Response
-  // ): Promise<any> => {
-  //   const { categoryId } = req.params;
-  //   const validateBody = this.menuItemValidation.validatePaginationBody(
-  //     req.query
-  //   );
-  //   const categoryValidation = this.menuItemValidation.validateId(categoryId); // Validate Category
-
-  //   if (validateBody.error) {
-  //     return Generator.sendResponse({
-  //       res,
-  //       statusCode: 400,
-  //       success: false,
-  //       message: validateBody.error.details[0].message,
-  //     });
-  //   }
-
-  //   if (categoryValidation.error) {
-  //     return Generator.sendResponse({
-  //       res,
-  //       statusCode: 400,
-  //       success: false,
-  //       message: categoryValidation.error.details[0].message,
-  //     });
-  //   }
-
-  //   try {
-  //     const page = Number(req.query.page);
-  //     const limit = Number(req.query.limit);
-  //     const paginationData: IPaginationBody = { page, limit };
-  //     const menuItems = await this.menuItemService.getMenuItemsByCategoryId(
-  //       categoryId,
-  //       paginationData
-  //     );
-  //     return Generator.sendResponse({
-  //       res,
-  //       statusCode: 200,
-  //       message: "Menu items retrieved successfully",
-  //       data: menuItems,
-  //     });
-  //   } catch (error: any) {
-  //     await this.handleError(res, error);
-  //   }
-  // };
-
-  /**
-   * @public
-   * @method  deleteMenuItem
-   * @param {Request} req - The request object from Express.
-   * @param {Response} res - The response object from Express.
-   * @returns {Promise<any>}
-   * @description Deletes a menu item by its ID.
-   */
-  public deleteMenuItem = async (req: Request, res: Response): Promise<any> => {
+  public delete = async (req: RequestWithUser, res: Response): Promise<any> => {
     try {
       const { id } = req.params;
       const idValidation = this.menuItemValidation.validateId(id); // Validate ID

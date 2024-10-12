@@ -4,12 +4,26 @@ import Config from "../config/env";
 import { ErrorHandler } from "./common-function";
 
 class JwtService {
-  public async generateToken(user: IUserSchema) {
+  public async generateAccessToken(user: IUserSchema) {
     try {
       const token = jwt.sign(
-        { id: user._id, email: user.email },
+        { _id: user._id, email: user.email },
         Config.jwtConfig.secretKey,
-        { expiresIn: String(Config.jwtConfig.expiryTime) }
+        { expiresIn: String(Config.jwtConfig.accessTokenExpiryTime) }
+      );
+
+      return token;
+    } catch (error: any) {
+      throw new ErrorHandler({ statusCode: 400, message: error.message });
+    }
+  }
+
+  public async generateRefreshToken(user: IUserSchema) {
+    try {
+      const token = jwt.sign(
+        { _id: user._id, email: user.email },
+        Config.jwtConfig.secretKey,
+        { expiresIn: String(Config.jwtConfig.refreshTokenExpiryTime) }
       );
 
       return token;

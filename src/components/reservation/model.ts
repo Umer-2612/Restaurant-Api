@@ -1,15 +1,3 @@
-/**
- * @typedef {import('mongoose').Document & {
- *   firstName: string,
- *   lastName: string,
- *   phoneNo: number,
- *   email: string,
- *   noOfPeople: number,
- *   date_of_reservation: Date,
- *   message: string,
- *   recordDeleted: boolean,
- * }} IReservationRequestSchema
- */
 import mongoose, { Schema } from "mongoose";
 import { IReservationRequestSchema } from "./interface";
 
@@ -20,14 +8,22 @@ const ReservationRequestsSchema: Schema = new Schema(
     phoneNo: { type: Number },
     email: { type: String },
     noOfPeople: { type: Number },
-    date_of_reservation: { type: Date },
+    reservationDate: { type: Date },
     message: { type: String },
+    status: {
+      type: String,
+      enum: ["Pending", "Accepted", "Rejected"],
+      default: "Pending",
+    },
     recordDeleted: { type: Boolean, default: false },
   },
   {
     timestamps: true,
-    collection: "reservation_request",
+    collection: "reservations",
   }
 );
 
-export default mongoose.model<IReservationRequestSchema>("ReservationRequest", ReservationRequestsSchema);
+export default mongoose.model<IReservationRequestSchema>(
+  "Reservation",
+  ReservationRequestsSchema
+);

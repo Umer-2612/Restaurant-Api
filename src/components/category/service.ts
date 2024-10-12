@@ -1,4 +1,8 @@
-import { ICategoryService, ICategorySchema, IPaginationBody } from "./interface";
+import {
+  ICategoryService,
+  ICategorySchema,
+  IPaginationBody,
+} from "./interface";
 import CategoryDAO from "./dao";
 import { ErrorHandler } from "../../utils/common-function";
 
@@ -76,7 +80,6 @@ class CategoryService implements ICategoryService {
 
       const result = await this.categoryDao.getCategories(pipeline);
       return result;
-
     } catch (error: any) {
       throw new ErrorHandler({
         statusCode: 500,
@@ -84,7 +87,6 @@ class CategoryService implements ICategoryService {
       });
     }
   }
-
 
   /**
    * Retrieve a category by its ID.
@@ -106,9 +108,9 @@ class CategoryService implements ICategoryService {
       throw error instanceof ErrorHandler
         ? error
         : new ErrorHandler({
-          statusCode: 500,
-          message: error.message || "Failed to retrieve category",
-        });
+            statusCode: 500,
+            message: error.message || "Failed to retrieve category",
+          });
     }
   }
 
@@ -136,9 +138,9 @@ class CategoryService implements ICategoryService {
       throw error instanceof ErrorHandler
         ? error
         : new ErrorHandler({
-          statusCode: 500,
-          message: error.message || "Failed to update category",
-        });
+            statusCode: 500,
+            message: error.message || "Failed to update category",
+          });
     }
   }
 
@@ -155,9 +157,9 @@ class CategoryService implements ICategoryService {
       throw error instanceof ErrorHandler
         ? error
         : new ErrorHandler({
-          statusCode: 500,
-          message: error.message || "Failed to delete category",
-        });
+            statusCode: 500,
+            message: error.message || "Failed to delete category",
+          });
     }
   }
 }

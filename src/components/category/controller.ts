@@ -1,11 +1,10 @@
-// controller.ts
-
 import { Request, Response } from "express";
 import CategoryService from "./service";
 import Generator from "../../utils/generator";
 import { ErrorHandler } from "../../utils/common-function";
 import CategoryValidation from "./validation";
 import { IPaginationBody } from "./interface";
+import { RequestWithUser } from "../auth/interface";
 
 /**
  * @class CategoryController
@@ -46,7 +45,7 @@ class CategoryController {
    * @returns {Promise<any>}
    * @description Creates a new category based on the request body.
    */
-  public createCategory = async (req: Request, res: Response): Promise<any> => {
+  public create = async (req: RequestWithUser, res: Response): Promise<any> => {
     try {
       // Validate the request body using the validation schema
       const { error } = this.categoryValidation.createCategoryBody.validate(
@@ -64,7 +63,7 @@ class CategoryController {
       }
 
       const categoryData = req.body;
-
+      categoryData.createdBy = req?.user?._id;
       const category = await this.categoryService.createCategory(categoryData);
       return Generator.sendResponse({
         res,
@@ -86,8 +85,10 @@ class CategoryController {
    * @returns {Promise<any>}
    * @description Retrieves all categories.
    */
-  public getCategories = async (req: Request, res: Response): Promise<any> => {
-    const validateBody = this.categoryValidation.validatePaginationBody(req.query);
+  public getAll = async (req: Request, res: Response): Promise<any> => {
+    const validateBody = this.categoryValidation.validatePaginationBody(
+      req.query
+    );
 
     if (validateBody.error) {
       return Generator.sendResponse({
@@ -102,12 +103,15 @@ class CategoryController {
       const page = Number(req.query.page);
       const limit = Number(req.query.limit);
       const paginationData: IPaginationBody = { page, limit };
-      const categories = await this.categoryService.getCategories(paginationData);
+      const categories = await this.categoryService.getCategories(
+        paginationData
+      );
       return Generator.sendResponse({
         res,
         statusCode: 200,
         message: "Categories retrieved successfully",
-        data: categories,
+        data: categories[0].data,
+        paginationData: categories[0].paginationData[0],
       });
     } catch (error: any) {
       await this.handleError(res, error);
@@ -122,10 +126,7 @@ class CategoryController {
    * @returns {Promise<any>}
    * @description Retrieves a category by its ID.
    */
-  public getCategoryById = async (
-    req: Request,
-    res: Response
-  ): Promise<any> => {
+  public getOne = async (req: Request, res: Response): Promise<any> => {
     try {
       const { id } = req.params;
       const idValidation = this.categoryValidation.validateId(id); // Validate ID
@@ -158,7 +159,7 @@ class CategoryController {
    * @returns {Promise<any>}
    * @description Updates an existing category by its ID.
    */
-  public updateCategory = async (req: Request, res: Response): Promise<any> => {
+  public update = async (req: RequestWithUser, res: Response): Promise<any> => {
     try {
       const { id } = req.params;
       const idValidation = this.categoryValidation.validateId(id); // Validate ID
@@ -183,10 +184,11 @@ class CategoryController {
           message: bodyValidation.error.details[0].message,
         });
       }
-
+      let categoryData = req.body;
+      categoryData.updatedBy = req?.user?._id;
       const updatedCategory = await this.categoryService.updateCategory(
         id,
-        req.body
+        categoryData
       );
       return Generator.sendResponse({
         res,
@@ -207,8 +209,17 @@ class CategoryController {
    * @returns {Promise<any>}
    * @description Deletes a category by its ID.
    */
-  public deleteCategory = async (req: Request, res: Response): Promise<any> => {
+  public delete = async (req: Request, res: Response): Promise<any> => {
     try {
+      const user = (req as any).user;
+      if (!user) {
+        return Generator.sendResponse({
+          res,
+          statusCode: 401,
+          success: false,
+          message: "Unauthorized",
+        });
+      }
       const { id } = req.params;
       const idValidation = this.categoryValidation.validateId(id); // Validate ID
 

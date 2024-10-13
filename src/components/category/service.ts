@@ -47,6 +47,8 @@ class CategoryService implements ICategoryService {
         recordDeleted: false,
       };
 
+      console.log({ rowLimit, rowSkip, matchCondition });
+
       const pipeline = [
         {
           $match: matchCondition,
@@ -79,6 +81,9 @@ class CategoryService implements ICategoryService {
       ];
 
       const result = await this.categoryDao.getCategories(pipeline);
+
+      console.log({ result, aa: result[0].data.length });
+
       return result;
     } catch (error: any) {
       throw new ErrorHandler({

@@ -130,7 +130,7 @@ export function forgotPasswordTemplate(user_name: string, email: string, otp: nu
       width: 100%;
     }
     img {
-      max-width: 150px;
+      max-width: 200px;
       margin-bottom: 20px;
       border-radius: 12px;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
@@ -138,7 +138,6 @@ export function forgotPasswordTemplate(user_name: string, email: string, otp: nu
       margin-left: auto;
       margin-right: auto;
       margin-top: 10px;
-      border: 2px solid #ddd;
       padding: 10px;
       background-color: #ffffff;
     }
@@ -155,20 +154,21 @@ export function forgotPasswordTemplate(user_name: string, email: string, otp: nu
       border: 1px solid #ddd;
       border-radius: 12px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
       background-color: #ffffff;
     }
     .header {
       text-align: center;
       padding: 20px;
-      background-color: #E63946;
       color: #ffffff;
     }
     .header h1 {
       margin: 0;
       font-size: 24px;
+      color: #000000
     }
     .content {
-      padding: 20px;
+      padding: 16px;
       line-height: 1.6;
       color: #555555;
     }
@@ -204,10 +204,10 @@ export function forgotPasswordTemplate(user_name: string, email: string, otp: nu
 <body>
   <div class="email-wrapper">
     <div class="container">
+    <img src="https://umer-karachiwala.tech/assets/punjabi-touch-cropped-BSNMGgT6.png" alt="Company Logo">
       <div class="header">
         <h1>Reset Your Password</h1>
       </div>
-      <img src="https://umer-karachiwala.tech/assets/punjabi-touch-cropped-BSNMGgT6.png" alt="Company Logo">
       <div class="content">
         <p>Hello ${user_name},</p>
         <p>We received a request to reset your password. Please use the following OTP to proceed with the password reset:</p>
@@ -227,6 +227,7 @@ export function forgotPasswordTemplate(user_name: string, email: string, otp: nu
 };
 
 export function statusChangeTemplate(user_name: string, email: string, status: string, reservationDate: String) {
+  let userStatus = status == 'accepted' ? 'Accepted' : 'Rejected';
   return {
     email: email,
     subject: `Your reservation has been ${status} - ${user_name}`,
@@ -247,7 +248,7 @@ export function statusChangeTemplate(user_name: string, email: string, status: s
       width: 100%;
     }
     img {
-      max-width: 150px;
+      max-width: 200px;
       margin-bottom: 20px;
       border-radius: 12px;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
@@ -255,7 +256,6 @@ export function statusChangeTemplate(user_name: string, email: string, status: s
       margin-left: auto;
       margin-right: auto;
       margin-top: 10px;
-      border: 2px solid #ddd;
       padding: 10px;
       background-color: #ffffff;
     }
@@ -272,20 +272,21 @@ export function statusChangeTemplate(user_name: string, email: string, status: s
       border: 1px solid #ddd;
       border-radius: 12px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
       background-color: #ffffff;
     }
     .header {
       text-align: center;
       padding: 20px;
-      background-color: #E63946;
       color: #ffffff;
     }
     .header h1 {
       margin: 0;
       font-size: 24px;
+      color: #000000
     }
     .content {
-      padding: 20px;
+      padding: 16px;
       line-height: 1.6;
       color: #555555;
     }
@@ -324,14 +325,14 @@ export function statusChangeTemplate(user_name: string, email: string, status: s
 <body>
   <div class="email-wrapper">
     <div class="container">
-      <div class="header">
+    <img src="https://umer-karachiwala.tech/assets/punjabi-touch-cropped-BSNMGgT6.png" alt="Company Logo">
+    <div class="header">
         <h1>Your Reservation Status</h1>
       </div>
-      <img src="https://umer-karachiwala.tech/assets/punjabi-touch-cropped-BSNMGgT6.png" alt="Company Logo">
       <div class="content">
         <p>Hello ${user_name},</p>
         <p>We are pleased to inform you that your reservation for <strong>Punjabi Touch Indian Restuarant</strong> on <strong>${reservationDate}</strong> has been:</p>
-        <p class="status ${status == 'accepted' ? 'accepted' : 'rejected'}">${status}</p>
+        <p class="status ${status == 'accepted' ? 'accepted' : 'rejected'}">${userStatus}</p>
         <p>Thank you for choosing us! We look forward to serving you.</p>
       </div>
       <div class="footer">
@@ -367,7 +368,7 @@ export function orderTemplate(userInfo: IOrderSchema, orderDate: String) {
       width: 100%;
     }
     img {
-      max-width: 150px;
+      max-width: 200px;
       margin-bottom: 20px;
       border-radius: 12px;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
@@ -375,7 +376,6 @@ export function orderTemplate(userInfo: IOrderSchema, orderDate: String) {
       margin-left: auto;
       margin-right: auto;
       margin-top: 10px;
-      border: 2px solid #ddd; 
       padding: 10px;
       background-color: #ffffff;
     }
@@ -392,21 +392,21 @@ export function orderTemplate(userInfo: IOrderSchema, orderDate: String) {
       border: 1px solid #ddd;
       border-radius: 12px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
       background-color: #ffffff;
     }
     .header {
       text-align: center;
       padding: 20px;
-      background-color: #E63946;
       color: #ffffff;
-      position: relative;
     }
     .header h1 {
       margin: 0;
       font-size: 24px;
+      color: #000000
     }
     .content {
-      padding: 20px;
+      padding: 16px;
       line-height: 1.6;
       color: #555555;
     }
@@ -461,10 +461,10 @@ export function orderTemplate(userInfo: IOrderSchema, orderDate: String) {
 <body>
   <div class="email-wrapper">
     <div class="container">
+    <img src="https://umer-karachiwala.tech/assets/punjabi-touch-cropped-BSNMGgT6.png" alt="Company Logo">
       <div class="header">
       <h1>Order Confirmation</h1>
       </div>
-      <img src="https://umer-karachiwala.tech/assets/punjabi-touch-cropped-BSNMGgT6.png" alt="Company Logo">
       <div class="content">
         <p>Hello <strong>${userInfo.orderdName}</strong>,</p>
         <p>Thank you for your order! Below are the details of your order:</p>
@@ -519,7 +519,6 @@ export function orderTemplate(userInfo: IOrderSchema, orderDate: String) {
   </div>
 </body>
 </html>
-
     `,
   }
 }

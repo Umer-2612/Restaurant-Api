@@ -12,6 +12,10 @@ class Database {
     try {
       const connectOptions: mongoose.ConnectOptions = {
         dbName: config.mongoDBConfig.MONGODB_DB_MAIN,
+        // Connection pooling options
+        maxPoolSize: 10, // Maximum number of connections in the pool
+        minPoolSize: 2, // Minimum number of connections in the pool
+        maxIdleTimeMS: 30000, // Max time (in ms) a connection can remain idle before closing
       };
 
       if (config.mongoDBConfig.authenticate) {

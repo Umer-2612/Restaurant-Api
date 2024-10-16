@@ -83,6 +83,7 @@ class ContactRequestFormService {
                   firstName: 1,
                   lastName: 1,
                   email: 1,
+                  status: 1,
                   message: 1,
                   createdAt: 1,
                 },

@@ -94,6 +94,7 @@ export default class ReservationRequestFormService {
                   phoneNo: 1,
                   email: 1,
                   noOfPeople: 1,
+                  status: 1,
                   reservationDate: 1,
                   message: 1,
                 },

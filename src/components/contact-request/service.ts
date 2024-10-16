@@ -1,15 +1,20 @@
-import ContactRequestsDAO from "./dao";
+import ContactRequestFormDao from "./dao";
 import { ErrorHandler } from "../../utils/common-function";
 import { IContactRequestSchema, IPaginationBody } from "./interface";
 
-export default class ContactRequestFormService {
+class ContactRequestFormService {
+  private contactRequestFormDao: ContactRequestFormDao;
+
+  constructor() {
+    this.contactRequestFormDao = new ContactRequestFormDao();
+  }
+
   public async createContactRequestForm(
     data: IContactRequestSchema
   ): Promise<IContactRequestSchema> {
     try {
-      const contactForm = await ContactRequestsDAO.createContactRequestForm(
-        data
-      );
+      const contactForm =
+        await this.contactRequestFormDao.createContactRequestForm(data);
       return contactForm;
     } catch (error) {
       throw error;
@@ -21,16 +26,25 @@ export default class ContactRequestFormService {
     data: IContactRequestSchema
   ): Promise<IContactRequestSchema | null> {
     try {
-      const contactForm = await ContactRequestsDAO.updateContactRequestForm(
-        id,
-        data
-      );
+      const isContactFormExist =
+        await this.contactRequestFormDao.getContactRequestFormById(id);
+
+      if (!isContactFormExist) {
+        throw new ErrorHandler({
+          statusCode: 404,
+          message: "Contact form not found for update",
+        });
+      }
+
+      const contactForm =
+        await this.contactRequestFormDao.updateContactRequestForm(id, data);
       if (!contactForm) {
         throw new ErrorHandler({
           statusCode: 404,
           message: "Contact form not found for update",
         });
       }
+
       return contactForm;
     } catch (error) {
       throw error;
@@ -79,9 +93,8 @@ export default class ContactRequestFormService {
       ];
 
       // Pass the pipeline to the DAO layer
-      const contactForms = await ContactRequestsDAO.getContactRequestForm(
-        pipeline
-      );
+      const contactForms =
+        await this.contactRequestFormDao.getAllContactRequestForm(pipeline);
 
       return contactForms;
     } catch (error: any) {
@@ -96,10 +109,13 @@ export default class ContactRequestFormService {
     id: string
   ): Promise<IContactRequestSchema | null> {
     try {
-      const contactForm = await ContactRequestsDAO.deleteContactRequestForm(id);
+      const contactForm =
+        await this.contactRequestFormDao.deleteContactRequestForm(id);
       return contactForm;
     } catch (error) {
       throw error;
     }
   }
 }
+
+export default ContactRequestFormService;

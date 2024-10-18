@@ -11,15 +11,10 @@ const CategorySchema: Schema = new Schema(
   {
     name: { type: String, trim: true },
     description: { type: String },
+    imagePath: { type: String },
     recordDeleted: { type: Boolean, default: false },
-    createdBy: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "user",
-    },
-    updatedBy: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "user",
-    },
+    createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
+    updatedBy: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
   },
   {
     timestamps: true, // Automatically creates createdAt and updatedAt fields

@@ -71,6 +71,7 @@ class CategoryService implements ICategoryService {
                   name: 1,
                   description: 1,
                   createdAt: 1,
+                  imagePath: 1,
                 },
               },
             ],

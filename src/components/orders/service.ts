@@ -86,6 +86,8 @@ class OrderService implements IOrderService {
             },
             customerDetails: { $first: "$customerDetails" },
             status: { $first: "$status" },
+            createdAt: { $first: "$createdAt" },
+            totalPrice: { $first: "$totalPrice" },
           },
         },
         {

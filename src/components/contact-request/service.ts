@@ -85,6 +85,7 @@ class ContactRequestFormService {
                   email: 1,
                   status: 1,
                   message: 1,
+                  phoneNo: 1,
                   createdAt: 1,
                 },
               },

@@ -62,7 +62,7 @@ class MenuItemService implements IMenuItemService {
         recordDeleted: false,
       };
 
-      if (body.category) {
+      if (body.category && body.category !== "All") {
         matchCondition.category = new mongoose.Types.ObjectId(body.category);
       }
 

@@ -12,7 +12,7 @@ const router = Router();
 
 router.post(
   "/",
-  // AuthMiddleware.authenticate,
+  AuthMiddleware.authenticate,
   uploadToCloudinary,
   MenuItemController.create
 );

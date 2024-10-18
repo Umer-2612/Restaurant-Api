@@ -56,6 +56,7 @@ class OrderService implements IOrderService {
                   _id: 1,
                   itemName: 1,
                   itemImagePath: 1,
+                  itemPrice: 1,
                 },
               },
             ],

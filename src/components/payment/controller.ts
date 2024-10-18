@@ -1,5 +1,5 @@
 // paymentController.ts
-import e, { Request, Response } from "express";
+import { Request, Response } from "express";
 import stripeClient from "../../config/stripe/configuration";
 import { ErrorHandler } from "../../utils/common-function";
 import Generator from "../../utils/generator";

@@ -34,8 +34,10 @@ class ReservationRequestFormController {
       );
 
     if (error) {
-      throw new ErrorHandler({
+      return Generator.sendResponse({
+        res,
         statusCode: 400,
+        success: false,
         message: error.details[0].message, // Get the first validation error message
       });
     }
@@ -77,15 +79,19 @@ class ReservationRequestFormController {
     const idValidation = this.reservationRequestsValidation.validateId(id);
 
     if (bodyValidation.error) {
-      throw new ErrorHandler({
+      return Generator.sendResponse({
+        res,
         statusCode: 400,
+        success: false,
         message: bodyValidation.error.details[0].message,
       });
     }
 
     if (idValidation.error) {
-      throw new ErrorHandler({
+      return Generator.sendResponse({
+        res,
         statusCode: 400,
+        success: false,
         message: idValidation.error.details[0].message,
       });
     }
@@ -113,8 +119,10 @@ class ReservationRequestFormController {
       this.reservationRequestsValidation.validatePaginationBody(req.query);
 
     if (validateBody.error) {
-      throw new ErrorHandler({
+      return Generator.sendResponse({
+        res,
         statusCode: 400,
+        success: false,
         message: validateBody.error.details[0].message,
       });
     }
@@ -144,8 +152,10 @@ class ReservationRequestFormController {
     const idValidation = this.reservationRequestsValidation.validateId(id);
 
     if (idValidation.error) {
-      throw new ErrorHandler({
+      return Generator.sendResponse({
+        res,
         statusCode: 400,
+        success: false,
         message: idValidation.error.details[0].message,
       });
     }

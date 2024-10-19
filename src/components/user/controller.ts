@@ -53,7 +53,7 @@ class UserController {
         data: user,
       });
     } catch (error: any) {
-      this.loggerService.logError(req, error);
+      await this.loggerService.logError(req, error);
       await this.handleError(res, error);
     }
   };

@@ -95,15 +95,14 @@ class CategoryController {
       );
 
       if (validateBody.error) {
-        throw new ErrorHandler({
+        // If validation fails, return the error response
+        return Generator.sendResponse({
+          res,
           statusCode: 400,
+          success: false,
           message: validateBody.error.details[0].message,
         });
       }
-
-      const page = Number(req.query.page);
-      const limit = Number(req.query.limit);
-      // const paginationData: IPaginationBody = { page, limit };
 
       const queryParams = {
         page: Number(req.query.page),

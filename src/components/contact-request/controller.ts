@@ -35,8 +35,11 @@ class ContactRequestFormController {
       );
 
     if (error) {
-      throw new ErrorHandler({
+      // If validation fails, return the error response
+      return Generator.sendResponse({
+        res,
         statusCode: 400,
+        success: false,
         message: error.details[0].message,
       });
     }
@@ -65,15 +68,20 @@ class ContactRequestFormController {
     const idValidation = this.contactRequestsValidation.validateId(id);
 
     if (bodyValidation.error) {
-      throw new ErrorHandler({
+      // If validation fails, return the error response
+      return Generator.sendResponse({
+        res,
         statusCode: 400,
+        success: false,
         message: bodyValidation.error.details[0].message,
       });
     }
 
     if (idValidation.error) {
-      throw new ErrorHandler({
+      return Generator.sendResponse({
+        res,
         statusCode: 400,
+        success: false,
         message: idValidation.error.details[0].message,
       });
     }
@@ -101,8 +109,10 @@ class ContactRequestFormController {
     );
 
     if (validateBody.error) {
-      throw new ErrorHandler({
+      return Generator.sendResponse({
+        res,
         statusCode: 400,
+        success: false,
         message: validateBody.error.details[0].message,
       });
     }
@@ -132,8 +142,10 @@ class ContactRequestFormController {
     const idValidation = this.contactRequestsValidation.validateId(id);
 
     if (idValidation.error) {
-      throw new ErrorHandler({
+      return Generator.sendResponse({
+        res,
         statusCode: 400,
+        success: false,
         message: idValidation.error.details[0].message,
       });
     }

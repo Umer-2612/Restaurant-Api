@@ -60,8 +60,8 @@ class AuthController {
         data,
       });
     } catch (error: any) {
-      this.loggerService.logError(req, error);
-      this.handleError(res, error);
+      await this.loggerService.logError(req, error);
+      await this.handleError(res, error);
     }
   };
 
@@ -93,8 +93,8 @@ class AuthController {
         data: user,
       });
     } catch (error: any) {
-      this.loggerService.logError(req, error);
-      this.handleError(res, error);
+      await this.loggerService.logError(req, error);
+      await this.handleError(res, error);
     }
   };
 }

@@ -51,6 +51,7 @@ class CategoryValidation {
     return Joi.object({
       page: Joi.number().optional(),
       limit: Joi.number().optional(),
+      isFav: Joi.boolean().optional(),
     }).validate(body);
   }
 }

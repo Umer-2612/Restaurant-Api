@@ -103,10 +103,15 @@ class CategoryController {
 
       const page = Number(req.query.page);
       const limit = Number(req.query.limit);
-      const paginationData: IPaginationBody = { page, limit };
-      const categories = await this.categoryService.getCategories(
-        paginationData
-      );
+      // const paginationData: IPaginationBody = { page, limit };
+
+      const queryParams = {
+        page: Number(req.query.page),
+        limit: Number(req.query.limit),
+        isFav: req.query.isFav,
+      };
+
+      const categories = await this.categoryService.getCategories(queryParams);
       return Generator.sendResponse({
         res,
         statusCode: 200,

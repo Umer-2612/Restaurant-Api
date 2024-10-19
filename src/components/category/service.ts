@@ -39,13 +39,17 @@ class CategoryService implements ICategoryService {
    * @returns {Promise<{data : ICategorySchema[], totalCount: number}>} - An array of categories.
    * @throws {ErrorHandler} - Throws an error if the categories cannot be retrieved.
    */
-  async getCategories(data: IPaginationBody): Promise<any> {
+  async getCategories(queryParams: any): Promise<any> {
     try {
-      const rowLimit = data.limit ? data.limit : 100;
-      const rowSkip = data.page ? (data.page - 1) * rowLimit : 0;
+      const rowLimit = queryParams.limit ? queryParams.limit : 100;
+      const rowSkip = queryParams.page ? (queryParams.page - 1) * rowLimit : 0;
       const matchCondition: any = {
         recordDeleted: false,
       };
+
+      if (queryParams?.isFav) {
+        matchCondition.isFav = true;
+      }
 
       const pipeline = [
         {
@@ -57,7 +61,8 @@ class CategoryService implements ICategoryService {
               { $count: "total" }, // Count the total number of records
               {
                 $addFields: {
-                  currentPage: data.page > 0 ? Number(data.page) : 1, // Return the current page
+                  currentPage:
+                    queryParams.page > 0 ? Number(queryParams.page) : 1, // Return the current page
                 },
               },
             ],

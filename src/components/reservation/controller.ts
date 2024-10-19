@@ -53,7 +53,7 @@ class ReservationRequestFormController {
         data: reservationForm,
       });
     } catch (error: any) {
-      this.loggerService.logError(req, error);
+      await this.loggerService.logError(req, error);
       await this.handleError(res, error);
     }
   };
@@ -103,7 +103,7 @@ class ReservationRequestFormController {
         data: reservationForm,
       });
     } catch (error: any) {
-      this.loggerService.logError(req, error);
+      await this.loggerService.logError(req, error);
       await this.handleError(res, error);
     }
   };
@@ -134,7 +134,7 @@ class ReservationRequestFormController {
         paginationData: reservationForms[0].paginationData[0],
       });
     } catch (error: any) {
-      this.loggerService.logError(req, error);
+      await this.loggerService.logError(req, error);
       await this.handleError(res, error);
     }
   };
@@ -161,7 +161,7 @@ class ReservationRequestFormController {
         data: reservationForms,
       });
     } catch (error: any) {
-      this.loggerService.logError(req, error);
+      await this.loggerService.logError(req, error);
       await this.handleError(res, error);
     }
   };

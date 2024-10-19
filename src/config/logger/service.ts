@@ -10,7 +10,7 @@ export type reqInfo = {
 };
 
 class LoggerService {
-  public logError(req: Request, error: any) {
+  public async logError(req: Request, error: any) {
     const logData = {
       date: moment().format(), // Format the date
       method: req.method,
@@ -22,7 +22,7 @@ class LoggerService {
     logger.error(JSON.stringify(logData)); // Log the error in JSON format
   }
 
-  public logInfo(reqInfo: reqInfo, message: string) {
+  public async logInfo(reqInfo: reqInfo, message: string) {
     return logger.info(
       JSON.stringify({
         date: moment().format(), // Format the date for better readability

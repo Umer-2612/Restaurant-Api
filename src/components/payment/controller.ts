@@ -90,7 +90,7 @@ class PaymentController {
       // Send the session ID to the frontend
       res.send({ sessionId: session.id });
     } catch (error: any) {
-      this.loggerService.logError(req, error);
+      await this.loggerService.logError(req, error);
       await this.handleError(res, error);
     }
   };

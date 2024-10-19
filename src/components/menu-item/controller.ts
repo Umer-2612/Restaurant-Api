@@ -57,7 +57,7 @@ class MenuItemController {
         paginationData: menuItems[0].paginationData[0],
       });
     } catch (error: any) {
-      this.loggerService.logError(req, error);
+      await this.loggerService.logError(req, error);
       await this.handleError(res, error);
     }
   };
@@ -90,7 +90,7 @@ class MenuItemController {
         data: menuItem,
       });
     } catch (error: any) {
-      this.loggerService.logError(req, error);
+      await this.loggerService.logError(req, error);
       await this.handleError(res, error);
     }
   };
@@ -115,7 +115,7 @@ class MenuItemController {
         data: menuItem,
       });
     } catch (error: any) {
-      this.loggerService.logError(req, error);
+      await this.loggerService.logError(req, error);
       await this.handleError(res, error);
     }
   };
@@ -159,7 +159,7 @@ class MenuItemController {
         data: updatedMenuItem,
       });
     } catch (error: any) {
-      this.loggerService.logError(req, error);
+      await this.loggerService.logError(req, error);
       await this.handleError(res, error);
     }
   };
@@ -184,7 +184,7 @@ class MenuItemController {
         message: "Menu item deleted successfully",
       });
     } catch (error: any) {
-      this.loggerService.logError(req, error);
+      await this.loggerService.logError(req, error);
       await this.handleError(res, error);
     }
   };

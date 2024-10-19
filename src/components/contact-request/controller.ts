@@ -51,7 +51,7 @@ class ContactRequestFormController {
         data: contactForm,
       });
     } catch (error: any) {
-      this.loggerService.logError(req, error);
+      await this.loggerService.logError(req, error);
       await this.handleError(res, error);
     }
   };
@@ -90,7 +90,7 @@ class ContactRequestFormController {
         data: contactForm,
       });
     } catch (error: any) {
-      this.loggerService.logError(req, error);
+      await this.loggerService.logError(req, error);
       await this.handleError(res, error);
     }
   };
@@ -122,7 +122,7 @@ class ContactRequestFormController {
         paginationData: contactForms[0].paginationData[0],
       });
     } catch (error: any) {
-      this.loggerService.logError(req, error);
+      await this.loggerService.logError(req, error);
       await this.handleError(res, error);
     }
   };
@@ -149,7 +149,7 @@ class ContactRequestFormController {
         data: contactForms,
       });
     } catch (error: any) {
-      this.loggerService.logError(req, error);
+      await this.loggerService.logError(req, error);
       await this.handleError(res, error);
     }
   };

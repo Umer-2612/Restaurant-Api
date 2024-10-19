@@ -124,7 +124,7 @@ class CategoryController {
         },
       });
     } catch (error: any) {
-      this.loggerService.logError(req, error);
+      await this.loggerService.logError(req, error);
       await this.handleError(res, error);
     }
   };
@@ -158,7 +158,7 @@ class CategoryController {
         data: category,
       });
     } catch (error: any) {
-      this.loggerService.logError(req, error);
+      await this.loggerService.logError(req, error);
       await this.handleError(res, error);
     }
   };
@@ -209,7 +209,7 @@ class CategoryController {
         data: updatedCategory,
       });
     } catch (error: any) {
-      this.loggerService.logError(req, error);
+      await this.loggerService.logError(req, error);
       await this.handleError(res, error);
     }
   };
@@ -253,7 +253,7 @@ class CategoryController {
         message: "Category deleted successfully",
       });
     } catch (error: any) {
-      this.loggerService.logError(req, error);
+      await this.loggerService.logError(req, error);
       await this.handleError(res, error);
     }
   };

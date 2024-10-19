@@ -47,7 +47,8 @@ class ReservationRequestFormController {
         );
       Generator.sendResponse({
         res,
-        message: "Reservation form created successfully",
+        message:
+          "Thank you for your reservation! We will update you shortly with the status of your booking. Please check your inbox for further details.",
         data: reservationForm,
       });
     } catch (error: any) {

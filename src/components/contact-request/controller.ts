@@ -45,7 +45,8 @@ class ContactRequestFormController {
         await this.contactRequestFormService.createContactRequestForm(req.body);
       Generator.sendResponse({
         res,
-        message: "Contact form created successfully",
+        message:
+          "Thank you for contacting us! We appreciate your message and will get back to you shortly.",
         data: contactForm,
       });
     } catch (error: any) {

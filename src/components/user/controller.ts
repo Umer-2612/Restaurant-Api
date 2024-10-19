@@ -3,13 +3,16 @@ import UserService from "./service";
 import { ErrorHandler } from "../../utils/common-function";
 import Generator from "../../utils/generator";
 import { RequestWithUser } from "../auth/interface";
+import LoggerService from "../../config/logger/service";
 
 class UserController {
   private userService: UserService;
+  private loggerService: LoggerService;
 
   constructor() {
     this.handleError = this.handleError.bind(this);
     this.userService = new UserService();
+    this.loggerService = new LoggerService();
   }
 
   private async handleError(res: Response, error: any): Promise<any> {
@@ -31,6 +34,7 @@ class UserController {
         data: user,
       });
     } catch (error: any) {
+      this.loggerService.logError(req, error);
       await this.handleError(res, error);
     }
   };
@@ -49,6 +53,7 @@ class UserController {
         data: user,
       });
     } catch (error: any) {
+      this.loggerService.logError(req, error);
       await this.handleError(res, error);
     }
   };

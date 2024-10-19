@@ -7,15 +7,18 @@ import { ErrorHandler } from "../../utils/common-function";
 import MenuItemValidation from "./validation";
 import { IQueryBody } from "./interface";
 import { RequestWithUser } from "../auth/interface";
+import LoggerService from "../../config/logger/service";
 
 class MenuItemController {
   private menuItemService: MenuItemService;
   private menuItemValidation: MenuItemValidation;
+  private loggerService: LoggerService;
 
   constructor() {
     this.handleError = this.handleError.bind(this);
     this.menuItemService = new MenuItemService();
     this.menuItemValidation = new MenuItemValidation();
+    this.loggerService = new LoggerService();
   }
 
   private async handleError(res: Response, error: any): Promise<any> {
@@ -33,10 +36,8 @@ class MenuItemController {
     );
 
     if (validateBody.error) {
-      return Generator.sendResponse({
-        res,
+      throw new ErrorHandler({
         statusCode: 400,
-        success: false,
         message: validateBody.error.details[0].message,
       });
     }
@@ -56,6 +57,7 @@ class MenuItemController {
         paginationData: menuItems[0].paginationData[0],
       });
     } catch (error: any) {
+      this.loggerService.logError(req, error);
       await this.handleError(res, error);
     }
   };
@@ -67,10 +69,8 @@ class MenuItemController {
         req.body
       );
       if (error) {
-        return Generator.sendResponse({
-          res,
+        throw new ErrorHandler({
           statusCode: 400,
-          success: false,
           message: error.details[0].message,
         });
       }
@@ -90,6 +90,7 @@ class MenuItemController {
         data: menuItem,
       });
     } catch (error: any) {
+      this.loggerService.logError(req, error);
       await this.handleError(res, error);
     }
   };
@@ -99,10 +100,8 @@ class MenuItemController {
     const idValidation = this.menuItemValidation.validateId(id); // Validate ID
 
     if (idValidation.error) {
-      return Generator.sendResponse({
-        res,
+      throw new ErrorHandler({
         statusCode: 400,
-        success: false,
         message: idValidation.error.details[0].message,
       });
     }
@@ -116,6 +115,7 @@ class MenuItemController {
         data: menuItem,
       });
     } catch (error: any) {
+      this.loggerService.logError(req, error);
       await this.handleError(res, error);
     }
   };
@@ -126,10 +126,8 @@ class MenuItemController {
       const idValidation = this.menuItemValidation.validateId(id); // Validate ID
 
       if (idValidation.error) {
-        return Generator.sendResponse({
-          res,
+        throw new ErrorHandler({
           statusCode: 400,
-          success: false,
           message: idValidation.error.details[0].message,
         });
       }
@@ -161,6 +159,7 @@ class MenuItemController {
         data: updatedMenuItem,
       });
     } catch (error: any) {
+      this.loggerService.logError(req, error);
       await this.handleError(res, error);
     }
   };
@@ -171,10 +170,8 @@ class MenuItemController {
       const idValidation = this.menuItemValidation.validateId(id); // Validate ID
 
       if (idValidation.error) {
-        return Generator.sendResponse({
-          res,
+        throw new ErrorHandler({
           statusCode: 400,
-          success: false,
           message: idValidation.error.details[0].message,
         });
       }
@@ -187,6 +184,7 @@ class MenuItemController {
         message: "Menu item deleted successfully",
       });
     } catch (error: any) {
+      this.loggerService.logError(req, error);
       await this.handleError(res, error);
     }
   };

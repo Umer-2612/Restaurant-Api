@@ -5,6 +5,7 @@ import { ErrorHandler } from "../../utils/common-function";
 import CategoryValidation from "./validation";
 import { IPaginationBody } from "./interface";
 import { RequestWithUser } from "../auth/interface";
+import LoggerService from "../../config/logger/service";
 
 /**
  * @class CategoryController
@@ -13,11 +14,13 @@ import { RequestWithUser } from "../auth/interface";
 class CategoryController {
   private categoryService: CategoryService;
   private categoryValidation: CategoryValidation;
+  private loggerService: LoggerService;
 
   constructor() {
     this.handleError = this.handleError.bind(this);
     this.categoryService = new CategoryService();
     this.categoryValidation = new CategoryValidation();
+    this.loggerService = new LoggerService();
   }
 
   /**
@@ -86,20 +89,18 @@ class CategoryController {
    * @description Retrieves all categories.
    */
   public getAll = async (req: Request, res: Response): Promise<any> => {
-    const validateBody = this.categoryValidation.validatePaginationBody(
-      req.query
-    );
-
-    if (validateBody.error) {
-      return Generator.sendResponse({
-        res,
-        statusCode: 400,
-        success: false,
-        message: validateBody.error.details[0].message,
-      });
-    }
-
     try {
+      const validateBody = this.categoryValidation.validatePaginationBody(
+        req.query
+      );
+
+      if (validateBody.error) {
+        throw new ErrorHandler({
+          statusCode: 400,
+          message: validateBody.error.details[0].message,
+        });
+      }
+
       const page = Number(req.query.page);
       const limit = Number(req.query.limit);
       const paginationData: IPaginationBody = { page, limit };
@@ -112,8 +113,13 @@ class CategoryController {
         message: "Categories retrieved successfully",
         data: categories[0].data,
         paginationData: categories[0].paginationData[0],
+        reqInfo: {
+          method: req.method,
+          originalUrl: req.originalUrl,
+        },
       });
     } catch (error: any) {
+      this.loggerService.logError(req, error);
       await this.handleError(res, error);
     }
   };
@@ -147,6 +153,7 @@ class CategoryController {
         data: category,
       });
     } catch (error: any) {
+      this.loggerService.logError(req, error);
       await this.handleError(res, error);
     }
   };
@@ -197,6 +204,7 @@ class CategoryController {
         data: updatedCategory,
       });
     } catch (error: any) {
+      this.loggerService.logError(req, error);
       await this.handleError(res, error);
     }
   };
@@ -240,6 +248,7 @@ class CategoryController {
         message: "Category deleted successfully",
       });
     } catch (error: any) {
+      this.loggerService.logError(req, error);
       await this.handleError(res, error);
     }
   };

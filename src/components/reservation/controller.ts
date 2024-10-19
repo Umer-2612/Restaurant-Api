@@ -4,15 +4,18 @@ import ReservationRequestsValidation from "./validation";
 import { ErrorHandler } from "../../utils/common-function";
 import Generator from "../../utils/generator";
 import { IPaginationBody } from "./interface";
+import LoggerService from "../../config/logger/service";
 
 class ReservationRequestFormController {
   private reservationRequestFormService: ReservationRequestFormService;
   private reservationRequestsValidation: ReservationRequestsValidation;
+  private loggerService: LoggerService;
 
   constructor() {
     this.handleError = this.handleError.bind(this);
     this.reservationRequestFormService = new ReservationRequestFormService();
     this.reservationRequestsValidation = new ReservationRequestsValidation();
+    this.loggerService = new LoggerService();
   }
 
   private async handleError(res: Response, error: any): Promise<any> {
@@ -31,10 +34,8 @@ class ReservationRequestFormController {
       );
 
     if (error) {
-      return Generator.sendResponse({
-        res,
+      throw new ErrorHandler({
         statusCode: 400,
-        success: false,
         message: error.details[0].message, // Get the first validation error message
       });
     }
@@ -52,7 +53,7 @@ class ReservationRequestFormController {
         data: reservationForm,
       });
     } catch (error: any) {
-      console.log({ error });
+      this.loggerService.logError(req, error);
       await this.handleError(res, error);
     }
   };
@@ -76,19 +77,15 @@ class ReservationRequestFormController {
     const idValidation = this.reservationRequestsValidation.validateId(id);
 
     if (bodyValidation.error) {
-      return Generator.sendResponse({
-        res,
+      throw new ErrorHandler({
         statusCode: 400,
-        success: false,
         message: bodyValidation.error.details[0].message,
       });
     }
 
     if (idValidation.error) {
-      return Generator.sendResponse({
-        res,
+      throw new ErrorHandler({
         statusCode: 400,
-        success: false,
         message: idValidation.error.details[0].message,
       });
     }
@@ -106,7 +103,7 @@ class ReservationRequestFormController {
         data: reservationForm,
       });
     } catch (error: any) {
-      console.log({ error });
+      this.loggerService.logError(req, error);
       await this.handleError(res, error);
     }
   };
@@ -116,10 +113,8 @@ class ReservationRequestFormController {
       this.reservationRequestsValidation.validatePaginationBody(req.query);
 
     if (validateBody.error) {
-      return Generator.sendResponse({
-        res,
+      throw new ErrorHandler({
         statusCode: 400,
-        success: false,
         message: validateBody.error.details[0].message,
       });
     }
@@ -139,7 +134,7 @@ class ReservationRequestFormController {
         paginationData: reservationForms[0].paginationData[0],
       });
     } catch (error: any) {
-      console.log({ error });
+      this.loggerService.logError(req, error);
       await this.handleError(res, error);
     }
   };
@@ -149,10 +144,8 @@ class ReservationRequestFormController {
     const idValidation = this.reservationRequestsValidation.validateId(id);
 
     if (idValidation.error) {
-      return Generator.sendResponse({
-        res,
+      throw new ErrorHandler({
         statusCode: 400,
-        success: false,
         message: idValidation.error.details[0].message,
       });
     }
@@ -168,7 +161,7 @@ class ReservationRequestFormController {
         data: reservationForms,
       });
     } catch (error: any) {
-      console.log({ error });
+      this.loggerService.logError(req, error);
       await this.handleError(res, error);
     }
   };

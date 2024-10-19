@@ -3,13 +3,16 @@ import MenuItemService from "./service";
 import Generator from "../../utils/generator";
 import { ErrorHandler } from "../../utils/common-function";
 import { IQueryBody } from "../menu-item/interface";
+import LoggerService from "../../config/logger/service";
 
 class MenuItemController {
   private menuItemService: MenuItemService;
+  private loggerService: LoggerService;
 
   constructor() {
     this.handleError = this.handleError.bind(this);
     this.menuItemService = new MenuItemService();
+    this.loggerService = new LoggerService();
   }
 
   private async handleError(res: Response, error: any): Promise<any> {
@@ -37,6 +40,7 @@ class MenuItemController {
         paginationData: menuItems[0].paginationData[0],
       });
     } catch (error: any) {
+      this.loggerService.logError(req, error);
       await this.handleError(res, error);
     }
   };
@@ -52,6 +56,7 @@ class MenuItemController {
         data: category,
       });
     } catch (error: any) {
+      this.loggerService.logError(req, error);
       await this.handleError(res, error);
     }
   };

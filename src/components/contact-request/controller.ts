@@ -5,15 +5,18 @@ import Generator from "../../utils/generator";
 import ContactRequestsValidation from "./validation";
 import { IPaginationBody } from "./interface";
 import { RequestWithUser } from "../auth/interface";
+import LoggerService from "../../config/logger/service";
 
 class ContactRequestFormController {
   private contactRequestFormService: ContactRequestFormService;
   private contactRequestsValidation: ContactRequestsValidation;
+  private loggerService: LoggerService;
 
   constructor() {
     this.handleError = this.handleError.bind(this);
     this.contactRequestFormService = new ContactRequestFormService();
     this.contactRequestsValidation = new ContactRequestsValidation();
+    this.loggerService = new LoggerService();
   }
 
   private async handleError(res: Response, error: any): Promise<any> {
@@ -32,11 +35,9 @@ class ContactRequestFormController {
       );
 
     if (error) {
-      return Generator.sendResponse({
-        res,
+      throw new ErrorHandler({
         statusCode: 400,
-        success: false,
-        message: error.details[0].message, // Get the first validation error message
+        message: error.details[0].message,
       });
     }
 
@@ -50,7 +51,7 @@ class ContactRequestFormController {
         data: contactForm,
       });
     } catch (error: any) {
-      console.log({ error });
+      this.loggerService.logError(req, error);
       await this.handleError(res, error);
     }
   };
@@ -64,19 +65,15 @@ class ContactRequestFormController {
     const idValidation = this.contactRequestsValidation.validateId(id);
 
     if (bodyValidation.error) {
-      return Generator.sendResponse({
-        res,
+      throw new ErrorHandler({
         statusCode: 400,
-        success: false,
         message: bodyValidation.error.details[0].message,
       });
     }
 
     if (idValidation.error) {
-      return Generator.sendResponse({
-        res,
+      throw new ErrorHandler({
         statusCode: 400,
-        success: false,
         message: idValidation.error.details[0].message,
       });
     }
@@ -93,7 +90,7 @@ class ContactRequestFormController {
         data: contactForm,
       });
     } catch (error: any) {
-      console.log({ error });
+      this.loggerService.logError(req, error);
       await this.handleError(res, error);
     }
   };
@@ -104,10 +101,8 @@ class ContactRequestFormController {
     );
 
     if (validateBody.error) {
-      return Generator.sendResponse({
-        res,
+      throw new ErrorHandler({
         statusCode: 400,
-        success: false,
         message: validateBody.error.details[0].message,
       });
     }
@@ -127,7 +122,7 @@ class ContactRequestFormController {
         paginationData: contactForms[0].paginationData[0],
       });
     } catch (error: any) {
-      console.log({ error });
+      this.loggerService.logError(req, error);
       await this.handleError(res, error);
     }
   };
@@ -137,10 +132,8 @@ class ContactRequestFormController {
     const idValidation = this.contactRequestsValidation.validateId(id);
 
     if (idValidation.error) {
-      return Generator.sendResponse({
-        res,
+      throw new ErrorHandler({
         statusCode: 400,
-        success: false,
         message: idValidation.error.details[0].message,
       });
     }
@@ -156,7 +149,7 @@ class ContactRequestFormController {
         data: contactForms,
       });
     } catch (error: any) {
-      console.log({ error });
+      this.loggerService.logError(req, error);
       await this.handleError(res, error);
     }
   };

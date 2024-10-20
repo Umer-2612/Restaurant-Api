@@ -111,7 +111,7 @@ const staging: Config = {
     "https://api.umer-karachiwala.tech",
     "http://api.umer-karachiwala.tech",
   ],
-  domainUrl: "https://umer-karachiwala.tech",
+  domainUrl: "http://localhost:5000",
   jwtConfig: {
     secretKey: "xjfqktewbghncmayzoipsvuldr",
     accessTokenExpiryTime: "24h",
@@ -163,7 +163,7 @@ const prod: Config = {
     "https://api.umer-karachiwala.tech",
     "http://api.umer-karachiwala.tech",
   ],
-  domainUrl: "https://umer-karachiwala.tech",
+  domainUrl: "http://localhost:5000",
   jwtConfig: {
     secretKey: "xjfqktewbghncmayzoipsvuldr",
     accessTokenExpiryTime: "24h",

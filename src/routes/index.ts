@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { Request, Response, Router } from "express";
 import userRouter from "../components/user/router";
 import authRouter from "../components/auth/router";
 import menuRouter from "../components/menu-item/router";
@@ -25,5 +25,10 @@ router.use("/reservation", ReservationRequestFormRouter);
 router.use("/stripe", stripeRouter);
 
 router.use("/orders", OrdersRouter);
+
+// Health Check Route
+router.get("/health", (req: Request, res: Response) => {
+  res.status(200).json({ message: "Server is live" });
+});
 
 export default router;

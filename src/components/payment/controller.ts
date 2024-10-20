@@ -4,18 +4,20 @@ import stripeClient from "../../config/stripe/configuration";
 import { ErrorHandler } from "../../utils/common-function";
 import Generator from "../../utils/generator";
 import Config from "../../config/env";
-import OrderSchema from "../orders/model";
 import OrderService from "../orders/service";
 import { IOrderSchema } from "../orders/interface";
+import PaymentService from "./service";
 // import LoggerService from "../../config/logger/service";
 
 class PaymentController {
   private orderService: OrderService;
+  private paymentService: PaymentService;
   // private loggerService: LoggerService;
 
   constructor() {
     this.handleError = this.handleError.bind(this);
     this.orderService = new OrderService();
+    this.paymentService = new PaymentService();
     // this.loggerService = new LoggerService();
   }
 
@@ -123,43 +125,7 @@ class PaymentController {
     // Handle the event
     switch (event.type) {
       case "checkout.session.completed":
-        const session: any = event.data.object;
-        const { orderId } = session.metadata;
-
-        try {
-          const orderDetails = await OrderSchema.findOne({
-            _id: orderId,
-            recordDeleted: false,
-          });
-
-          if (!orderDetails) {
-            throw new ErrorHandler({
-              statusCode: 404,
-              message: "Order not found.",
-            });
-          }
-
-          orderDetails.status = "Paid";
-
-          orderDetails.paymentDetails = {
-            method: session.payment_method_types[0],
-            paymentIntent: session.payment_intent,
-            sessionId: session.id,
-            totalAmountReceivedInCents: session.amount_total,
-            currency: session.currency,
-            paymentStatus: session.payment_status,
-            customerCardDetails: {
-              email: session.customer_details.email,
-              name: session.customer_details.name,
-              phone: session.customer_details.phone,
-            },
-          };
-
-          await orderDetails.save();
-        } catch (error) {
-          console.error("Error creating order:", error);
-          return res.status(500).json({ error: "Internal Server Error" });
-        }
+        this.paymentService.handleSessionComplete(event);
 
         break;
     }

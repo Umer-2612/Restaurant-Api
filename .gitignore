@@ -3,3 +3,4 @@
 # Ignore logs directory and log files
 *.log
 .env
+.vercel

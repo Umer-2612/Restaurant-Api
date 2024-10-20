@@ -27,7 +27,7 @@ router.use("/stripe", stripeRouter);
 router.use("/orders", OrdersRouter);
 
 // Health Check Route
-router.get("/health", (req: Request, res: Response) => {
+router.get("/", (req: Request, res: Response) => {
   res.status(200).json({ message: "Server is live" });
 });
 

@@ -23,7 +23,7 @@ const OrderSchema = new Schema(
       firstName: { type: String },
       lastName: { type: String },
       email: { type: String },
-      phone: { type: String },
+      phoneNo: { type: String },
     },
     paymentDetails: {
       method: { type: String },

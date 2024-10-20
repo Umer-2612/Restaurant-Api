@@ -66,16 +66,6 @@ class OrderService implements IOrderService {
           $unwind: "$menuItemDetails", // Unwind the menuItemDetails array
         },
         {
-          $addFields: {
-            customerDetails: {
-              firstName: "Umer",
-              lastName: "Karachiwala",
-              email: "karachiwalaumer2612@gmail.com",
-              phone: "8200084872",
-            },
-          },
-        },
-        {
           $group: {
             _id: "$_id", // Group back the orders by their original _id
             cart: {

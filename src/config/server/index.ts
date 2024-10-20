@@ -5,6 +5,7 @@ import Database from "../database/index";
 import { ErrorHandler } from "../../utils/common-function";
 import { setupMiddleware } from "../middleware/setup";
 import Config from "../env/index";
+import path from "path";
 
 class Server {
   private app: Application;
@@ -27,6 +28,18 @@ class Server {
       console.error("Error connecting to the database:", error);
       process.exit(1); // Exit the process if database connection fails
     }
+
+    // Serve static files from the Vite build
+    this.app.use(
+      express.static(path.join(__dirname, "../../../../Restaurant-Web/dist"))
+    ); // Adjust path to your Vite dist folder
+
+    // Handle all other routes by serving the index.html file
+    this.app.get("*", (req: Request, res: Response) => {
+      res.sendFile(
+        path.join(__dirname, "../../../../Restaurant-Web/dist/index.html")
+      );
+    });
 
     this.app.use(
       (err: any, req: Request, res: Response, next: NextFunction) => {

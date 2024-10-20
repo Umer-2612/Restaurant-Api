@@ -7,16 +7,16 @@ import Config from "../../config/env";
 import OrderSchema from "../orders/model";
 import OrderService from "../orders/service";
 import { IOrderSchema } from "../orders/interface";
-import LoggerService from "../../config/logger/service";
+// import LoggerService from "../../config/logger/service";
 
 class PaymentController {
   private orderService: OrderService;
-  private loggerService: LoggerService;
+  // private loggerService: LoggerService;
 
   constructor() {
     this.handleError = this.handleError.bind(this);
     this.orderService = new OrderService();
-    this.loggerService = new LoggerService();
+    // this.loggerService = new LoggerService();
   }
 
   private async handleError(res: Response, error: any): Promise<any> {
@@ -90,7 +90,7 @@ class PaymentController {
       // Send the session ID to the frontend
       res.send({ sessionId: session.id });
     } catch (error: any) {
-      await this.loggerService.logError(req, error);
+      //  await this\.loggerService\.logError\(req, error\);
       await this.handleError(res, error);
     }
   };
@@ -116,7 +116,7 @@ class PaymentController {
         Config.stripeConfig.webhookSecretKey
       );
     } catch (error: any) {
-      this.loggerService.logError(req, error);
+      // this.loggerService.logError(req, error);
       return res.status(400).send(`Webhook Error: ${error.message}`);
     }
 

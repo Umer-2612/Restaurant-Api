@@ -4,7 +4,7 @@ import bodyParser from "body-parser";
 import routes from "../../routes/index";
 import Config from "../env/index";
 import morgan from "morgan";
-import logger from "../logger";
+// import logger from "../logger";
 import moment from "moment";
 
 const expressWinston = require("express-winston");
@@ -34,39 +34,39 @@ export function setupMiddleware(app: Application): void {
   // Middleware for parsing JSON bodies (for non-webhook routes)
   app.use(bodyParser.json());
 
-  // Middleware for logging requests
-  app.use(
-    expressWinston.logger({
-      winstonInstance: logger,
-      meta: false, // Add metadata like request and response
-      msg: "HTTP {{req.method}} {{req.url}}", // Customize log message format
-      expressFormat: true, // Use the default Express format
-      colorize: false, // Colorize the logs (useful for console transport)
-    })
-  );
+  // // Middleware for logging requests
+  // app.use(
+  //   expressWinston.logger({
+  //     winstonInstance: logger,
+  //     meta: false, // Add metadata like request and response
+  //     msg: "HTTP {{req.method}} {{req.url}}", // Customize log message format
+  //     expressFormat: true, // Use the default Express format
+  //     colorize: false, // Colorize the logs (useful for console transport)
+  //   })
+  // );
 
-  const morganFormat = ":method :url :status :response-time ms";
+  // const morganFormat = ":method :url :status :response-time ms";
 
-  app.use(
-    morgan(morganFormat, {
-      stream: {
-        write: (message: any) => {
-          const [method, url, status, responseTime] = message.trim().split(" ");
+  // app.use(
+  //   morgan(morganFormat, {
+  //     stream: {
+  //       write: (message: any) => {
+  //         const [method, url, status, responseTime] = message.trim().split(" ");
 
-          logger.info(
-            JSON.stringify({
-              level: "info",
-              date: moment(),
-              method,
-              url,
-              status,
-              responseTime,
-            })
-          );
-        },
-      },
-    })
-  );
+  //         logger.info(
+  //           JSON.stringify({
+  //             level: "info",
+  //             date: moment(),
+  //             method,
+  //             url,
+  //             status,
+  //             responseTime,
+  //           })
+  //         );
+  //       },
+  //     },
+  //   })
+  // );
 
   // Mount the routes to the Express app
   app.use(routes);

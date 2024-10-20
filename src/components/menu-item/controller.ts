@@ -7,18 +7,18 @@ import { ErrorHandler } from "../../utils/common-function";
 import MenuItemValidation from "./validation";
 import { IQueryBody } from "./interface";
 import { RequestWithUser } from "../auth/interface";
-import LoggerService from "../../config/logger/service";
+// import LoggerService from "../../config/logger/service";
 
 class MenuItemController {
   private menuItemService: MenuItemService;
   private menuItemValidation: MenuItemValidation;
-  private loggerService: LoggerService;
+  // private loggerService: LoggerService;
 
   constructor() {
     this.handleError = this.handleError.bind(this);
     this.menuItemService = new MenuItemService();
     this.menuItemValidation = new MenuItemValidation();
-    this.loggerService = new LoggerService();
+    // this.loggerService = new LoggerService();
   }
 
   private async handleError(res: Response, error: any): Promise<any> {
@@ -60,7 +60,7 @@ class MenuItemController {
         paginationData: menuItems[0].paginationData[0],
       });
     } catch (error: any) {
-      await this.loggerService.logError(req, error);
+      //  await this\.loggerService\.logError\(req, error\);
       await this.handleError(res, error);
     }
   };
@@ -95,7 +95,7 @@ class MenuItemController {
         data: menuItem,
       });
     } catch (error: any) {
-      await this.loggerService.logError(req, error);
+      //  await this\.loggerService\.logError\(req, error\);
       await this.handleError(res, error);
     }
   };
@@ -122,7 +122,7 @@ class MenuItemController {
         data: menuItem,
       });
     } catch (error: any) {
-      await this.loggerService.logError(req, error);
+      //  await this\.loggerService\.logError\(req, error\);
       await this.handleError(res, error);
     }
   };
@@ -168,7 +168,7 @@ class MenuItemController {
         data: updatedMenuItem,
       });
     } catch (error: any) {
-      await this.loggerService.logError(req, error);
+      //  await this\.loggerService\.logError\(req, error\);
       await this.handleError(res, error);
     }
   };
@@ -195,7 +195,7 @@ class MenuItemController {
         message: "Menu item deleted successfully",
       });
     } catch (error: any) {
-      await this.loggerService.logError(req, error);
+      //  await this\.loggerService\.logError\(req, error\);
       await this.handleError(res, error);
     }
   };

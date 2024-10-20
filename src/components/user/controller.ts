@@ -7,12 +7,12 @@ import LoggerService from "../../config/logger/service";
 
 class UserController {
   private userService: UserService;
-  private loggerService: LoggerService;
+  // private loggerService: LoggerService;
 
   constructor() {
     this.handleError = this.handleError.bind(this);
     this.userService = new UserService();
-    this.loggerService = new LoggerService();
+    // this.loggerService = new LoggerService();
   }
 
   private async handleError(res: Response, error: any): Promise<any> {
@@ -34,7 +34,7 @@ class UserController {
         data: user,
       });
     } catch (error: any) {
-      this.loggerService.logError(req, error);
+      // this.loggerService.logError(req, error);
       await this.handleError(res, error);
     }
   };
@@ -53,7 +53,7 @@ class UserController {
         data: user,
       });
     } catch (error: any) {
-      await this.loggerService.logError(req, error);
+      //  await this\.loggerService\.logError\(req, error\);
       await this.handleError(res, error);
     }
   };

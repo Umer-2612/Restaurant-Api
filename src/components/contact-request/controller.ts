@@ -10,13 +10,13 @@ import LoggerService from "../../config/logger/service";
 class ContactRequestFormController {
   private contactRequestFormService: ContactRequestFormService;
   private contactRequestsValidation: ContactRequestsValidation;
-  private loggerService: LoggerService;
+  // private loggerService: LoggerService;
 
   constructor() {
     this.handleError = this.handleError.bind(this);
     this.contactRequestFormService = new ContactRequestFormService();
     this.contactRequestsValidation = new ContactRequestsValidation();
-    this.loggerService = new LoggerService();
+    // this.loggerService = new LoggerService();
   }
 
   private async handleError(res: Response, error: any): Promise<any> {
@@ -54,7 +54,7 @@ class ContactRequestFormController {
         data: contactForm,
       });
     } catch (error: any) {
-      await this.loggerService.logError(req, error);
+      //  await this\.loggerService\.logError\(req, error\);
       await this.handleError(res, error);
     }
   };
@@ -98,7 +98,7 @@ class ContactRequestFormController {
         data: contactForm,
       });
     } catch (error: any) {
-      await this.loggerService.logError(req, error);
+      //  await this\.loggerService\.logError\(req, error\);
       await this.handleError(res, error);
     }
   };
@@ -132,7 +132,7 @@ class ContactRequestFormController {
         paginationData: contactForms[0].paginationData[0],
       });
     } catch (error: any) {
-      await this.loggerService.logError(req, error);
+      //  await this\.loggerService\.logError\(req, error\);
       await this.handleError(res, error);
     }
   };
@@ -161,7 +161,7 @@ class ContactRequestFormController {
         data: contactForms,
       });
     } catch (error: any) {
-      await this.loggerService.logError(req, error);
+      //  await this\.loggerService\.logError\(req, error\);
       await this.handleError(res, error);
     }
   };

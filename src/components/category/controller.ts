@@ -3,9 +3,8 @@ import CategoryService from "./service";
 import Generator from "../../utils/generator";
 import { ErrorHandler } from "../../utils/common-function";
 import CategoryValidation from "./validation";
-import { IPaginationBody } from "./interface";
 import { RequestWithUser } from "../auth/interface";
-import LoggerService from "../../config/logger/service";
+// import LoggerService from "../../config/logger/service";
 
 /**
  * @class CategoryController
@@ -14,13 +13,13 @@ import LoggerService from "../../config/logger/service";
 class CategoryController {
   private categoryService: CategoryService;
   private categoryValidation: CategoryValidation;
-  private loggerService: LoggerService;
+  // private loggerService: LoggerService;
 
   constructor() {
     this.handleError = this.handleError.bind(this);
     this.categoryService = new CategoryService();
     this.categoryValidation = new CategoryValidation();
-    this.loggerService = new LoggerService();
+    // this.loggerService = new LoggerService();
   }
 
   /**
@@ -75,7 +74,6 @@ class CategoryController {
         data: category,
       });
     } catch (error: any) {
-      console.log({ error });
       await this.handleError(res, error);
     }
   };
@@ -123,7 +121,7 @@ class CategoryController {
         },
       });
     } catch (error: any) {
-      await this.loggerService.logError(req, error);
+      //  await this\.loggerService\.logError\(req, error\);
       await this.handleError(res, error);
     }
   };
@@ -157,7 +155,7 @@ class CategoryController {
         data: category,
       });
     } catch (error: any) {
-      await this.loggerService.logError(req, error);
+      //  await this\.loggerService\.logError\(req, error\);
       await this.handleError(res, error);
     }
   };
@@ -208,7 +206,7 @@ class CategoryController {
         data: updatedCategory,
       });
     } catch (error: any) {
-      await this.loggerService.logError(req, error);
+      //  await this\.loggerService\.logError\(req, error\);
       await this.handleError(res, error);
     }
   };
@@ -252,7 +250,7 @@ class CategoryController {
         message: "Category deleted successfully",
       });
     } catch (error: any) {
-      await this.loggerService.logError(req, error);
+      //  await this\.loggerService\.logError\(req, error\);
       await this.handleError(res, error);
     }
   };

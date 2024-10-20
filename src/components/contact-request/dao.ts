@@ -3,7 +3,37 @@ import { ErrorHandler } from "../../utils/common-function";
 import { IContactRequestSchema, IPaginationBody } from "./interface";
 
 export default class ContactRequestsDAO {
-  public static async createContactRequestForm(
+  public async getAllContactRequestForm(pipeline: any): Promise<any> {
+    try {
+      const result = await ContactRequestSchema.aggregate(pipeline);
+
+      return result;
+    } catch (error: any) {
+      throw new ErrorHandler({
+        statusCode: 500,
+        message: "Database Error: Unable to retrieve contact request forms",
+      });
+    }
+  }
+
+  public async getContactRequestFormById(
+    id: string
+  ): Promise<IContactRequestSchema | null> {
+    try {
+      const res = await ContactRequestSchema.findOne({
+        _id: id,
+        recordDeleted: false,
+      });
+      return res;
+    } catch (error: any) {
+      throw new ErrorHandler({
+        statusCode: 500,
+        message: "Database Error: Unable to retrieve contact form",
+      });
+    }
+  }
+
+  public async createContactRequestForm(
     data: IContactRequestSchema
   ): Promise<IContactRequestSchema> {
     try {
@@ -21,7 +51,7 @@ export default class ContactRequestsDAO {
     }
   }
 
-  public static async updateContactRequestForm(
+  public async updateContactRequestForm(
     id: string,
     data: IContactRequestSchema
   ): Promise<IContactRequestSchema | null> {
@@ -38,20 +68,7 @@ export default class ContactRequestsDAO {
     }
   }
 
-  public static async getContactRequestForm(pipeline: any): Promise<any> {
-    try {
-      const result = await ContactRequestSchema.aggregate(pipeline);
-
-      return result;
-    } catch (error: any) {
-      throw new ErrorHandler({
-        statusCode: 500,
-        message: "Database Error: Unable to retrieve contact request forms",
-      });
-    }
-  }
-
-  public static async deleteContactRequestForm(
+  public async deleteContactRequestForm(
     id: string
   ): Promise<IContactRequestSchema | null> {
     try {

@@ -71,7 +71,9 @@ export interface ICategoryService {
    * @method getCategories
    * @returns {Promise<{data : ICategorySchema[], totalCount: number}>} A list of all categories.
    */
-  getCategories(data: IPaginationBody): Promise<{ data: ICategorySchema[], totalCount: number }>;
+  getCategories(
+    data: IPaginationBody
+  ): Promise<{ data: ICategorySchema[]; totalCount: number }>;
 
   /**
    * @method getCategoryById

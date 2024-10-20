@@ -12,7 +12,7 @@ const router = Router();
 
 router.post(
   "/",
-  // AuthMiddleware.authenticate,
+  AuthMiddleware.authenticate,
   uploadToCloudinary,
   MenuItemController.create
 );
@@ -23,7 +23,7 @@ router.get("/:id", MenuItemController.getOne);
 
 router.patch(
   "/:id",
-  AuthMiddleware.authenticate,
+  // AuthMiddleware.authenticate,
   uploadToCloudinary,
   MenuItemController.update
 );

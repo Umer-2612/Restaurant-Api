@@ -25,6 +25,7 @@ export default class ContactRequestsValidation {
       "any.required": "email is required",
       "string.empty": "email cannot be empty",
     }),
+    status: Joi.string().optional(),
     message: Joi.string().required().messages({
       "any.required": "Message is required",
       "string.empty": "Message cannot be empty",
@@ -38,6 +39,7 @@ export default class ContactRequestsValidation {
     phoneNo: Joi.number().optional().default(null),
     email: Joi.string().optional().default(null),
     message: Joi.string().optional().default(null),
+    status: Joi.string().optional(),
     recordDeleted: Joi.boolean().optional().default(false),
   });
 

@@ -56,6 +56,7 @@ class OrderService implements IOrderService {
                   _id: 1,
                   itemName: 1,
                   itemImagePath: 1,
+                  itemPrice: 1,
                 },
               },
             ],
@@ -85,6 +86,8 @@ class OrderService implements IOrderService {
             },
             customerDetails: { $first: "$customerDetails" },
             status: { $first: "$status" },
+            createdAt: { $first: "$createdAt" },
+            totalPrice: { $first: "$totalPrice" },
           },
         },
         {

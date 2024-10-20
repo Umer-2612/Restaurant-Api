@@ -3,10 +3,14 @@ import AuthService from "./service";
 import { ErrorHandler } from "../../utils/common-function";
 import Generator from "../../utils/generator";
 import jwtService from "../../utils/jwtService";
+import LoggerService from "../../config/logger/service";
 
 class AuthController {
+  private loggerService: LoggerService;
+
   constructor() {
     this.handleError = this.handleError.bind(this);
+    this.loggerService = new LoggerService();
   }
 
   private async handleError(res: Response, error: any): Promise<void> {
@@ -30,6 +34,7 @@ class AuthController {
         data: user,
       });
     } catch (error: any) {
+      this.loggerService.logError(req, error);
       this.handleError(res, error);
     }
   };
@@ -55,8 +60,8 @@ class AuthController {
         data,
       });
     } catch (error: any) {
-      console.log(error);
-      this.handleError(res, error);
+      await this.loggerService.logError(req, error);
+      await this.handleError(res, error);
     }
   };
 
@@ -71,6 +76,7 @@ class AuthController {
         data: user,
       });
     } catch (error: any) {
+      this.loggerService.logError(req, error);
       this.handleError(res, error);
     }
   };
@@ -87,7 +93,8 @@ class AuthController {
         data: user,
       });
     } catch (error: any) {
-      this.handleError(res, error);
+      await this.loggerService.logError(req, error);
+      await this.handleError(res, error);
     }
   };
 }

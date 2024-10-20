@@ -5,15 +5,18 @@ import Generator from "../../utils/generator";
 import ContactRequestsValidation from "./validation";
 import { IPaginationBody } from "./interface";
 import { RequestWithUser } from "../auth/interface";
+import LoggerService from "../../config/logger/service";
 
 class ContactRequestFormController {
   private contactRequestFormService: ContactRequestFormService;
   private contactRequestsValidation: ContactRequestsValidation;
+  private loggerService: LoggerService;
 
   constructor() {
     this.handleError = this.handleError.bind(this);
     this.contactRequestFormService = new ContactRequestFormService();
     this.contactRequestsValidation = new ContactRequestsValidation();
+    this.loggerService = new LoggerService();
   }
 
   private async handleError(res: Response, error: any): Promise<any> {
@@ -32,11 +35,12 @@ class ContactRequestFormController {
       );
 
     if (error) {
+      // If validation fails, return the error response
       return Generator.sendResponse({
         res,
         statusCode: 400,
         success: false,
-        message: error.details[0].message, // Get the first validation error message
+        message: error.details[0].message,
       });
     }
 
@@ -45,11 +49,12 @@ class ContactRequestFormController {
         await this.contactRequestFormService.createContactRequestForm(req.body);
       Generator.sendResponse({
         res,
-        message: "Contact form created successfully",
+        message:
+          "Thank you for contacting us! We appreciate your message and will get back to you shortly.",
         data: contactForm,
       });
     } catch (error: any) {
-      console.log({ error });
+      await this.loggerService.logError(req, error);
       await this.handleError(res, error);
     }
   };
@@ -63,6 +68,7 @@ class ContactRequestFormController {
     const idValidation = this.contactRequestsValidation.validateId(id);
 
     if (bodyValidation.error) {
+      // If validation fails, return the error response
       return Generator.sendResponse({
         res,
         statusCode: 400,
@@ -92,7 +98,7 @@ class ContactRequestFormController {
         data: contactForm,
       });
     } catch (error: any) {
-      console.log({ error });
+      await this.loggerService.logError(req, error);
       await this.handleError(res, error);
     }
   };
@@ -126,7 +132,7 @@ class ContactRequestFormController {
         paginationData: contactForms[0].paginationData[0],
       });
     } catch (error: any) {
-      console.log({ error });
+      await this.loggerService.logError(req, error);
       await this.handleError(res, error);
     }
   };
@@ -155,7 +161,7 @@ class ContactRequestFormController {
         data: contactForms,
       });
     } catch (error: any) {
-      console.log({ error });
+      await this.loggerService.logError(req, error);
       await this.handleError(res, error);
     }
   };

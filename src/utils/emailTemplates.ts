@@ -98,7 +98,7 @@ export const reservationAcceptedTemplate = async ({
 <body>
   <div class="email-wrapper">
     <div class="container">
-    <img src="https://umer-karachiwala.tech/assets/punjabi-touch-cropped-BSNMGgT6.png" alt="Company Logo">
+    <img src="https://res.cloudinary.com/domcmqnwn/image/upload/v1729418279/Production-Restaurant-Menu/Punjabi-Touch-01-01-e1698190288737_dwd6hu.png" alt="Company Logo">
     <div class="header">
         <h1>Your Reservation Status</h1>
       </div>
@@ -214,7 +214,7 @@ export const reservationDeclinedTemplate = async ({
 <body>
   <div class="email-wrapper">
     <div class="container">
-    <img src="https://umer-karachiwala.tech/assets/punjabi-touch-cropped-BSNMGgT6.png" alt="Company Logo">
+    <img src="https://res.cloudinary.com/domcmqnwn/image/upload/v1729418279/Production-Restaurant-Menu/Punjabi-Touch-01-01-e1698190288737_dwd6hu.png" alt="Company Logo">
     <div class="header">
         <h1>Your Reservation Status</h1>
       </div>
@@ -365,7 +365,7 @@ export const orderConformationTemplate = async ({
 <body>
   <div class="email-wrapper">
     <div class="container">
-    <img src="https://umer-karachiwala.tech/assets/punjabi-touch-cropped-BSNMGgT6.png" alt="Company Logo">
+    <img src="https://res.cloudinary.com/domcmqnwn/image/upload/v1729418279/Production-Restaurant-Menu/Punjabi-Touch-01-01-e1698190288737_dwd6hu.png" alt="Company Logo">
       <div class="header">
       <h1>Order Confirmation</h1>
       </div>

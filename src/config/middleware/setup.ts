@@ -69,5 +69,5 @@ export function setupMiddleware(app: Application): void {
   // );
 
   // Mount the routes to the Express app
-  app.use(routes);
+  app.use("/api/v1", routes);
 }

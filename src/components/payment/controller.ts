@@ -76,12 +76,12 @@ class PaymentController {
         payment_method_types: ["card"],
         mode: "payment",
         line_items: lineItems,
-        success_url: `${Config.domainUrl}/cart?status=success&orderId=${String(
-          orderDetails._id
-        )}`,
-        cancel_url: `${Config.domainUrl}/cart?status=failed&orderId=${String(
-          orderDetails._id
-        )}`,
+        success_url: `${
+          Config.stripeConfig.redirectUrl
+        }?status=success&orderId=${String(orderDetails._id)}`,
+        cancel_url: `${
+          Config.stripeConfig.redirectUrl
+        }?status=failed&orderId=${String(orderDetails._id)}`,
         metadata: {
           orderId: String(orderDetails?._id), // Attach your order ID as metadata
         },

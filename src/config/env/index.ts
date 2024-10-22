@@ -29,6 +29,7 @@ interface Config {
     secretKey: string;
     publishableKey: string;
     webhookSecretKey: string;
+    redirectUrl: string;
   };
   nodeMailerConfig: {
     outgoingServer: string;
@@ -84,6 +85,7 @@ const dev: Config = {
     secretKey: process.env.STRIPE_SECRET_KEY || "",
     publishableKey: process.env.STRIPE_PUBLISHABLE_KEY || "",
     webhookSecretKey: process.env.STRIPE_WEBHOOK_SECRET || "",
+    redirectUrl: process.env.STRIPE_REDIRECT_URL || "",
   },
   nodeMailerConfig: {
     outgoingServer: process.env.NODE_MAILER_OUTGOING_SERVER || "",
@@ -137,6 +139,7 @@ const staging: Config = {
     secretKey: process.env.STRIPE_SECRET_KEY || "",
     publishableKey: process.env.STRIPE_PUBLISHABLE_KEY || "",
     webhookSecretKey: process.env.STRIPE_WEBHOOK_SECRET || "",
+    redirectUrl: process.env.STRIPE_REDIRECT_URL || "",
   },
   nodeMailerConfig: {
     outgoingServer: process.env.NODE_MAILER_OUTGOING_SERVER || "",
@@ -190,6 +193,7 @@ const prod: Config = {
     secretKey: process.env.STRIPE_SECRET_KEY || "",
     publishableKey: process.env.STRIPE_PUBLISHABLE_KEY || "",
     webhookSecretKey: process.env.STRIPE_WEBHOOK_SECRET || "",
+    redirectUrl: process.env.STRIPE_REDIRECT_URL || "",
   },
   nodeMailerConfig: {
     outgoingServer: process.env.NODE_MAILER_OUTGOING_SERVER || "",

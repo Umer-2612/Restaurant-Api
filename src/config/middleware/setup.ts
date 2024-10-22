@@ -12,6 +12,7 @@ const expressWinston = require("express-winston");
 export function setupMiddleware(app: Application): void {
   const corsOptions = {
     origin: function (origin: string, callback: any) {
+      console.log({ origin });
       if (Config.whiteList.indexOf(origin) !== -1 || !origin) {
         // Allow requests from whitelisted origins or if there is no origin (e.g. Postman or server-side requests)
         callback(null, true);

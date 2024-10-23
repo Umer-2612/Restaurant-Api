@@ -21,14 +21,7 @@ export function setupMiddleware(app: Application): void {
   app.use("/api/v1", routes);
 
   // Add raw body parser middleware ONLY for Stripe webhook route
-  app.post(
-    "/stripe/webhook",
-    (req, res, next) => {
-      console.log({ aa: req.baseUrl });
-      next();
-    },
-    bodyParser.raw({ type: "application/json" })
-  );
+  app.post("/stripe/webhook", bodyParser.raw({ type: "application/json" }));
 
   // Middleware for CORS
   app.use(cors(corsOptions));

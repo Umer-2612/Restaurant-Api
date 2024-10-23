@@ -18,7 +18,11 @@ export function setupMiddleware(app: Application): void {
   } as CorsOptions;
 
   app.use((req, res, next) => {
-    console.log({ aa: req.baseUrl });
+    // Access the full request URL
+
+    const url = req.url;
+    console.log({ url });
+
     next();
   });
 

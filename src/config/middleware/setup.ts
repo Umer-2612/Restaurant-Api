@@ -17,6 +17,9 @@ export function setupMiddleware(app: Application): void {
     credentials: true, // Allow credentials (authorization headers, etc.)
   } as CorsOptions;
 
+  // Mount the routes to the Express app
+  app.use("/api/v1", routes);
+
   // Add raw body parser middleware ONLY for Stripe webhook route
   app.post(
     "/stripe/webhook",
@@ -35,7 +38,4 @@ export function setupMiddleware(app: Application): void {
 
   // Middleware for parsing JSON bodies (for non-webhook routes)
   app.use(bodyParser.json());
-
-  // Mount the routes to the Express app
-  app.use("/api/v1", routes);
 }

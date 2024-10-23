@@ -97,6 +97,8 @@ class PaymentController {
 
   // New method for handling Stripe webhooks
   public handleWebhook = async (req: Request, res: Response) => {
+    console.log({ aa: req.baseUrl });
+
     const sig: string | string[] | undefined = req.headers["stripe-signature"]; // Retrieve the signature from headers
 
     let event;

@@ -17,6 +17,11 @@ export function setupMiddleware(app: Application): void {
     credentials: true, // Allow credentials (authorization headers, etc.)
   } as CorsOptions;
 
+  app.use((req, res, next) => {
+    console.log({ aa: req.baseUrl });
+    next();
+  });
+
   // Add raw body parser middleware ONLY for Stripe webhook route
   app.post("/stripe/webhook", bodyParser.raw({ type: "application/json" }));
 

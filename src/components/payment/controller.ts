@@ -101,6 +101,8 @@ class PaymentController {
 
     const sig: string | string[] | undefined = req.headers["stripe-signature"]; // Retrieve the signature from headers
 
+    console.log({ sig });
+
     let event;
 
     try {
@@ -117,6 +119,8 @@ class PaymentController {
         sig,
         Config.stripeConfig.webhookSecretKey
       );
+
+      console.log({ event });
     } catch (error: any) {
       // this.loggerService.logError(req, error);
       return res.status(400).send(`Webhook Error: ${error.message}`);

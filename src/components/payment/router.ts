@@ -1,9 +1,13 @@
 // paymentRoutes.ts
 import { Router } from "express";
 import PaymentController from "./controller";
-import bodyParser from "body-parser";
 
 const router = Router();
+
+router.post(
+  "/create-cod-order",
+  PaymentController.createCashOnDeliveryOrder
+);
 
 router.post(
   "/create-checkout-session",

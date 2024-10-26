@@ -1,8 +1,6 @@
 import { IGetAllOrderBody, IOrderSchema, IOrderService } from "./interface";
 import OrderDAO from "./dao";
 import { ErrorHandler } from "../../utils/common-function";
-import { IQueryBody } from "../menu-item/interface";
-import { pipeline } from "stream/promises";
 import { Types } from "mongoose";
 
 class OrderService implements IOrderService {
@@ -30,6 +28,7 @@ class OrderService implements IOrderService {
       const matchCondition: any = {
         recordDeleted: false,
         status: "Paid",
+        payment_method: { $in: ["COD", "Online"] }
       };
 
       if (body.id) {
@@ -129,9 +128,9 @@ class OrderService implements IOrderService {
       throw error instanceof ErrorHandler
         ? error
         : new ErrorHandler({
-            statusCode: 500,
-            message: error.message || "Failed to retrieve category",
-          });
+          statusCode: 500,
+          message: error.message || "Failed to retrieve category",
+        });
     }
   }
 }

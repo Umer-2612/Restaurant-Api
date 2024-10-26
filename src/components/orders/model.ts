@@ -15,6 +15,7 @@ const OrderSchema = new Schema(
       enum: ["Paid", "Not Paid"],
       default: "Not Paid",
     },
+    payment_method: { type: String, enum: ["COD", "Online"], default: "Online" },
     orderDate: {
       type: Date,
       default: Date.now,

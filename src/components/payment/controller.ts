@@ -33,7 +33,9 @@ class PaymentController {
     res: Response
   ): Promise<any> => {
     try {
-      const order = await this.orderService.create(req.body);
+      let body = req.body;
+      body.payment_method = "COD";
+      const order = await this.orderService.create(body);
       return Generator.sendResponse({
         res,
         statusCode: 200,

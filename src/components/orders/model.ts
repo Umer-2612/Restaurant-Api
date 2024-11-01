@@ -12,10 +12,10 @@ const OrderSchema = new Schema(
     totalPrice: { type: Number },
     status: {
       type: String,
-      enum: ["Paid", "Not Paid"],
+      enum: ["Paid", "Not Paid", "POD"],
       default: "Not Paid",
     },
-    payment_method: { type: String, enum: ["COD", "Online"], default: "Online" },
+    paymentMethod: { type: String, enum: ["COD", "Online"], default: "Online" },
     orderDate: {
       type: Date,
       default: Date.now,
@@ -27,7 +27,6 @@ const OrderSchema = new Schema(
       phoneNo: { type: String },
     },
     paymentDetails: {
-      method: { type: String },
       status: { type: String },
       paymentIntent: { type: String },
       sessionId: { type: String },

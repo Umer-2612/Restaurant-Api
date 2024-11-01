@@ -28,7 +28,7 @@ class OrderService implements IOrderService {
       const matchCondition: any = {
         recordDeleted: false,
         status: "Paid",
-        payment_method: { $in: ["COD", "Online"] }
+        paymentMethod: { $in: ["COD", "Online"] },
       };
 
       if (body.id) {
@@ -128,9 +128,9 @@ class OrderService implements IOrderService {
       throw error instanceof ErrorHandler
         ? error
         : new ErrorHandler({
-          statusCode: 500,
-          message: error.message || "Failed to retrieve category",
-        });
+            statusCode: 500,
+            message: error.message || "Failed to retrieve category",
+          });
     }
   }
 }

@@ -34,7 +34,10 @@ class PaymentController {
   ): Promise<any> => {
     try {
       let body = req.body;
-      body.payment_method = "COD";
+      body.paymentMethod = "COD";
+      body.status = "POD";
+      body.customerDetails = req.body.user;
+
       const order = await this.orderService.create(body);
       return Generator.sendResponse({
         res,
@@ -160,6 +163,7 @@ class PaymentController {
           }
 
           orderDetails.status = "Paid";
+          orderDetails.paymentMethod = "Card";
 
           orderDetails.paymentDetails = {
             method: session.payment_method_types[0],

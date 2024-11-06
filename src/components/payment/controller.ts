@@ -6,8 +6,10 @@ import Generator from "../../utils/generator";
 import Config from "../../config/env";
 import OrderService from "../orders/service";
 import { IOrderSchema } from "../orders/interface";
-import PaymentService from "./service";
+import OrderSchema from "../orders/model";
+import * as Stripe from "stripe";
 // import LoggerService from "../../config/logger/service";
+import PaymentService from "./service";
 
 class PaymentController {
   private orderService: OrderService;
@@ -78,12 +80,12 @@ class PaymentController {
         payment_method_types: ["card"],
         mode: "payment",
         line_items: lineItems,
-        success_url: `${Config.domainUrl}/cart?status=success&orderId=${String(
-          orderDetails._id
-        )}`,
-        cancel_url: `${Config.domainUrl}/cart?status=failed&orderId=${String(
-          orderDetails._id
-        )}`,
+        success_url: `${
+          Config.stripeConfig.redirectUrl
+        }?status=success&orderId=${String(orderDetails._id)}`,
+        cancel_url: `${
+          Config.stripeConfig.redirectUrl
+        }?status=failed&orderId=${String(orderDetails._id)}`,
         metadata: {
           orderId: String(orderDetails?._id), // Attach your order ID as metadata
         },
@@ -101,7 +103,7 @@ class PaymentController {
   public handleWebhook = async (req: Request, res: Response) => {
     const sig: string | string[] | undefined = req.headers["stripe-signature"]; // Retrieve the signature from headers
 
-    let event;
+    let event: Stripe.Stripe.Event;
 
     try {
       if (!sig) {
@@ -111,27 +113,71 @@ class PaymentController {
         });
       }
 
-      // Verify the event with Stripe
-      event = stripeClient.webhooks.constructEvent(
-        req.body,
-        sig,
-        Config.stripeConfig.webhookSecretKey
-      );
+      try {
+        // Verify the event with Stripe
+        event = stripeClient.webhooks.constructEvent(
+          req.body,
+          sig,
+          Config.stripeConfig.webhookSecretKey
+        );
+      } catch (error: any) {
+        console.error("Stripe webhook verification failed:", error.message);
+        return res.status(400).send(`Webhook Error: ${error.message}`);
+      }
+
+      console.log({ event });
     } catch (error: any) {
       // this.loggerService.logError(req, error);
       return res.status(400).send(`Webhook Error: ${error.message}`);
     }
 
-    // Handle the event
-    switch (event.type) {
-      case "checkout.session.completed":
-        this.paymentService.handleSessionComplete(event);
+    if (event) {
+      // Handle the event
+      switch (event.type) {
+        case "checkout.session.completed":
+          const session: any = event?.data?.object;
+          const { orderId } = session.metadata;
 
-        break;
+          try {
+            const orderDetails = await OrderSchema.findOne({
+              _id: orderId,
+              recordDeleted: false,
+            });
+
+            if (!orderDetails) {
+              throw new ErrorHandler({
+                statusCode: 404,
+                message: "Order not found.",
+              });
+            }
+
+            orderDetails.status = "Paid";
+
+            orderDetails.paymentDetails = {
+              method: session.payment_method_types[0],
+              paymentIntent: session.payment_intent,
+              sessionId: session.id,
+              totalAmountReceivedInCents: session.amount_total,
+              currency: session.currency,
+              paymentStatus: session.payment_status,
+              customerCardDetails: {
+                email: session.customer_details.email,
+                name: session.customer_details.name,
+                phone: session.customer_details.phone,
+              },
+            };
+
+            await orderDetails.save();
+          } catch (error) {
+            console.error("Error creating order:", error);
+            return res.status(500).json({ error: "Internal Server Error" });
+          }
+
+          break;
+      }
+      // Acknowledge receipt of the event
+      res.json({ received: true });
     }
-
-    // Acknowledge receipt of the event
-    res.json({ received: true });
   };
 }
 

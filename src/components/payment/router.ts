@@ -11,6 +11,6 @@ router.post(
 );
 
 // New route for the webhook
-router.post("/webhook", PaymentController.handleWebhook);
+// router.post("/webhook", PaymentController.handleWebhook);
 
 export default router;

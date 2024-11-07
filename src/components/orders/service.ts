@@ -1,8 +1,6 @@
 import { IGetAllOrderBody, IOrderSchema, IOrderService } from "./interface";
 import OrderDAO from "./dao";
 import { ErrorHandler } from "../../utils/common-function";
-import { IQueryBody } from "../menu-item/interface";
-import { pipeline } from "stream/promises";
 import { Types } from "mongoose";
 
 class OrderService implements IOrderService {
@@ -30,6 +28,7 @@ class OrderService implements IOrderService {
       const matchCondition: any = {
         recordDeleted: false,
         status: "Paid",
+        paymentMethod: { $in: ["COD", "Online"] },
       };
 
       if (body.id) {

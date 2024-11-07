@@ -365,9 +365,9 @@ export const orderConformationTemplate = async ({
 <body>
   <div class="email-wrapper">
     <div class="container">
-    <img src="https://res.cloudinary.com/domcmqnwn/image/upload/v1729418279/Production-Restaurant-Menu/Punjabi-Touch-01-01-e1698190288737_dwd6hu.png" alt="Company Logo">
+      <img src="https://res.cloudinary.com/domcmqnwn/image/upload/v1729418279/Production-Restaurant-Menu/Punjabi-Touch-01-01-e1698190288737_dwd6hu.png" alt="Company Logo">
       <div class="header">
-      <h1>Order Confirmation</h1>
+        <h1>Order Confirmation</h1>
       </div>
       <div class="content">
         <p>Hello <strong>${orderdName}</strong>,</p>
@@ -390,10 +390,12 @@ export const orderConformationTemplate = async ({
             <th>Payment Method</th>
             <td>${paymentMethod}</td>
           </tr>
+          ${paymentMethod !== 'COD' ? `
           <tr>
             <th>Payment Status</th>
             <td>${paymentStatus}</td>
           </tr>
+          ` : ''}
         </table>
 
         <h3>Order Items</h3>
@@ -406,14 +408,14 @@ export const orderConformationTemplate = async ({
           </thead>
           <tbody>
             ${items
-              .map(
-                (item: any) => `
-              <tr>
-              <td>${item.menu} </td>
-              <td> ${item.quantity} </td>
-            </tr>`
-              )
-              .join("")}
+        .map(
+          (item: any) => `
+                <tr>
+                  <td>${item.menu}</td>
+                  <td>${item.quantity}</td>
+                </tr>`
+        )
+        .join("")}
           </tbody>
         </table>
 

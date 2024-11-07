@@ -16,7 +16,9 @@ export interface IOrderSchema extends Document {
   items: IItem[];
   totalPrice: number;
   status: "Paid" | "Not Paid";
+  payment_method: "COD" | "Online";
   orderDate: Date;
+  paymentMethod: string;
   customerDetails: {
     firstName: string;
     lastName: string;

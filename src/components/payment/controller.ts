@@ -29,6 +29,29 @@ class PaymentController {
     Generator.sendResponse({ res, statusCode, success: false, message });
   }
 
+  public createCashOnDeliveryOrder = async (
+    req: Request,
+    res: Response
+  ): Promise<any> => {
+    try {
+      let body = req.body;
+      body.paymentMethod = "COD";
+      body.status = "POD";
+      body.customerDetails = req.body.user;
+
+      const order = await this.orderService.create(body);
+      return Generator.sendResponse({
+        res,
+        statusCode: 200,
+        message: "Cash on delivery order created successfully",
+        data: order,
+      });
+    } catch (error: any) {
+      //  await this\.loggerService\.logError\(req, error\);
+      await this.handleError(res, error);
+    }
+  };
+
   public createCheckoutSession = async (req: Request, res: Response) => {
     const { cartItems } = req.body; // Get items from the request body
 
@@ -149,7 +172,7 @@ class PaymentController {
             }
 
             orderDetails.status = "Paid";
-
+            orderDetails.paymentMethod = "Card";
             orderDetails.paymentDetails = {
               method: session.payment_method_types[0],
               paymentIntent: session.payment_intent,

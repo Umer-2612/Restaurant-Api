@@ -8,6 +8,7 @@ import OrderSchema from "../orders/model";
 import OrderService from "../orders/service";
 import { IOrderSchema } from "../orders/interface";
 import * as Stripe from "stripe";
+import server from "../../config/server";
 // import LoggerService from "../../config/logger/service";
 
 class PaymentController {
@@ -40,6 +41,9 @@ class PaymentController {
       body.customerDetails = req.body.user;
 
       const order = await this.orderService.create(body);
+      const socketInstance = await server.getSocketIOInstance();
+      socketInstance.emit("orders", JSON.parse(JSON.stringify(order)));
+
       return Generator.sendResponse({
         res,
         statusCode: 200,
@@ -188,6 +192,12 @@ class PaymentController {
             };
 
             await orderDetails.save();
+
+            const socketInstance = await server.getSocketIOInstance();
+            socketInstance.emit(
+              "orders",
+              JSON.parse(JSON.stringify(orderDetails))
+            );
           } catch (error) {
             console.error("Error creating order:", error);
             return res.status(500).json({ error: "Internal Server Error" });

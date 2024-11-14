@@ -23,7 +23,7 @@ class NodeMailerService {
     };
 
     try {
-      const info = await this.transporter.sendMail(mailOptions);
+      await this.transporter.sendMail(mailOptions);
     } catch (error) {
       console.error("Error sending email:", error);
       throw error; // Re-throw the error for further handling

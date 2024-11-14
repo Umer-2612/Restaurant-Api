@@ -1,8 +1,8 @@
 import ReservationRequestsDAO from "./dao";
 import { ErrorHandler } from "../../utils/common-function";
 import { IReservationRequestSchema, IPaginationBody } from "./interface";
-import NodeMailerService from "../../config/node-mailer/service";
 import ReservationRequestFormUtils from "./utils";
+import server from "../../config/server";
 
 export default class ReservationRequestFormService {
   private reservationRequestDao: ReservationRequestsDAO;
@@ -19,6 +19,13 @@ export default class ReservationRequestFormService {
     try {
       const reservationForm =
         await this.reservationRequestDao.createReservationRequestForm(data);
+
+      const socketInstance = await server.getSocketIOInstance();
+      socketInstance.emit(
+        "reservationRequest",
+        JSON.parse(JSON.stringify(reservationForm))
+      );
+
       return reservationForm;
     } catch (error) {
       throw error;

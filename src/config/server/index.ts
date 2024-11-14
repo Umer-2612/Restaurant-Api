@@ -6,15 +6,22 @@ import { ErrorHandler } from "../../utils/common-function";
 import { setupMiddleware } from "../middleware/setup";
 import Config from "../env/index";
 import path from "path";
+import * as http from "http";
+import SocketServer from "../socket/index";
 
 class Server {
   private app: Application;
   private database: Database;
+  private httpServer: http.Server;
+  private socketServer: SocketServer;
 
   constructor() {
     this.app = express();
+    this.httpServer = http.createServer(this.app); // Create HTTP server
+    this.socketServer = new SocketServer(this.httpServer); // Initialize SocketServer
     this.start();
     this.database = new Database();
+    this.socketServer.setupSocketIO(); // Set up Socket.IO handling
     this.setup();
   }
 
@@ -57,9 +64,14 @@ class Server {
     const hostname = Config.nodeEnv === "PROD" ? os.hostname() : "localhost";
     const protocol = Config.nodeEnv === "PROD" ? "https" : "http";
 
-    this.app.listen(config.port, () => {
+    this.httpServer.listen(config.port, () => {
       console.log(`Running on: ${protocol}://${hostname}:${config.port}`);
     });
+  }
+
+  // Method to access the Socket.IO instance
+  public async getSocketIOInstance() {
+    return this.socketServer.getIO(); // Get the Socket.IO instance from SocketServer
   }
 }
 

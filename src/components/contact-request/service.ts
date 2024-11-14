@@ -1,6 +1,7 @@
 import ContactRequestFormDao from "./dao";
 import { ErrorHandler } from "../../utils/common-function";
 import { IContactRequestSchema, IPaginationBody } from "./interface";
+import server from "../../config/server";
 
 class ContactRequestFormService {
   private contactRequestFormDao: ContactRequestFormDao;
@@ -15,6 +16,13 @@ class ContactRequestFormService {
     try {
       const contactForm =
         await this.contactRequestFormDao.createContactRequestForm(data);
+
+      const socketInstance = await server.getSocketIOInstance();
+      socketInstance.emit(
+        "contactRequest",
+        JSON.parse(JSON.stringify(contactForm))
+      );
+
       return contactForm;
     } catch (error) {
       throw error;

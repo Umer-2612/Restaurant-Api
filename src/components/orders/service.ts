@@ -27,8 +27,7 @@ class OrderService implements IOrderService {
       const rowSkip = body.page ? (body.page - 1) * rowLimit : 0;
       const matchCondition: any = {
         recordDeleted: false,
-        status: "Paid",
-        paymentMethod: { $in: ["COD", "Online"] },
+        status: { $in: ["POD", "Paid"] },
       };
 
       if (body.id) {

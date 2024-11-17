@@ -7,6 +7,8 @@ import OrderSchema from "../../components/orders/model";
 import * as Stripe from "stripe";
 import { ErrorHandler } from "../../utils/common-function";
 import stripeClient from "../stripe/configuration";
+import server from "../server";
+import OrderService from "../../components/orders/service";
 
 export function setupMiddleware(app: Application): void {
   const corsOptions: CorsOptions = {
@@ -30,6 +32,7 @@ export function setupMiddleware(app: Application): void {
         req.headers["stripe-signature"]; // Retrieve the signature from headers
 
       let event: Stripe.Stripe.Event;
+      const orderService = new OrderService();
 
       try {
         if (!sig) {
@@ -90,8 +93,20 @@ export function setupMiddleware(app: Application): void {
                   phone: session.customer_details.phone,
                 },
               };
-
               await orderDetails.save();
+
+              const socketInstance = await server.getSocketIOInstance();
+
+              const formattedResponse = await orderService.getAllOrders({
+                id: String(orderId),
+              });
+
+              if (formattedResponse[0].data.length > 0) {
+                socketInstance.emit(
+                  "orders",
+                  JSON.parse(JSON.stringify(formattedResponse[0].data[0]))
+                );
+              }
             } catch (error) {
               console.error("Error creating order:", error);
               return res.status(500).json({ error: "Internal Server Error" });

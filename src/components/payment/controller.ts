@@ -36,6 +36,17 @@ class PaymentController {
   ): Promise<any> => {
     try {
       let body = req.body;
+
+      body = {
+        items: body.items.map((item: { menuId: string; quantity: number }) => {
+          return {
+            item: item.menuId,
+            quantity: item.quantity,
+          };
+        }),
+        totalPrice: Math.round(body.totalPrice),
+      };
+
       body.paymentMethod = "COD";
       body.status = "POD";
       body.customerDetails = req.body.user;
@@ -47,10 +58,12 @@ class PaymentController {
         id: String(order._id),
       });
 
-      socketInstance.emit(
-        "orders",
-        JSON.parse(JSON.stringify(formattedResponse[0].data[0]))
-      );
+      if (formattedResponse[0].data.length > 0) {
+        socketInstance.emit(
+          "orders",
+          JSON.parse(JSON.stringify(formattedResponse[0].data[0]))
+        );
+      }
 
       return Generator.sendResponse({
         res,
@@ -59,7 +72,7 @@ class PaymentController {
         data: order,
       });
     } catch (error: any) {
-      //  await this\.loggerService\.logError\(req, error\);
+      console.log({ error });
       await this.handleError(res, error);
     }
   };

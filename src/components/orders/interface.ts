@@ -7,8 +7,8 @@ type IItem = {
 
 export interface IGetAllOrderBody {
   id?: string;
-  page: number;
-  limit: number;
+  page?: number;
+  limit?: number;
 }
 
 export interface IOrderSchema extends Document {

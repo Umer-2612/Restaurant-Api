@@ -42,7 +42,15 @@ class PaymentController {
 
       const order = await this.orderService.create(body);
       const socketInstance = await server.getSocketIOInstance();
-      socketInstance.emit("orders", JSON.parse(JSON.stringify(order)));
+
+      const formattedResponse = await this.orderService.getAllOrders({
+        id: String(order._id),
+      });
+
+      socketInstance.emit(
+        "orders",
+        JSON.parse(JSON.stringify(formattedResponse[0].data[0]))
+      );
 
       return Generator.sendResponse({
         res,
@@ -194,9 +202,13 @@ class PaymentController {
             await orderDetails.save();
 
             const socketInstance = await server.getSocketIOInstance();
+
+            const formattedResponse = await this.orderService.getAllOrders({
+              id: String(orderId),
+            });
             socketInstance.emit(
               "orders",
-              JSON.parse(JSON.stringify(orderDetails))
+              JSON.parse(JSON.stringify(formattedResponse[0].data[0]))
             );
           } catch (error) {
             console.error("Error creating order:", error);

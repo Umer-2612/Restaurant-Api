@@ -85,7 +85,8 @@ class OrderService implements IOrderService {
               { $count: "total" }, // Count the total number of records
               {
                 $addFields: {
-                  currentPage: body.page > 0 ? Number(body.page) : 1, // Return the current page
+                  currentPage:
+                    body.page && body.page > 0 ? Number(body.page) : 1, // Return the current page
                 },
               },
             ],

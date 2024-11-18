@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 type IItem = {
-  menu: mongoose.Schema.Types.ObjectId | string;
+  item: mongoose.Schema.Types.ObjectId | string;
   quantity: number;
 };
 

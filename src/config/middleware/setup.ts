@@ -9,6 +9,7 @@ import { ErrorHandler } from "../../utils/common-function";
 import stripeClient from "../stripe/configuration";
 import server from "../server";
 import OrderService from "../../components/orders/service";
+import ThermalService from "../node-thermal-printer/service";
 
 export function setupMiddleware(app: Application): void {
   const corsOptions: CorsOptions = {
@@ -106,6 +107,9 @@ export function setupMiddleware(app: Application): void {
                   "orders",
                   JSON.parse(JSON.stringify(formattedResponse[0].data[0]))
                 );
+
+                const thermalService = new ThermalService();
+                await thermalService.printReceipt(formattedResponse[0].data[0]);
               }
             } catch (error) {
               console.error("Error creating order:", error);

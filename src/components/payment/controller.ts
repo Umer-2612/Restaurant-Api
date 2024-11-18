@@ -4,21 +4,21 @@ import stripeClient from "../../config/stripe/configuration";
 import { ErrorHandler } from "../../utils/common-function";
 import Generator from "../../utils/generator";
 import Config from "../../config/env";
-import OrderSchema from "../orders/model";
 import OrderService from "../orders/service";
 import { IOrderSchema } from "../orders/interface";
-import * as Stripe from "stripe";
 import server from "../../config/server";
-// import LoggerService from "../../config/logger/service";
+import ThermalService from "../../config/node-thermal-printer/service";
+
+// const { ThermalPrinter, PrinterTypes } = require("node-thermal-printer");
 
 class PaymentController {
   private orderService: OrderService;
-  // private loggerService: LoggerService;
+  private thermalService: ThermalService;
 
   constructor() {
     this.handleError = this.handleError.bind(this);
     this.orderService = new OrderService();
-    // this.loggerService = new LoggerService();
+    this.thermalService = new ThermalService();
   }
 
   private async handleError(res: Response, error: any): Promise<any> {
@@ -63,6 +63,8 @@ class PaymentController {
           "orders",
           JSON.parse(JSON.stringify(formattedResponse[0].data[0]))
         );
+
+        await this.thermalService.printReceipt(formattedResponse[0].data[0]);
       }
 
       return Generator.sendResponse({

@@ -12,8 +12,8 @@ class ThermalService {
       //   }
       // Print receipt with a structured template
       printer.alignCenter();
-      printer.setFont("A"); // Optional: Set font style (A, B, or C)
-      printer.setSize(2, 2); // Optional: Set size (width, height)
+      // printer.setFont("A"); // Optional: Set font style (A, B, or C)
+      // printer.setSize(2, 2); // Optional: Set size (width, height)
 
       // Header
       printer.println("*** Restaurant Name ***");
@@ -26,11 +26,11 @@ class ThermalService {
       // Order Details
       printer.alignLeft();
       printer.println("Items Ordered:");
-      for (const item of orderDetails.items) {
-        if (item.item && item.item.name && item.item.price) {
+      for (const item of orderDetails.cart) {
+        if (item.item && item.item.itemName && item.item.itemPrice) {
           printer.println(
-            `${item.item.name} x ${item.quantity} - $${(
-              item.item.price / 100
+            `${item.item.itemName} x ${item.quantity} - $${(
+              item.item.itemPrice / 100
             ).toFixed(2)}`
           );
         } else {
@@ -42,7 +42,11 @@ class ThermalService {
       printer.drawLine();
       printer.alignCenter();
       printer.println(`Total: $${(orderDetails.totalPrice / 100).toFixed(2)}`);
-      printer.println(`Payment Method: ${orderDetails.paymentMethod}`);
+      printer.println(
+        `Payment Method: ${
+          orderDetails.status === "POD" ? "Pay on Delivery" : "Online"
+        }`
+      );
       printer.println(`Order ID: ${orderDetails._id}`);
       if (orderDetails.customerDetails) {
         printer.println(

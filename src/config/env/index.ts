@@ -60,6 +60,8 @@ const dev: Config = {
     "https://api.umer-karachiwala.tech",
     "http://api.umer-karachiwala.tech",
     "https://42ef-2409-40c1-500a-6ea2-e18d-8186-7fe1-bc30.ngrok-free.app",
+    "http://192.168.29.147:5000",
+    "http://192.168.29.147:3000",
   ],
   domainUrl: "http://localhost:5000",
   jwtConfig: {
@@ -168,6 +170,8 @@ const prod: Config = {
     "https://umer-karachiwala.tech",
     "https://api.umer-karachiwala.tech",
     "http://api.umer-karachiwala.tech",
+    "http://192.168.29.147:5000",
+    "http://192.168.29.147:3000",
   ],
   domainUrl: "http://localhost:5000",
   jwtConfig: {

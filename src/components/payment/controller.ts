@@ -8,6 +8,7 @@ import OrderService from "../orders/service";
 import { IOrderSchema } from "../orders/interface";
 import server from "../../config/server";
 import ThermalService from "../../config/node-thermal-printer/service";
+import { sendNotification } from "../../services/notificationService";
 
 // const { ThermalPrinter, PrinterTypes } = require("node-thermal-printer");
 
@@ -62,6 +63,15 @@ class PaymentController {
         socketInstance.emit(
           "orders",
           JSON.parse(JSON.stringify(formattedResponse[0].data[0]))
+        );
+        const customerName =
+          body.customerDetails.firstName + body.customerDetails.lastName;
+
+        // Send notification to the topic
+        await sendNotification(
+          "MyNews",
+          `${customerName} placed an Order`,
+          `Order for ${body.items.length} items has been placed.`
         );
 
         await this.thermalService.printReceipt(formattedResponse[0].data[0]);

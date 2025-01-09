@@ -14,7 +14,6 @@ import ThermalService from "../node-thermal-printer/service";
 export function setupMiddleware(app: Application): void {
   const corsOptions: CorsOptions = {
     origin: function (origin: string | undefined, callback: any) {
-      console.log({ aa: origin });
       if (!origin || Config.whiteList.indexOf(origin) !== -1) {
         // Allow requests from whitelisted origins or if there is no origin (e.g. Postman or server-side requests)
         callback(null, true);

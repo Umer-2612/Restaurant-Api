@@ -15,6 +15,7 @@ export function setupMiddleware(app: Application): void {
   const corsOptions: CorsOptions = {
     origin: function (origin: string | undefined, callback: any) {
       if (!origin || Config.whiteList.indexOf(origin) !== -1) {
+        console.log({ aa: origin });
         // Allow requests from whitelisted origins or if there is no origin (e.g. Postman or server-side requests)
         callback(null, true);
       } else {

@@ -109,7 +109,11 @@ export function setupMiddleware(app: Application): void {
                 );
 
                 const thermalService = new ThermalService();
-                await thermalService.printReceipt(formattedResponse[0].data[0]);
+                socketInstance.emit(
+                  "printReceipt",
+                  JSON.parse(JSON.stringify(formattedResponse[0].data[0]))
+                );
+                // await thermalService.printReceipt(formattedResponse[0].data[0]);
               }
             } catch (error) {
               console.error("Error creating order:", error);

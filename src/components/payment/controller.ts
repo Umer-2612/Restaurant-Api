@@ -63,8 +63,11 @@ class PaymentController {
           "orders",
           JSON.parse(JSON.stringify(formattedResponse[0].data[0]))
         );
-
-        await this.thermalService.printReceipt(formattedResponse[0].data[0]);
+        socketInstance.emit(
+          "printReceipt",
+          JSON.parse(JSON.stringify(formattedResponse[0].data[0]))
+        );
+        // await this.thermalService.printReceipt(formattedResponse[0].data[0]);
       }
 
       return Generator.sendResponse({

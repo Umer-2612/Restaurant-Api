@@ -122,6 +122,12 @@ class PaymentController {
         orderBody
       );
 
+      console.log({
+        aa: `${Config.stripeConfig.redirectUrl}?status=failed&orderId=${String(
+          orderDetails._id
+        )}`,
+      });
+
       // Create a Checkout session with the line items
       const session = await stripeClient.checkout.sessions.create({
         payment_method_types: ["card"],
